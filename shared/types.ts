@@ -1,14 +1,16 @@
 interface ServerToClientEvents {
     personalityConnected: (personalityId: string) => void;
     nameUpdatedPts: (personalityId: string, name: string) => void;
-    attributeUpdatedPts: (personalityId: string, columnI: number, attributeI: number, value: GoalChangeType) => void
+    attributeUpdatedPts: (personalityId: string, columnI: number, attributeI: number, value: AttributeChangeType) => void
+    attributeUpdatedStp: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
 }
 
 interface ClientToServerEvents {
     clientType: (roomcode: string, callback: (clientType: ClientType) => void) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     nameUpdatedPts: (name: string) => void;
-    attributeUpdatedPts: (columnI: number, attributeI: number, value: GoalChangeType) => void
+    attributeUpdatedPts: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
+    attributeUpdatedStp: (personalityId: string, columnI: number, attributeI: number, value: AttributeChangeType) => void;
 }
 
 interface InterServerEvents {
@@ -53,7 +55,7 @@ type Room = {
 
 type AttributeType = "ability" | "goal";
 
-type GoalChangeType = 
+type AttributeChangeType = 
     { type: "description"
         value: string
     } |
@@ -61,6 +63,6 @@ type GoalChangeType =
         value: boolean
     } |
     { type: "score"
-        value: number
+        value: string
     }
 ;

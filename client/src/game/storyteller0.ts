@@ -1,13 +1,17 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem";
-import { CardOs } from "./cardOs";
+import { Card } from "./card";
 
 export let storyteller0 = (roomcode: string) => {
-    let cards = new Map<string, CardOs>();
+    let cards = new Map<string, Card>();
     let cardsContainer = Elem("div", {innerText: "Personalities"});
 
     socket.on("personalityConnected", (personalityId)=>{
-        let card = CardOs(2, 2, ()=>{});
+        let card = Card("onStoryteller", 2, 2, 
+        /*onNameChange*/()=>{},
+        /*onAttributeChange*/(columnI, attributeI, value)=>{
+            socket.emit("attributeUpdatedStp", personalityId, columnI, attributeI, value);
+        });
 
         cards.set(personalityId, card);
         cardsContainer.appendChild(card.elem);

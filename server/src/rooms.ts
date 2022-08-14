@@ -3,7 +3,11 @@ import { io } from ".";
 
 export let rooms: Room[] = [];
 
-export let getRoomByPersonality = (personalityId: string): Room | undefined => {
+export const getRoomByStoryteller = (storytellerId: string): Room | undefined => {
+    return rooms.find((room)=>{return room.storytellerId == storytellerId;});
+}
+
+export const getRoomByPersonality = (personalityId: string): Room | undefined => {
     return rooms.find((room)=>{
         return room.personalities.find((personality)=>{
           return personality.id == personalityId; 
@@ -11,7 +15,7 @@ export let getRoomByPersonality = (personalityId: string): Room | undefined => {
     });
 }
 
-export let createRoom = (storytellerId: string): string => {
+export const createRoom = (storytellerId: string): string => {
     let roomcode = "";
 
     do {
@@ -36,7 +40,7 @@ export let createRoom = (storytellerId: string): string => {
     return roomcode;
 }
 
-export let connectToRoom = (personalityId: string, roomcode: String): boolean => {
+export const connectToRoom = (personalityId: string, roomcode: String): boolean => {
     let room = rooms.find((room)=>{return room.roomcode==roomcode;});
     
     if (room != undefined) {

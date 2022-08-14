@@ -1,10 +1,12 @@
 import { socket } from ".";
+import { Elem } from "./core/Elem";
 import { personality0 } from "./game/personality0";
 import { storyteller0 } from "./game/storyteller0";
 import { Title } from "./game/title";
 
 export let game = () => {
-    let clientPageContainer = document.createElement("div");
+    let clientPageContainer = Elem("div");
+
     socket.emit("clientType", window.location.href.split('/')[3], (clientType)=>{
         switch (clientType.type) {
             case "Storyteller":
@@ -14,10 +16,11 @@ export let game = () => {
                 clientPageContainer.appendChild(personality0(clientType.roomFound));
         }
     });
-    
-    let div = document.createElement("div");
-        let title0 = Title();
-        div.appendChild(title0);
-        div.appendChild(clientPageContainer);
-    return div;
+
+    return Elem("div", {}, [
+        Title(),
+        clientPageContainer
+    ], {
+        // textAlign: "center"
+    });
 }

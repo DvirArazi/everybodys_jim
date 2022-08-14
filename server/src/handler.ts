@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { io } from ".";
-import { connectToRoom, createRoom, getRoomByPersonality, rooms } from "./rooms";
+import { connectToRoom, createRoom, getRoomByPersonality, getRoomByStoryteller, rooms } from "./rooms";
 
 export let handler = () => {
     io.on("connection", (socket) => {
@@ -31,12 +31,20 @@ export let handler = () => {
         socket.on("attributeUpdatedPts", (columnI, attributeI, value)=>{
             let room = getRoomByPersonality(socket.id);
 
+            console.log("boop");
+
             if (room != undefined) {
                 io.to(room.storytellerId).emit("attributeUpdatedPts", socket.id, columnI, attributeI, value);
             }
             else {
                 console.log("ERROR 404: Couldn't find personality in any room.");
             }
+        });
+
+        socket.on("attributeUpdatedStp", (personalityId, columnI, attributeI, value)=>{
+            let room = getRoomByStoryteller(socket.id);
+
+            io.to(personalityId).emit("attributeUpdatedStp", columnI, attributeI, value);
         });
     });
 }

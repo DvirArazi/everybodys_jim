@@ -1,9 +1,9 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem";
-import { CardOp } from "./cardOp";
+import { Card } from "./card";
 
 export let personality0 = (foundRoom: boolean) => {
-    let card = CardOp(2, 2,
+    let card = Card("onPersonality", 2, 2,
         (name)=>{
             socket.emit("nameUpdatedPts", name)
         },
@@ -11,6 +11,10 @@ export let personality0 = (foundRoom: boolean) => {
             socket.emit("attributeUpdatedPts", columnI, attributeI, value);
         }
     );
+
+    socket.on("attributeUpdatedStp", (columnI, attributeI, value)=>{
+        card.updateAttribute(columnI, attributeI, value);
+    });
 
     let div = Elem("div");
     if (foundRoom) {
