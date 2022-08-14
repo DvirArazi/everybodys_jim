@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "es6",
+        "rootDirs": [
+            "./server/src",
+            "./shared"
+        ],
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "noFallthroughCasesInSwitch": true,
+        // "noImplicitReturns": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+    }
+}
