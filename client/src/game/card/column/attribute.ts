@@ -1,5 +1,6 @@
 import { Elem } from "../../../core/Elem";
 import { CardType } from "../../card";
+import { Textarea } from "../../textarea";
 import { Checkbox } from "./attribute/checkbox";
 import { Description } from "./attribute/description";
 import { Scorebox } from "./attribute/scorebox";
@@ -12,7 +13,7 @@ export type Attribute = {
 export const Attribute = (
     cardType: CardType, attributeType: AttributeType,
     onChange: (changeType: AttributeChangeType)=>void
-    ): Attribute => {
+): Attribute => {
     
     let bla = document.createElement("div");
     bla.style.color = "";
@@ -27,27 +28,38 @@ export const Attribute = (
     ;
     leftChildren.push(checkbox.elem);
 
-    let scorebox: HTMLTextAreaElement | undefined = undefined;
+    let scorebox: Scorebox | undefined = undefined;
     if (attributeType == "goal") {
         scorebox = Scorebox((value)=>{onChange({type:"score", value: value})});
-        leftChildren.push(scorebox);
+        scorebox.setEnabled(cardType == "onStoryteller");
+        leftChildren.push(scorebox.elem);
     }
 
-    let description = Description((value)=>{
-        onChange({type: "description", value: value});
-    });
+    let description = Textarea({
+        oninput: (ev)=>{
+            let target = ev.target as HTMLTextAreaElement;
+            target.value = target.value.replace('\n', "");
+            onChange({type: "description", value: target.value});
+        },
+    }, {}, {/*minHeight: "70px"*/});
 
     return {
-        elem: Elem("div", {}, [
-            Elem("div", {}, [
-                Elem("td", {}, leftChildren),
-                Elem("td", {}, [description.elem])
+        elem: Elem("div" , {}, [
+            Elem("table", {}, [
+                Elem("tr", {}, [
+                    Elem("td", {}, leftChildren, {
+                        padding: "0px",
+                    }),
+                    Elem("td", {}, [description.elem], {
+                        padding: "0px",
+                        width: "100%"
+                    })
+                ], {
+                })
             ], {
-                borderCollapse: "collapse"
+                borderSpacing: "0px",
             })
-        ], {
-            display: "table"
-        }),
+        ]),
         update: (attributeChangeType) => { 
             switch (attributeChangeType.type) {
                 case "checkbox":
@@ -55,7 +67,7 @@ export const Attribute = (
                 break;
                 case "score":
                     if (scorebox != undefined) {
-                        scorebox.value = attributeChangeType.value;
+                        scorebox.update(attributeChangeType.value);
                     }
                 break;
                 case "description":

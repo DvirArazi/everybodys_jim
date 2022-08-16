@@ -1,3 +1,3 @@
-type Mutable<T> = {
-    value: T
+const isDigit = (num: number) => {
+    return num >= 0 && num <= 9;
 }

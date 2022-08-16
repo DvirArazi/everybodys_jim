@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { Console } from "console";
 import { io } from ".";
 
@@ -35,13 +36,13 @@ export const createRoom = (storytellerId: string): string => {
         personalities: []
     });
 
-    console.log(rooms);
+    console.log(`New storyteller ` + chalk.yellow(storytellerId) + ` created room ` + chalk.yellow(roomcode));
 
     return roomcode;
 }
 
 export const connectToRoom = (personalityId: string, roomcode: String): boolean => {
-    let room = rooms.find((room)=>{return room.roomcode==roomcode;});
+    let room = rooms.find((room)=>{return room.roomcode == roomcode;});
     
     if (room != undefined) {
         room.personalities.push({
@@ -53,7 +54,7 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
 
         io.to(room.storytellerId).emit("personalityConnected", personalityId)
 
-        console.log(rooms);
+        console.log(`New personality ` + chalk.yellow(personalityId) + ` connected to room ` + chalk.yellow(roomcode));
 
         return true;
     }

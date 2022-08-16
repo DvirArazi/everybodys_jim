@@ -16,12 +16,16 @@ export const Column = (
         elem: Elem("td", {}, [
             Elem("div", {
                 innerText: attributeType == "ability" ?
-                    "Abilities" :
-                    "Goals"
+                    "Abilities" : "Goals"
+            }, [], {
+                textAlign: "center"
             }),
-            Elem("div", {}, attributes.map((attribute)=>{return attribute.elem;}))
+            Elem("div", {}, attributes.map((attribute)=>{return attribute.elem;}), {
+                // background: "red"
+            })
         ], {
-            background: "orange"
+            // background: "AliceBlue",
+            borderWidth: "0px"
         }),
         updateAttribute: (attributeI: number, value: AttributeChangeType)=>{attributes[attributeI].update(value);}
     };

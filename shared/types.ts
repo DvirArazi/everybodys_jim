@@ -1,12 +1,14 @@
 interface ServerToClientEvents {
     personalityConnected: (personalityId: string) => void;
+    personalityDisconnected: (personalityId: string) => void;
     nameUpdatedPts: (personalityId: string, name: string) => void;
     attributeUpdatedPts: (personalityId: string, columnI: number, attributeI: number, value: AttributeChangeType) => void
     attributeUpdatedStp: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
 }
 
 interface ClientToServerEvents {
-    clientType: (roomcode: string, callback: (clientType: ClientType) => void) => void;
+    // init: (param: string, callback: (ClientType)) => void;
+    init: (param: string, callback: (clientType: ClientType) => void) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     nameUpdatedPts: (name: string) => void;
     attributeUpdatedPts: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
@@ -14,12 +16,12 @@ interface ClientToServerEvents {
 }
 
 interface InterServerEvents {
-    ping: () => void;
+    // ping: () => void;
 }
 
 interface SocketData {
-    name: string;
-    age: number;
+    // name: string;
+    // age: number;
 }
 
 type ClientType = 
@@ -27,7 +29,8 @@ type ClientType =
         roomcode: string
     } |
     { type: "Personality"
-        roomFound: boolean
+    } | 
+    { type: "new",
     }
 
 type Attribute = {

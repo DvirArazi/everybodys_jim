@@ -1,0 +1,8 @@
+.cardTextarea::placeholder {
+    color: #00CC66
+}
+
+.button:active {
+    box-shadow: 0 0px !important;
+    transform: translate(0, 5px);
+}
