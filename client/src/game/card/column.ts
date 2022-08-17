@@ -4,7 +4,7 @@ import { Attribute } from "./column/attribute";
 
 export const Column = (
     cardType: CardType, attributeType: AttributeType, attributeCount: number,
-    onAttributeChange: (attributeI: number, value: AttributeChangeType)=>void
+    onAttributeChange: (attributeI: number, value: AttributeChange)=>void
     ) => {
     
     let attributes: Attribute[] = [];
@@ -27,6 +27,7 @@ export const Column = (
             // background: "AliceBlue",
             borderWidth: "0px"
         }),
-        updateAttribute: (attributeI: number, value: AttributeChangeType)=>{attributes[attributeI].update(value);}
+        updateAttribute: (attributeI: number, value: AttributeChange)=>{attributes[attributeI].update(value);},
+        isComplete: ()=>{return attributes.every((attribute)=>{return attribute.isComplete();});}
     };
 }

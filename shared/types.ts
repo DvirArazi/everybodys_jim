@@ -1,18 +1,15 @@
 interface ServerToClientEvents {
     personalityConnected: (personalityId: string) => void;
     personalityDisconnected: (personalityId: string) => void;
-    nameUpdatedPts: (personalityId: string, name: string) => void;
-    attributeUpdatedPts: (personalityId: string, columnI: number, attributeI: number, value: AttributeChangeType) => void
-    attributeUpdatedStp: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
+    cardUpdatedPts: (personalityId: string,value: CardChange) => void
+    cardUpdatedStp: (value: CardChange) => void;
 }
 
 interface ClientToServerEvents {
-    // init: (param: string, callback: (ClientType)) => void;
-    init: (param: string, callback: (clientType: ClientType) => void) => void;
+    init: (param: string, entries: Entry[], callback: (clientType: ClientType, toDelete: string[]) => void) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
-    nameUpdatedPts: (name: string) => void;
-    attributeUpdatedPts: (columnI: number, attributeI: number, value: AttributeChangeType) => void;
-    attributeUpdatedStp: (personalityId: string, columnI: number, attributeI: number, value: AttributeChangeType) => void;
+    cardUpdatedPts: (value: CardChange) => void;
+    cardUpdatedStp: (personalityId: string, value: CardChange) => void;
 }
 
 interface InterServerEvents {
@@ -24,13 +21,24 @@ interface SocketData {
     // age: number;
 }
 
+
+type Role = "storyteller" | "personality";
+
+type Entry = {
+    id: string,
+    role: Role
+}
+
 type ClientType = 
     { type: "Storyteller", 
-        roomcode: string
+        roomcode: string,
+        data: Room | undefined,
     } |
-    { type: "Personality"
+    { type: "Personality",
+        data: Personality | undefined,
     } | 
     { type: "new",
+        relevants: string[]
     }
 
 type Attribute = {
@@ -43,22 +51,30 @@ type Goal = {
     score: number
 }
 
+type Storyteller = {
+    id: string,
+    connected: boolean,
+}
+
 type Personality = {
     id: string,
     name: string,
     abilities: Attribute[],
-    goals: Goal[]
+    goals: Goal[],
+    stage: number,
+    connected: boolean,
 }
 
 type Room = {
     roomcode: string,
-    storytellerId: string,
-    personalities: Personality[]
+    storyteller: Storyteller,
+    personalities: Personality[],
+    stage: number,
 }
 
 type AttributeType = "ability" | "goal";
 
-type AttributeChangeType = 
+type AttributeChange = 
     { type: "description"
         value: string
     } |
@@ -67,5 +83,16 @@ type AttributeChangeType =
     } |
     { type: "score"
         value: string
+    }
+;
+
+type CardChange = 
+    { type: "name"
+        value: string
+    } |
+    { type: "attribute"
+        columnI: number,
+        attributeI: number,
+        attributeChangeType: AttributeChange
     }
 ;

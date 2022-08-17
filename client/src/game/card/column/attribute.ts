@@ -7,12 +7,13 @@ import { Scorebox } from "./attribute/scorebox";
 
 export type Attribute = {
     elem: Node,
-    update: (value: AttributeChangeType)=>void
+    update: (value: AttributeChange)=>void,
+    isComplete: ()=>boolean
 }
 
 export const Attribute = (
     cardType: CardType, attributeType: AttributeType,
-    onChange: (changeType: AttributeChangeType)=>void
+    onChange: (changeType: AttributeChange)=>void
 ): Attribute => {
     
     let bla = document.createElement("div");
@@ -39,9 +40,15 @@ export const Attribute = (
         oninput: (ev)=>{
             let target = ev.target as HTMLTextAreaElement;
             target.value = target.value.replace('\n', "");
+
+            target.style.height = "0px";
+            target.style.height = target.scrollHeight > 70 ?
+                target.scrollHeight + "px" :
+                "70px";
+
             onChange({type: "description", value: target.value});
         },
-    }, {}, {/*minHeight: "70px"*/});
+    }, {}, {height: "70px"});
 
     return {
         elem: Elem("div" , {}, [
@@ -74,6 +81,11 @@ export const Attribute = (
                     description.update(attributeChangeType.value);
                 break;
             }
-        }    
+        },
+        isComplete: ()=>{
+            return checkbox.isComplete() && 
+            description.isComplete() &&
+            ( scorebox == undefined ? true : scorebox.isComplete())
+        ;}  
     };
 }

@@ -10,54 +10,100 @@ export let handler = () => {
 
     io.on("connection", (socket) => {
 
-        socket.on("init", (path, callback) => {
+        socket.on("init", (path, entries, callback) => {
             let param = path.split('/')[1];
 
-            if (param == "st") {
-                callback({ type: "Storyteller",
-                    roomcode: createRoom(socket.id)
-                });
+            let relevants: {Sto}[] = [];
+            let toDelete: string[] = [];
+            for (let entry of entries) {
+                let room: Room | undefined;
+                switch (entry.role) {
+                    case "storyteller":
+                        let room = getRoomByStoryteller(entry.id);
+                        if (room == undefined) {
+                            toDelete.push(entry.id);
+                            continue;
+                        }
+                        if (param == "st" && !room.storyteller.connected) {
+                            relevants.push(room.storyteller);
+                        }
+                    break;
+                    case "personality":
+                        let personality;
+                        ({room, personality} = getRoomByPersonality(entry.id));
+                        if (room == undefined) {
+                            toDelete.push(entry.id);
+                            continue;
+                        }
+                        if (param == room.roomcode && !personality!.connected) {
+                            relevants.push(entry.id);
+                        }
+                    break;
+                }
             }
-            else if(param.length == 4 && connectToRoom(socket.id, param)) {
-                callback({type: "Personality"});
+
+            //add relevants to "new" type
+            //add storyteller data to storyteller of relevants 1
+            //add personality data to personality of relevants 1
+            //add todelete to callback
+            let clientType: ClientType;
+
+            if (relevants.length > 1) {
+                clientType = {type: "new", relevants: relevants};
+            }
+            if (relevants.length == 1) {
+
+                if (param == "st") {
+                    callback({ type: "Storyteller",
+                        roomcode: createRoom(socket.id),
+                        data: undefined
+                    }, toDelete);
+                }
+                else if(param.length == 4 && connectToRoom(socket.id, param)) {
+                    callback({type: "Personality"}, toDelete);
+                } else {
+                    callback({type: "new"}, toDelete);
+                }
             } else {
-                callback({type: "new"});
+                if (param == "st") {
+                    callback({ type: "Storyteller",
+                        roomcode: createRoom(socket.id),
+                        data: undefined
+                    }, toDelete);
+                }
+                else if(param.length == 4 && connectToRoom(socket.id, param)) {
+                    callback({type: "Personality", data: undefined}, toDelete);
+                } else {
+                    callback({type: "new", relevants: []}, toDelete);
+                }
             }
+
+            callback(, toDelete);
         });
 
-        socket.on("nameUpdatedPts", (name) => {
-            let room = getRoomByPersonality(socket.id);
+        socket.on("cardUpdatedPts", (cardChange)=>{
+            let room = getRoomByPersonality(socket.id).room;
 
             if (room != undefined) {
-                io.to(room.storytellerId).emit("nameUpdatedPts", socket.id, name);
+                io.to(room.storyteller.id).emit("cardUpdatedPts", socket.id, cardChange);
             }
             else {
                 console.log("ERROR 404: Couldn't find personality in any room.");
             }
-        })
-
-        socket.on("attributeUpdatedPts", (columnI, attributeI, value)=>{
-            let room = getRoomByPersonality(socket.id);
-
-            if (room != undefined) {
-                io.to(room.storytellerId).emit("attributeUpdatedPts", socket.id, columnI, attributeI, value);
-            }
-            else {
-                console.log("ERROR 404: Couldn't find personality in any room.");
-            }
         });
 
-        socket.on("attributeUpdatedStp", (personalityId, columnI, attributeI, value)=>{
+        socket.on("cardUpdatedStp", (personalityId, cardChange)=>{
             let room = getRoomByStoryteller(socket.id);
 
-            io.to(personalityId).emit("attributeUpdatedStp", columnI, attributeI, value);
+            io.to(personalityId).emit("cardUpdatedStp", cardChange);
         });
 
         socket.on("disconnect", (reason)=>{
             let room = getRoomByStoryteller(socket.id);
             if (room != undefined) {
-                //inform players that the storyteller disconnected
-                //then, wait for them/ask if someone else wants to be the storyteller
+                
+                room.storyteller.connected = false;
+
                 console.log(
                     `Storyteller ` + chalk.yellow(socket.id) + ` of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
                     `\treason: ${reason}`
@@ -68,14 +114,17 @@ export let handler = () => {
                 return;
             }
 
-            room = getRoomByPersonality(socket.id);
+            let personality;
+            ({ room, personality } = getRoomByPersonality(socket.id));
             if (room != undefined) {
                 
-                io.to(room.storytellerId).emit("personalityDisconnected", socket.id);
+                io.to(room.storyteller.id).emit("personalityDisconnected", socket.id);
+
+                personality!.connected = false;
 
                 console.log(
                     `Peronality ` + chalk.yellow(socket.id) + ` of room ` + `${room.roomcode}` + ` disconnected\n` +
-                    `\treason: ${reason}`
+                    ` reason: ${reason}`
                 );
 
                 return;
@@ -83,7 +132,7 @@ export let handler = () => {
 
             console.log(
                 `User ` + chalk.yellow(socket.id) + ` disconnected\n` +
-                `\treason: ${reason}`
+                ` reason: ${reason}`
             );
         });
     });

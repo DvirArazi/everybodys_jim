@@ -11,4 +11,8 @@
 [V] make it so only personalities with a name are not invisible
 [ ] use cookies to enable player to reconnect to room
 [ ] make description expand with the text
-[ ] make descriotion not accept newlines
+[ ] make description not accept newlines
+[ ] make it so a numberpad pops up instead of a keyboard for mobile
+    in scorebox
+[ ] set ordered list
+[ ] enable start button by the ordered list

@@ -6,7 +6,8 @@ import { Elem } from "../../../../core/Elem";
 export type Scorebox = {
     elem: Node,
     update: (value: string)=>void,
-    setEnabled: (enabled: boolean)=>void
+    setEnabled: (enabled: boolean)=>void,
+    isComplete: ()=>boolean
 }
 
 const isDigit = (num: number) => {
@@ -23,7 +24,6 @@ export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
                 for (let char of target.value) {
                     if (char >= '0' && char <= '9') {
                         newValue += char;
-                        console.log(char);
                     }
                 }
 
@@ -70,6 +70,7 @@ export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
         setEnabled: (enabled: boolean)=>{
             textarea.style.borderColor = enabled ? "#767676" : "#7DD6A9";
             textarea.disabled = !enabled;
-        }
+        },
+        isComplete: ()=>{return textarea.value != "";}
     };
 }

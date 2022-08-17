@@ -4,7 +4,7 @@ export const Container = (title: string, color: string, children: Node[]) => {
     let childContainer = Elem("div", {}, children, {});
     
     let div = Elem("div", {}, [
-        Elem("div", {innerText: title}, [], {margin: "0 0 3px 5px"}),
+        Elem("div", {innerText: title}, [], {margin: "0 0 1px 5px"}),
         childContainer
     ], {
         backgroundColor: color,

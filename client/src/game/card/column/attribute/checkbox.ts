@@ -19,6 +19,7 @@ export const Checkbox = (enabled: boolean, onChange: (checked: boolean)=>void) =
         ], {
             display: "flex",
         }),
-        update: (check: boolean)=>{checkbox.checked = check;}
+        update: (check: boolean)=>{checkbox.checked = check;},
+        isComplete: ()=>{return checkbox.checked;}
     };
 }

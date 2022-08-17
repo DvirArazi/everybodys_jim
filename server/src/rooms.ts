@@ -5,15 +5,19 @@ import { io } from ".";
 export let rooms: Room[] = [];
 
 export const getRoomByStoryteller = (storytellerId: string): Room | undefined => {
-    return rooms.find((room)=>{return room.storytellerId == storytellerId;});
+    return rooms.find((room)=>{return room.storyteller.id == storytellerId;});
 }
 
-export const getRoomByPersonality = (personalityId: string): Room | undefined => {
-    return rooms.find((room)=>{
-        return room.personalities.find((personality)=>{
-          return personality.id == personalityId; 
-        }) != undefined;
-    });
+export const getRoomByPersonality = (personalityId: string) => {
+    for (let room of rooms) {
+        for (let personality of room.personalities) {
+            if (personality.id == personalityId) {
+                return {room: room, personality: personality};
+            }
+        }
+    }
+
+    return {room: undefined, personality: undefined};
 }
 
 export const createRoom = (storytellerId: string): string => {
@@ -32,8 +36,9 @@ export const createRoom = (storytellerId: string): string => {
 
     rooms.push({
         roomcode,
-        storytellerId,
-        personalities: []
+        storyteller: {id: storytellerId, connected: true},
+        personalities: [], 
+        stage: 0
     });
 
     console.log(`New storyteller ` + chalk.yellow(storytellerId) + ` created room ` + chalk.yellow(roomcode));
@@ -49,10 +54,12 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
             id: personalityId,
             name: "",
             abilities: [],
-            goals: []
+            goals: [],
+            stage: 0,
+            connected: true
         });
 
-        io.to(room.storytellerId).emit("personalityConnected", personalityId)
+        io.to(room.storyteller.id).emit("personalityConnected", personalityId)
 
         console.log(`New personality ` + chalk.yellow(personalityId) + ` connected to room ` + chalk.yellow(roomcode));
 

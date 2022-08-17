@@ -8,8 +8,7 @@ export const Textarea = (
 )=> {
     let blurColor = "#00E673";
 
-    let textarea = Elem("span", {
-            contentEditable: "true",
+    let textarea = Elem("textarea", {
             className: "textarea",
             ...textareaProperties
         },
@@ -22,10 +21,8 @@ export const Textarea = (
             border: "none",
             outline: "none",
 
-            display: "inline-block",
             width: "100%",
-            // height: "100%",
-            minHeight: "70px", 
+            height: "100%", 
             resize: "none",
             boxSizing: "border-box",
             overflow: "hidden",
@@ -56,6 +53,7 @@ export const Textarea = (
 
     return {
         elem: div,
-        update: (value: string)=>{textarea.innerText = value;}
+        update: (value: string)=>{textarea.value = value;},
+        isComplete: ()=>{return textarea.value != "";}
     }
 }

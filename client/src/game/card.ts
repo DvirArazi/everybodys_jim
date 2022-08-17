@@ -1,5 +1,6 @@
 import { Elem } from "../core/Elem";
 import { Column } from "./card/column";
+import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 import { VisibilityBox } from "./visibilityBox";
 
@@ -7,17 +8,16 @@ export type CardType = "onStoryteller" | "onPersonality";
 
 export type Card = {
     elem: Node,
-    updateName: (name: string)=>void,
     getName: ()=>string,
-    updateAttribute: (columnI: number, attributeI: number, value: AttributeChangeType)=>void,
-    setVisible: (visible: boolean)=>void
+    update: (cardChangeType: CardChange)=>void,
+    setVisible: (visible: boolean)=>void,
+    isComplete: ()=>boolean
 }
 
 export let Card = (
     cardType: CardType, abilitiesCount: number, goalsCount: number,
-    onNameChange: (name: string)=>void,
-    onAttributeChange: (columnI: number, attributeI: number, value: AttributeChangeType)=>void
-    ): Card => { 
+    onChange: (cardChangeType: CardChange)=>void
+): Card => { 
 
     let nameDiv = Elem("div", {}, [(()=>{
         return cardType == "onStoryteller" ?
@@ -29,7 +29,7 @@ export let Card = (
                     oninput: (ev)=>{
                         let target = ev.target as HTMLTextAreaElement;
                         target.value = target.value.replace('\n', "");
-                        onNameChange(target.value);
+                        onChange({type: "name", value: target.value});
                     },
                 }, {
                     border: "none"
@@ -46,8 +46,12 @@ export let Card = (
     });
 
     let columns = [
-        Column(cardType, "ability", abilitiesCount, (attributeI, value)=>{onAttributeChange(0, attributeI, value);}),
-        Column(cardType, "goal", goalsCount, (attributeI, value)=>{onAttributeChange(1, attributeI, value);})
+        Column(cardType, "ability", abilitiesCount, (attributeI, value)=>{
+            onChange({type:"attribute", columnI: 0, attributeI, attributeChangeType: value});
+        }),
+        Column(cardType, "goal", goalsCount, (attributeI, value)=>{
+            onChange({type:"attribute", columnI: 1, attributeI, attributeChangeType: value});
+        })
     ];
 
     let visibilityBox = VisibilityBox([
@@ -71,10 +75,22 @@ export let Card = (
     ]);
     
     return {
-        elem: visibilityBox.elem,
-        updateName: (name: string)=>{ nameDiv.innerHTML = name; },
+        elem: Elem("div", {}, [Spacer(2.5), visibilityBox.elem]),
         getName: ()=>{return nameDiv.innerText;},
-        updateAttribute: (columnI, attributeI, value)=>{columns[columnI].updateAttribute(attributeI, value);},
-        setVisible: visibilityBox.setVisible
+        update: (cardChangeType)=>{
+            switch (cardChangeType.type) {
+                case "name":
+                    nameDiv.innerText = cardChangeType.value;
+                break;
+                case "attribute":
+                    let {columnI, attributeI, attributeChangeType} = cardChangeType;
+                    columns[columnI].updateAttribute(attributeI, attributeChangeType);
+                break;
+            }
+        },
+        setVisible: visibilityBox.setVisible,
+        isComplete: ()=>{
+            return columns.every((column)=>{return column.isComplete();});
+        }
     };
 }

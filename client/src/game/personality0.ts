@@ -5,16 +5,13 @@ import { Container } from "./container";
 
 export let Personality0 = () => {
     let card = Card("onPersonality", 2, 2,
-        (name)=>{
-            socket.emit("nameUpdatedPts", name)
-        },
-        (columnI, attributeI, value)=>{
-            socket.emit("attributeUpdatedPts", columnI, attributeI, value);
+        (value)=>{
+            socket.emit("cardUpdatedPts", value);
         }
     );
 
-    socket.on("attributeUpdatedStp", (columnI, attributeI, value)=>{
-        card.updateAttribute(columnI, attributeI, value);
+    socket.on("cardUpdatedStp", (cardChangeType)=>{
+        card.update(cardChangeType);
     });
 
     return Container(
