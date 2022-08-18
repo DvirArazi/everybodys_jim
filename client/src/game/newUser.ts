@@ -1,4 +1,5 @@
 import { Elem } from "../core/Elem"
+import { NewData } from "../shared/types";
 import { Button } from "./button";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";

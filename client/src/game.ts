@@ -1,4 +1,3 @@
-import { Cookies } from "typescript-cookie";
 import { socket } from ".";
 import { Elem } from "./core/Elem";
 import { addEntry, deleteEntries, getEntries } from "./game/entries";
@@ -7,11 +6,25 @@ import { Personality0 } from "./game/personality0";
 import { Spacer } from "./game/spacer";
 import { Storyteller0 } from "./game/storyteller0";
 import { Title } from "./game/title";
+import { ClientData } from "./shared/types";
 
 export let Game = () => {
     let clientPageContainer = Elem("div");
     
-    const router = (path: string, newGame: boolean = false)=>{
+    let router = (clientData: ClientData) => {
+        switch (clientData.type) {
+            // case "Storyteller":
+            //         addEntry("Storyteller");
+            //         clientPage = Storyteller0(newData.st0data);
+            //     break;
+            //     case "Personality":
+            //         addEntry("Personality");
+            //         clientPage = Personality0();
+            //     break;
+        }
+    }
+
+    const init = (path: string, newGame: boolean = false)=>{
         let clientPage: Node;
         
         if (path.length == 4) {
@@ -19,22 +32,16 @@ export let Game = () => {
         }
 
         window.history.replaceState("", "", path);
-        socket.emit("init", path, getEntries(), newGame,(clientType, toDeletes)=>{
-            console.log("Client Type: ", clientType);
+        socket.emit("init", path, getEntries(), newGame,(newData, toDeletes)=>{
+            console.log("Client Type: ", newData);
+            console.log("To deletes: ", toDeletes);
             deleteEntries(toDeletes);
             console.log("Entries after delete: " + getEntries());
             
-            switch (clientType.type) {
-                case "Storyteller":
-                    addEntry("Storyteller");
-                    clientPage = Storyteller0(clientType.st0data);
-                break;
-                case "Personality":
-                    addEntry("Personality");
-                    clientPage = Personality0();
-                break;
+            switch (newData.type) {
+                
                 case "new":
-                    clientPage = NewUser(path.split('/')[1], clientType.datas, router);
+                    clientPage = NewUser(path.split('/')[1], newData.datas, init);
                 break;
             }
 
@@ -43,7 +50,7 @@ export let Game = () => {
         });
     };
 
-    router(window.location.pathname);
+    init(window.location.pathname);
 
     return Elem("div", {}, [
         Title(),

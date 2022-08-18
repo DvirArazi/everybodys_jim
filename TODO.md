@@ -10,9 +10,20 @@
     "share the link to invite players to join the game"
 [V] make it so only personalities with a name are not invisible
 [ ] use cookies to enable player to reconnect to room
-[ ] make description expand with the text
-[ ] make description not accept newlines
+[V] make description expand with the text
+[V] make description not accept newlines
 [ ] make it so a numberpad pops up instead of a keyboard for mobile
     in scorebox
 [ ] set ordered list
 [ ] enable start button by the ordered list
+[V] figure out node + browser debugging
+[ ] create the new routing system of
+            client                                       server
+    send path + entries ->
+                                     --------- send relevant {id + roomcode + role}s
+                                     V          if none - send new construction, if one - send construction                       
+    if (more then one) {let user choose} -------|-\
+    if (one) {send that}                        | |
+                                                | |
+    construct              <--------------------/ \-> send construction
+           /\-----------------------------------------------/

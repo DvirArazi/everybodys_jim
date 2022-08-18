@@ -1,4 +1,5 @@
 import { Elem } from "../core/Elem";
+import { AbilityData, CardChange, GoalData } from "../shared/types";
 import { Column } from "./card/column";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";

@@ -1,5 +1,6 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem";
+import { St0Data } from "../shared/types";
 import { Button } from "./button";
 import { Card } from "./card";
 import { Container } from "./container";
@@ -27,13 +28,15 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
                 socket.emit("cardUpdatedStp", id, cardChange);
     
                 updateStartButton();
-
-                cards.set(id, card);
-                cardsContainer.append(card.elem);
             });
 
             card.set(name, abilities, goals);
             card.setVisible(card.getName() != "");
+            visibilityBox.setVisible(Array.from(cards.values()).some((card)=>{return card.getName() != "";}));
+            visibilityBox.setVisible(true);
+
+            cards.set(id, card);
+            cardsContainer.append(card.elem);
         }
 
         updateStartButton();
@@ -86,8 +89,6 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
             }
             visibilityBox.setVisible(visible);
         }
-
-        startButton.setEnabled(card.isComplete());
 
         updateStartButton();
     });

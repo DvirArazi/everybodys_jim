@@ -21,8 +21,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node server/src/index.ts",
-    "dev": "concurrently \"npm run watch-server\" \"npm run watch-client\" \"nodemon -q dist/server/index.js\"",
-    "debug-client": "concurrently \"npm run watch-server\" \"nodemon -q dist/server/index.js\"",
+    "dev": "concurrently \"npm run watch-server\" \"npm run watch-client\" \"nodemon --enable-source-maps -q dist/server/index.js\"",
     "watch-server": "esbuild server/src/index.ts --sourcemap --bundle --watch --outdir=dist/server --platform=node --target=node16.16.0",
     "watch-client": "esbuild client/src/index.ts --sourcemap --bundle --watch --outdir=dist/client"
   }

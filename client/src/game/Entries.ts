@@ -1,7 +1,6 @@
-import { Role } from "types";
-import { Entry } from "types";
 import { Cookies } from "typescript-cookie";
 import { socket } from "..";
+import { Entry, Role } from "../shared/types";
 
 export const initEntries = () => {
     let entries = Cookies.get("entries");
@@ -38,6 +37,8 @@ export const deleteEntries = (ids: string[]) => {
             }
         }
     }
+
+    console.log(entries);
 
     setEntries(entries);
 }

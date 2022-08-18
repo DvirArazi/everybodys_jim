@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { Console } from "console";
 import { io } from ".";
+import { AbilityData, Room } from "./types";
 
 export let rooms: Room[] = [];
 
@@ -53,7 +54,7 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
         room.personalities.push({
             id: personalityId,
             name: "",
-            abilities: [],
+            abilities: Array<AbilityData>(2).fill({type: ""}),
             goals: [],
             stage: 0,
             connected: true

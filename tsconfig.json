@@ -16,6 +16,7 @@
         "noFallthroughCasesInSwitch": true,
         "isolatedModules": true,
         // "noImplicitReturns": true,
+        "sourceMap": true,
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
     }

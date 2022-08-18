@@ -1,6 +1,3 @@
-import { number } from "fp-ts";
-import { unfoldTree } from "fp-ts/lib/Tree";
-import { parse } from "path";
 import { Elem } from "../../../../core/Elem";
 
 export type Scorebox = {

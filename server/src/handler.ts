@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { io } from ".";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByStoryteller, rooms } from "./rooms";
+import { ClientData, NewData, Personality, Room, Storyteller } from "./types";
 
 export let handler = () => {
     process.on('SIGTERM', ()=>{
@@ -13,7 +14,7 @@ export let handler = () => {
             console.log("init");
             let param = path.split('/')[1];
 
-            let st0Datas: Room[] = [];
+            let st0Datas: Storyteller[] = [];
             let ps0Datas: Personality[] = [];
             let newData: NewData = [];
             let toDeletes: string[] = [];
@@ -22,26 +23,26 @@ export let handler = () => {
                 let room: Room | undefined;
                 switch (entry.role) {
                     case "Storyteller":
-                        let room = getRoomByStoryteller(entry.id);
+                        room = getRoomByStoryteller(entry.id);
                         if (room == undefined) {
                             toDeletes.push(entry.id);
                             continue;
                         }
                         newData.push({role: entry.role, roomcode: room.roomcode});
                         if (param == "st" && !room.storyteller.connected) {
-                            st0Datas.push(room);
+                            st0Datas.push(room.storyteller);
                         }
                     break;
                     case "Personality":
                         let personality;
                         ({room, personality} = getRoomByPersonality(entry.id));
-                        if (room == undefined) {
+                        if (room == undefined || personality == undefined) {
                             toDeletes.push(entry.id);
                             continue;
                         }
                         newData.push({role: entry.role, roomcode: room.roomcode});
-                        if (param == room.roomcode && !personality!.connected) {
-                            ps0Datas.push(personality!);
+                        if (param == room.roomcode && !personality.connected) {
+                            ps0Datas.push(personality);
                         }
                     break;
                 }
@@ -52,7 +53,7 @@ export let handler = () => {
                 if (st0Datas.length == 0 || newGame) {
                     clientType = { type: "Storyteller", st0data: {roomcode: createRoom(socket.id)} };
                 } else if (st0Datas.length == 1) {
-                    st0Datas[0].storyteller.id = socket.id;
+                    st0Datas[0].id = socket.id;
                     clientType = { type: "Storyteller", st0data: st0Datas[0] };
                 }
             }
@@ -127,7 +128,8 @@ export let handler = () => {
                     `\treason: ${reason}`
                 );
 
-                rooms.splice(rooms.indexOf(room), 1);
+                // rooms.splice(rooms.indexOf(room), 1);
+                console.log(rooms);
 
                 return;
             }

@@ -8,6 +8,7 @@ import { initEntries } from "./game/entries";
 import { Personality0 } from "./game/personality0";
 import { Storyteller0 } from "./game/storyteller0";
 import { Storyteller1 } from "./game/storyteller1";
+import { ClientToServerEvents, ServerToClientEvents } from "./shared/types";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 

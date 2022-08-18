@@ -1,4 +1,5 @@
 import { Elem } from "../../../core/Elem";
+import { AttributeChange, AttributeData, AttributeType } from "../../../shared/types";
 import { CardType } from "../../card";
 import { Textarea } from "../../textarea";
 import { Checkbox } from "./attribute/checkbox";
