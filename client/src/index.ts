@@ -4,14 +4,14 @@ import { Game } from "./game";
 import { Card } from "./game/card";
 import { Column } from "./game/card/column";
 import { Attribute } from "./game/card/column/attribute";
-import { setEntries } from "./game/Entries";
+import { initEntries } from "./game/entries";
 import { Personality0 } from "./game/personality0";
 import { Storyteller0 } from "./game/storyteller0";
 import { Storyteller1 } from "./game/storyteller1";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
-setEntries();
+initEntries();
 
 document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "scroll";

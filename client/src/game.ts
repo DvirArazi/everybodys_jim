@@ -1,7 +1,7 @@
 import { Cookies } from "typescript-cookie";
 import { socket } from ".";
 import { Elem } from "./core/Elem";
-import { addEntry, getEntries } from "./game/Entries";
+import { addEntry, deleteEntries, getEntries } from "./game/entries";
 import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";
 import { Spacer } from "./game/spacer";
@@ -11,26 +11,38 @@ import { Title } from "./game/title";
 export let Game = () => {
     let clientPageContainer = Elem("div");
     
-    let router = (path: string)=>{
-        console.log(getEntries());
+    const router = (path: string, newGame: boolean = false)=>{
+        let clientPage: Node;
+        
+        if (path.length == 4) {
+            path = path.toUpperCase();
+        }
+
         window.history.replaceState("", "", path);
-        clientPageContainer.innerHTML = '';
-        socket.emit("init", path, getEntries(), (clientType)=>{
+        socket.emit("init", path, getEntries(), newGame,(clientType, toDeletes)=>{
+            console.log("Client Type: ", clientType);
+            deleteEntries(toDeletes);
+            console.log("Entries after delete: " + getEntries());
+            
             switch (clientType.type) {
                 case "Storyteller":
-                    addEntry("storyteller");
-                    clientPageContainer.appendChild(Storyteller0(clientType.roomcode));
+                    addEntry("Storyteller");
+                    clientPage = Storyteller0(clientType.st0data);
                 break;
                 case "Personality":
-                    addEntry("personality");
-                    clientPageContainer.appendChild(Personality0());
+                    addEntry("Personality");
+                    clientPage = Personality0();
                 break;
                 case "new":
-                    clientPageContainer.appendChild(NewUser(path.split('/')[1], ()=>{router("/st")}, (path)=>{router(path)}));
+                    clientPage = NewUser(path.split('/')[1], clientType.datas, router);
                 break;
             }
-        })
+
+            clientPageContainer.innerHTML = '';
+            clientPageContainer.appendChild(clientPage);
+        });
     };
+
     router(window.location.pathname);
 
     return Elem("div", {}, [
@@ -39,3 +51,5 @@ export let Game = () => {
         clientPageContainer
     ], {});
 }
+
+// export 

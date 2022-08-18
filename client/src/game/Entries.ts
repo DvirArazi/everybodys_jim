@@ -1,7 +1,9 @@
+import { Role } from "types";
+import { Entry } from "types";
 import { Cookies } from "typescript-cookie";
 import { socket } from "..";
 
-export const setEntries = () => {
+export const initEntries = () => {
     let entries = Cookies.get("entries");
     if (entries == undefined) {
         entries = JSON.stringify([]);
@@ -9,15 +11,33 @@ export const setEntries = () => {
     }
 }
 
+export const getEntries = (): Entry[] => {
+    return JSON.parse(Cookies.get("entries")!.toString());
+}
+
+export const setEntries = (entries: Entry[]) => {
+    Cookies.set("entries", JSON.stringify(entries));
+}
+
 export const addEntry = (role: Role) => {
-    let entries = Cookies.get("entries");
-    let updatedEntries = JSON.parse(entries!.toString()).concat({
+    let entries = getEntries().concat({
         id: socket.id, role: role
     });
 
-    Cookies.set("entries", JSON.stringify(updatedEntries));
+    setEntries(entries);
 }
 
-export const getEntries = (): Entry[] => {
-    return JSON.parse(Cookies.get("entries")!.toString());
+export const deleteEntries = (ids: string[]) => {
+    let entries = getEntries();
+
+    for (let i = 0; i < ids.length; i++) {
+        for (let j = 0; j < entries.length;) {
+            if (ids[i] == entries[j].id) {
+                entries.splice(j);
+                break;
+            }
+        }
+    }
+
+    setEntries(entries);
 }

@@ -1,6 +1,6 @@
 import { Elem } from "../core/Elem"
 
-export const Button = (text: string, onClick: ()=>void, enabled: boolean = true) => {
+export const Button = (text: string, onClick: ()=>void, enabled = true, fontSize = 24) => {
     let button = Elem("button", {
         innerText: text,
         disabled: !enabled,
@@ -10,7 +10,7 @@ export const Button = (text: string, onClick: ()=>void, enabled: boolean = true)
         fontWeight: "bold",
         backgroundColor: "#00ff80",
         boxShadow: "0 5px #00e673",
-        fontSize: "24px",
+        fontSize: fontSize + "px",
         outline: "none",
         cursor: "pointer",
 

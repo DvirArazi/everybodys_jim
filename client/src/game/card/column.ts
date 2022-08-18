@@ -28,6 +28,11 @@ export const Column = (
             borderWidth: "0px"
         }),
         updateAttribute: (attributeI: number, value: AttributeChange)=>{attributes[attributeI].update(value);},
+        set: (attributeDatas: AttributeData[])=>{
+            for (let i = 0; i < Math.min(attributeDatas.length, attributes.length); i++) {
+                attributes[i].set(attributeDatas[i]);
+            }
+        },
         isComplete: ()=>{return attributes.every((attribute)=>{return attribute.isComplete();});}
     };
 }

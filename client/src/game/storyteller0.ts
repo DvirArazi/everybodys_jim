@@ -6,7 +6,7 @@ import { Container } from "./container";
 import { Spacer } from "./spacer";
 import { VisibilityBox } from "./visibilityBox";
 
-export let Storyteller0 = (roomcode: string):HTMLElement => {
+export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     let orderedPersonalities: string[] = [];
 
     let cards = new Map<string, Card>();
@@ -21,10 +21,27 @@ export let Storyteller0 = (roomcode: string):HTMLElement => {
         );
     }
 
+    if (st0data.personalities != undefined) {
+        for (let {id, name, abilities, goals} of st0data.personalities) {
+            let card = Card("onStoryteller", 2, 2, (cardChange)=>{
+                socket.emit("cardUpdatedStp", id, cardChange);
+    
+                updateStartButton();
+
+                cards.set(id, card);
+                cardsContainer.append(card.elem);
+            });
+
+            card.set(name, abilities, goals);
+            card.setVisible(card.getName() != "");
+        }
+
+        updateStartButton();
+    }
+
     socket.on("personalityConnected", (personalityId)=>{
-        let card = Card("onStoryteller", 2, 2, 
-        /*onChange*/(cardChangeType)=>{
-            socket.emit("cardUpdatedStp", personalityId, cardChangeType);
+        let card = Card("onStoryteller", 2, 2, (cardChange)=>{
+            socket.emit("cardUpdatedStp", personalityId, cardChange);
 
             updateStartButton();
         });
@@ -77,31 +94,15 @@ export let Storyteller0 = (roomcode: string):HTMLElement => {
 
     return Elem("div", {}, [
         Button("Copy room link", ()=>{
-            navigator.clipboard.writeText(window.location.host + "/" + roomcode);
+            console.log("copying " + st0data.roomcode);
+            navigator.clipboard.writeText(window.location.host + "/" + st0data.roomcode);
         }).elem,
         Spacer(10),
         Elem("span", {innerText: `Players can join your game by either using the link or by entering the room code: `}),
-        Elem("span", {innerText: roomcode}, [], {color: "#eb0000"}),
+        Elem("span", {innerText: st0data.roomcode}, [], {color: "#eb0000"}),
         Spacer(10),
         visibilityBox.elem,
         Spacer(10)
     ]);
 }
 
-
-//DELET!!! for testing only!!!
-    // let card = Card("onStoryteller", 2, 2, 
-    // /*onNameChange*/()=>{},
-    // /*onAttributeChange*/(columnI, attributeI, value)=>{
-    //     socket.emit("attributeUpdatedStp", "personalityId", columnI, attributeI, value);
-    // });
-
-    // cards.set("personalityId", card);
-    // cardsContainer.appendChild(card.elem);
-
-    // if (card != undefined) {
-    //     card.updateName("name");
-    // } else {
-    //     console.log("ERROR 404: Could not find the personality to modify.");
-    // }
-//DELET!!!

@@ -8,6 +8,7 @@ import { Scorebox } from "./attribute/scorebox";
 export type Attribute = {
     elem: Node,
     update: (value: AttributeChange)=>void,
+    set: (attributeData: AttributeData)=>void
     isComplete: ()=>boolean
 }
 
@@ -67,19 +68,26 @@ export const Attribute = (
                 borderSpacing: "0px",
             })
         ]),
-        update: (attributeChangeType) => { 
-            switch (attributeChangeType.type) {
+        update: (attributeChange) => { 
+            switch (attributeChange.type) {
                 case "checkbox":
-                    checkbox.update(attributeChangeType.value);
+                    checkbox.update(attributeChange.value);
                 break;
                 case "score":
                     if (scorebox != undefined) {
-                        scorebox.update(attributeChangeType.value);
+                        scorebox.update(attributeChange.value);
                     }
                 break;
                 case "description":
-                    description.update(attributeChangeType.value);
+                    description.update(attributeChange.value);
                 break;
+            }
+        },
+        set:(attributeData: AttributeData)=>{
+            checkbox.update(attributeData.approved);
+            description.update(attributeData.description);
+            if (attributeData.type == "goal" && scorebox != undefined) {
+                scorebox.update(attributeData.score);
             }
         },
         isComplete: ()=>{

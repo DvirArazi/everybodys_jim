@@ -4,17 +4,62 @@ import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 
 export const NewUser = (
-    nullRoomcode: string,
-    onCreateRoom: ()=>void,
-    onRoute: (path: string)=>void
+    param: string,
+    clientDatas: NewData,
+    router: (path: string, newGame: boolean)=>void
 ) => {
-    let param = "";
+    let newParam = "";
     let joinButton = Button("Join room", ()=>{
-        onRoute("/" + param);
+        router("/" + newParam, true);
     }, false);
+
+    let roomExists = false;
+
+    let reconnectionButtons = Elem("div", {}, (()=>{
+        let rtn: Node[] = [];
+
+        let topIs: number[] = [];
+        let btmIs: number[] = [];
+        if (param != "") {
+            if (param == "st") {
+                for (let i = 0; i < clientDatas.length; i++) {
+                    if (clientDatas[i].role == "Storyteller") {
+                        topIs.push(i);
+                    } else {
+                        btmIs.push(i);
+                    }
+                }
+            } else if (param.length == 4) {
+                for (let i = 0; i < clientDatas.length; i++) {
+                    let clientData = clientDatas[i];
+                    if (clientData.role == "Personality" &&
+                        clientData.roomcode == param
+                    ) {
+                        roomExists = true;
+                        topIs.push(i);
+                    } else {
+                        btmIs.push(i);
+                    }
+                }
+            }
+
+            for (let indexes of [topIs, btmIs]) {
+                for (let topI of indexes) {
+                    let {role, roomcode} = clientDatas[topI];
+                    rtn.push(Button(
+                        `Return to room ${roomcode} as ${role == "Storyteller" ? "the storyteller" : "a personality"}`,
+                        ()=>{}, true, 14).elem
+                    );
+                }
+            }
+        }
+
+        return rtn;
+    })());
+    
     
     return Elem("div", {}, [
-        Button("Create a room", onCreateRoom).elem,
+        Button("Create a room", ()=>{router("/st", true);}).elem,
         Spacer(15),
         Textarea({
             placeholder: "Enter room code here",
@@ -41,7 +86,7 @@ export const NewUser = (
                     joinButton.setEnabled(false);
                 }
 
-                param = newValue;
+                newParam = newValue;
                 target.value = newValue;
             }
         }, {
@@ -59,8 +104,9 @@ export const NewUser = (
         Spacer(10),
         joinButton.elem,
         Spacer(10),
-        Elem("div", {innerText: nullRoomcode != "" ? 
-            `Room ${nullRoomcode} does not exist :/` : ``    
-        })
+        Elem("div", {innerText: roomExists || param.length != 4 ? "" :
+            `Room ${param} does not exist :/`    
+        }),
+        reconnectionButtons
     ]);
 }

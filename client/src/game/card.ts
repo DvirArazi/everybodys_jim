@@ -10,6 +10,7 @@ export type Card = {
     elem: Node,
     getName: ()=>string,
     update: (cardChangeType: CardChange)=>void,
+    set: (name: string, abilities: AbilityData[], goals: GoalData[])=>void
     setVisible: (visible: boolean)=>void,
     isComplete: ()=>boolean
 }
@@ -47,10 +48,10 @@ export let Card = (
 
     let columns = [
         Column(cardType, "ability", abilitiesCount, (attributeI, value)=>{
-            onChange({type:"attribute", columnI: 0, attributeI, attributeChangeType: value});
+            onChange({type:"attribute", columnI: 0, attributeI, attributeChange: value});
         }),
         Column(cardType, "goal", goalsCount, (attributeI, value)=>{
-            onChange({type:"attribute", columnI: 1, attributeI, attributeChangeType: value});
+            onChange({type:"attribute", columnI: 1, attributeI, attributeChange: value});
         })
     ];
 
@@ -83,10 +84,15 @@ export let Card = (
                     nameDiv.innerText = cardChangeType.value;
                 break;
                 case "attribute":
-                    let {columnI, attributeI, attributeChangeType} = cardChangeType;
+                    let {columnI, attributeI, attributeChange: attributeChangeType} = cardChangeType;
                     columns[columnI].updateAttribute(attributeI, attributeChangeType);
                 break;
             }
+        },
+        set: (name: string, abilities: AbilityData[], goals: GoalData[])=>{
+            nameDiv.innerText = name;
+            columns[0].set(abilities);
+            columns[1].set(goals);
         },
         setVisible: visibilityBox.setVisible,
         isComplete: ()=>{

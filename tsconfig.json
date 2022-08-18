@@ -14,6 +14,7 @@
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "noFallthroughCasesInSwitch": true,
+        "isolatedModules": true,
         // "noImplicitReturns": true,
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
