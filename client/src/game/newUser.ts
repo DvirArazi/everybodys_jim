@@ -1,40 +1,40 @@
+import { socket } from "..";
 import { Elem } from "../core/Elem"
-import { NewData } from "../shared/types";
+import { Entry, Role } from "../shared/types";
 import { Button } from "./button";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 
 export const NewUser = (
-    param: string,
-    clientDatas: NewData,
-    router: (path: string, newGame: boolean)=>void
+    role: Role,
+    entries: Entry[]
 ) => {
-    let newParam = "";
+    let newRole: Role;
     let joinButton = Button("Join room", ()=>{
-        router("/" + newParam, true);
+        socket.emit("construct", newRole);
     }, false);
 
-    let roomExists = false;
-
+    let roomExists = true;
     let reconnectionButtons = Elem("div", {}, (()=>{
         let rtn: Node[] = [];
 
         let topIs: number[] = [];
         let btmIs: number[] = [];
-        if (param != "") {
-            if (param == "st") {
-                for (let i = 0; i < clientDatas.length; i++) {
-                    if (clientDatas[i].role == "Storyteller") {
+        if (role.type != "NewUser") {
+            if (role.type == "Storyteller") {
+                for (let i = 0; i < entries.length; i++) {
+                    if (entries[i].roleType == "Personality") {
                         topIs.push(i);
                     } else {
                         btmIs.push(i);
                     }
                 }
-            } else if (param.length == 4) {
-                for (let i = 0; i < clientDatas.length; i++) {
-                    let clientData = clientDatas[i];
-                    if (clientData.role == "Personality" &&
-                        clientData.roomcode == param
+            } else if (role.type == "Personality") {
+                roomExists = false;
+                for (let i = 0; i < entries.length; i++) {
+                    let entry = entries[i];
+                    if (entry.roleType == "Personality" &&
+                        entry.roomcode == role.roomcode
                     ) {
                         roomExists = true;
                         topIs.push(i);
@@ -46,9 +46,9 @@ export const NewUser = (
 
             for (let indexes of [topIs, btmIs]) {
                 for (let topI of indexes) {
-                    let {role, roomcode} = clientDatas[topI];
+                    let {roleType: role, roomcode} = entries[topI];
                     rtn.push(Button(
-                        `Return to room ${roomcode} as ${role == "Storyteller" ? "the storyteller" : "a personality"}`,
+                        `Return to room ${roomcode} as ${role == "Personality" ? "the storyteller" : "a personality"}`,
                         ()=>{}, true, 14).elem
                     );
                 }
@@ -60,7 +60,7 @@ export const NewUser = (
     
     
     return Elem("div", {}, [
-        Button("Create a room", ()=>{router("/st", true);}).elem,
+        Button("Create a room", ()=>{socket.emit("construct", {type:"Storyteller"})}).elem,
         Spacer(15),
         Textarea({
             placeholder: "Enter room code here",
@@ -82,12 +82,12 @@ export const NewUser = (
                 }
 
                 if (newValue.length == 4) {
+                    newRole = {type:"Personality", roomcode:newValue};
                     joinButton.setEnabled(true);
                 } else {
                     joinButton.setEnabled(false);
                 }
 
-                newParam = newValue;
                 target.value = newValue;
             }
         }, {
@@ -105,8 +105,8 @@ export const NewUser = (
         Spacer(10),
         joinButton.elem,
         Spacer(10),
-        Elem("div", {innerText: roomExists || param.length != 4 ? "" :
-            `Room ${param} does not exist :/`    
+        Elem("div", {innerText: roomExists? "" :
+            `Room ${role} does not exist :/`    
         }),
         reconnectionButtons
     ]);

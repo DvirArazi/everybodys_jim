@@ -1,31 +1,40 @@
+
 import { Elem } from "../core/Elem";
-import { AbilityData, CardChange, GoalData } from "../shared/types";
+import { CardChange, CardData, RoleType } from "../shared/types";
 import { Column } from "./card/column";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 import { VisibilityBox } from "./visibilityBox";
 
-export type CardType = "onStoryteller" | "onPersonality";
-
 export type Card = {
     elem: Node,
     getName: ()=>string,
     update: (cardChangeType: CardChange)=>void,
-    set: (name: string, abilities: AbilityData[], goals: GoalData[])=>void
+    set: (cardData: CardData)=>void
     setVisible: (visible: boolean)=>void,
     isComplete: ()=>boolean
 }
 
 export let Card = (
-    cardType: CardType, abilitiesCount: number, goalsCount: number,
+    roleType: RoleType, abilitiesCount: number, goalsCount: number,
     onChange: (cardChangeType: CardChange)=>void
 ): Card => { 
 
-    let nameDiv = Elem("div", {}, [(()=>{
-        return cardType == "onStoryteller" ?
-            Elem("div", {}, [], {})
-            :
-            Textarea({
+    let nameDiv = Elem("div", {}, [], {
+        padding: "3px 0 0px 5px",
+        borderRadius: "10px 10px 0 0",
+        backgroundColor: "#4dffa6"
+    });;
+    let setName: (name: string)=>void;
+    switch (roleType) {
+        case "Storyteller": {
+            nameDiv.appendChild(Elem("div", {}, [], {}));
+            setName = (name)=>{nameDiv.innerText = name};
+            break;
+        }
+        case "Personality": {
+            let textarea = Textarea(
+                {
                     className: "cardTextarea",
                     placeholder: "Enter your name",
                     oninput: (ev)=>{
@@ -40,44 +49,47 @@ export let Card = (
                     height: "25px",
                 }
                 , false
-            ).elem
-    })()], {
-        padding: "3px 0 0px 5px",
-        borderRadius: "10px 10px 0 0",
-        backgroundColor: "#4dffa6"
-    });
+            );
+            nameDiv.appendChild(textarea.elem);
+            setName = (name)=>{textarea.update(name)};
+            break;
+        }
+    }
 
     let columns = [
-        Column(cardType, "ability", abilitiesCount, (attributeI, value)=>{
+        Column(roleType, "ability", abilitiesCount, (attributeI, value)=>{
             onChange({type:"attribute", columnI: 0, attributeI, attributeChange: value});
         }),
-        Column(cardType, "goal", goalsCount, (attributeI, value)=>{
+        Column(roleType, "goal", goalsCount, (attributeI, value)=>{
             onChange({type:"attribute", columnI: 1, attributeI, attributeChange: value});
         })
     ];
 
     let visibilityBox = VisibilityBox([
+        Elem("div", {}, [
+            Spacer(2.5),
             Elem("div", {}, [
-            nameDiv,
-            Elem("div", {}, [
-                Elem("table", {
-                }, [
-                    Elem("tr", {}, columns.map((column)=>{return column.elem;}))
+                nameDiv,
+                Elem("div", {}, [
+                    Elem("table", {
+                    }, [
+                        Elem("tr", {}, columns.map((column)=>{return column.elem;}))
+                    ], {
+                        width: "100%"
+                    })
                 ], {
-                    width: "100%"
-                })
+                    padding: "0 5px 1px 0"
+                }),
             ], {
-                padding: "0 5px 1px 0"
-            }),
-        ], {
-            borderSpacing: "0px",
-            borderRadius: "10px",
-            background: "#00FF80"//"#00cc66"//"#4dffa6",
-        })
+                borderSpacing: "0px",
+                borderRadius: "10px",
+                background: "#00FF80"//"#00cc66"//"#4dffa6",
+            })
+        ])
     ]);
     
     return {
-        elem: Elem("div", {}, [Spacer(2.5), visibilityBox.elem]),
+        elem: visibilityBox.elem,
         getName: ()=>{return nameDiv.innerText;},
         update: (cardChangeType)=>{
             switch (cardChangeType.type) {
@@ -90,8 +102,8 @@ export let Card = (
                 break;
             }
         },
-        set: (name: string, abilities: AbilityData[], goals: GoalData[])=>{
-            nameDiv.innerText = name;
+        set: ({name, abilities, goals}: CardData)=>{
+            setName(name);
             columns[0].set(abilities);
             columns[1].set(goals);
         },

@@ -22,8 +22,8 @@
     send path + entries ->
                                      --------- send relevant {id + roomcode + role}s
                                      V          if none - send new construction, if one - send construction                       
-    if (more then one) {let user choose} -------|-\
-    if (one) {send that}                        | |
+                         let user choose -------|-\
+                                                | |
                                                 | |
     construct              <--------------------/ \-> send construction
            /\-----------------------------------------------/

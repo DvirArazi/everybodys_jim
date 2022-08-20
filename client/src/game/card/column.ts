@@ -1,16 +1,15 @@
 import { Elem } from "../../core/Elem";
-import { AttributeChange, AttributeData, AttributeType } from "../../shared/types";
-import { CardType } from "../card";
+import { AttributeChange, AttributeData, AttributeType, RoleType } from "../../shared/types";
 import { Attribute } from "./column/attribute";
 
 export const Column = (
-    cardType: CardType, attributeType: AttributeType, attributeCount: number,
+    roleType: RoleType, attributeType: AttributeType, attributeCount: number,
     onAttributeChange: (attributeI: number, value: AttributeChange)=>void
     ) => {
     
     let attributes: Attribute[] = [];
     for (let i = 0; i < attributeCount; i++) {
-        attributes.push(Attribute(cardType, attributeType, (value)=>{onAttributeChange(i, value);}));
+        attributes.push(Attribute(roleType, attributeType, (value)=>{onAttributeChange(i, value);}));
     }
 
     return {

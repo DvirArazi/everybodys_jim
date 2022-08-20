@@ -1,6 +1,5 @@
 import { Elem } from "../../../core/Elem";
-import { AttributeChange, AttributeData, AttributeType } from "../../../shared/types";
-import { CardType } from "../../card";
+import { AbilityData, AttributeChange, AttributeData, AttributeType, GoalData, RoleType} from "../../../shared/types";
 import { Textarea } from "../../textarea";
 import { Checkbox } from "./attribute/checkbox";
 import { Description } from "./attribute/description";
@@ -14,7 +13,7 @@ export type Attribute = {
 }
 
 export const Attribute = (
-    cardType: CardType, attributeType: AttributeType,
+    roleType: RoleType, attributeType: AttributeType,
     onChange: (changeType: AttributeChange)=>void
 ): Attribute => {
     
@@ -23,7 +22,7 @@ export const Attribute = (
 
     const leftChildren: Node[] = [];
 
-    let checkbox = cardType == "onStoryteller" ?
+    let checkbox = roleType == "Storyteller" ?
         Checkbox(true, (checked)=>{
             onChange({type: "checkbox", value: checked});
         }) : 
@@ -34,7 +33,7 @@ export const Attribute = (
     let scorebox: Scorebox | undefined = undefined;
     if (attributeType == "goal") {
         scorebox = Scorebox((value)=>{onChange({type:"score", value: value})});
-        scorebox.setEnabled(cardType == "onStoryteller");
+        scorebox.setEnabled(roleType == "Storyteller");
         leftChildren.push(scorebox.elem);
     }
 
@@ -87,8 +86,9 @@ export const Attribute = (
         set:(attributeData: AttributeData)=>{
             checkbox.update(attributeData.approved);
             description.update(attributeData.description);
-            if (attributeData.type == "goal" && scorebox != undefined) {
-                scorebox.update(attributeData.score);
+            let goalData = (attributeData as GoalData);
+            if (goalData.score != undefined && scorebox != undefined) {
+                scorebox.update(goalData.score);
             }
         },
         isComplete: ()=>{

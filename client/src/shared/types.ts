@@ -1,12 +1,18 @@
 export interface ServerToClientEvents {
-    personalityConnected: (personalityId: string) => void;
+    personalityConnected: (personalityId: string, cardData: CardData | undefined) => void;
     personalityDisconnected: (personalityId: string) => void;
-    cardUpdatedPts: (personalityId: string,value: CardChange) => void
+    deleteEntries: (indexes: number[]) => void;
+    addEntry: (entry: Entry) => void;
+    updateEntry: (currentId: string, newId: string) => void;
+    createNewUser: (entries: Entry[]) => void;
+    construct: (clientData: ClientData) => void;
+    cardUpdatedPts: (personalityId: string,value: CardChange) => void;
     cardUpdatedStp: (value: CardChange) => void;
 }
 
 export interface ClientToServerEvents {
-    init: (param: string, entries: Entry[], newGame: boolean, callback: (clientType: NewData, toDeletes: string[]) => void) => void;
+    init: (role: Role, entries: Entry[]) => void;
+    construct: (role: Role) => void
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;
@@ -22,26 +28,32 @@ export interface SocketData {
 }
 
 
-export type Role = "Storyteller" | "Personality";
+export type RoleType = "Storyteller" | "Personality";
 
+export type Role =
+    { type: "Storyteller",
+    } |
+    { type: "Personality",
+        roomcode: string
+    } |
+    { type: "NewUser"
+    }
+;
 
 export type Entry = {
     id: string,
-    role: Role
+    roomcode: string,
+    roleType: RoleType,
 };
 
 
-export type Attribute = {
+export type AbilityData = {
     description: string,
     approved: boolean
 };
-export type Goal = Attribute & {score: string};
+export type GoalData = AbilityData & {score: string};
 
-export type AbilityData = { type: "ability" } & Attribute
-export type GoalData = { type: "goal" } & Goal;
-
-export type AttributeData = GoalData | AbilityData;
-
+export type AttributeData = AbilityData | GoalData;
 
 export type Storyteller = {
     id: string,
@@ -50,9 +62,7 @@ export type Storyteller = {
 
 export type Personality = {
     id: string,
-    name: string,
-    abilities: Attribute[],
-    goals: Goal[],
+    cardData: CardData
     stage: number,
     connected: boolean,
 };
@@ -64,33 +74,31 @@ export type Room = {
     stage: number,
 };
 
-export type cardData = {
+export type CardData = {
     name: string,
     abilities: AbilityData[],
     goals: GoalData[],
 }
 
-export type Ps0Data = cardData | undefined;
+export type Ps0Data = {
+    roomcode: string,
+    cardData: CardData | undefined
+};
 
 export type St0Data = {
     roomcode: string,
-    personalities?: ({id: string} & cardData)[],
+    personalities: {
+        id: string,
+        cardData: CardData
+    }[] | undefined
 };
 
-export type NewData = {
-    role: Role,
-    roomcode: string,
-}[];
-
 export type ClientData = 
-    { type: "Storyteller", 
+    { type: "St0Data", 
         st0data: St0Data,
     } |
-    { type: "Personality",
-        data: Ps0Data,
-    } | 
-    { type: "new",
-        datas: NewData,
+    { type: "Ps0Data",
+        ps0data: Ps0Data,
     }
 ;
 

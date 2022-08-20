@@ -1,3 +1,5 @@
+import chalk from "chalk";
+import { Console } from "console";
 import { Cookies } from "typescript-cookie";
 import { socket } from "..";
 import { Entry, Role } from "../shared/types";
@@ -18,24 +20,31 @@ export const setEntries = (entries: Entry[]) => {
     Cookies.set("entries", JSON.stringify(entries));
 }
 
-export const addEntry = (role: Role) => {
-    let entries = getEntries().concat({
-        id: socket.id, role: role
-    });
+export const addEntry = (entry: Entry) => {
+    let entries = getEntries().concat(entry);
 
     setEntries(entries);
 }
 
-export const deleteEntries = (ids: string[]) => {
+export const updateEntry = (currentId: string, newId: string) => {
     let entries = getEntries();
 
-    for (let i = 0; i < ids.length; i++) {
-        for (let j = 0; j < entries.length;) {
-            if (ids[i] == entries[j].id) {
-                entries.splice(j);
-                break;
-            }
+    for (let entry of entries) {
+        if (entry.id == currentId) {
+            entry.id = newId;
+            setEntries(entries);
+            return;
         }
+    }
+
+    console.log(chalk.red("ERROR: ") + "Could not find entry to update");
+}
+
+export const deleteEntries = (ids: number[]) => {
+    let entries = getEntries();
+
+    for (let id of ids) {
+        entries.splice(id);
     }
 
     console.log(entries);

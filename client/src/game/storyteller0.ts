@@ -23,14 +23,14 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     }
 
     if (st0data.personalities != undefined) {
-        for (let {id, name, abilities, goals} of st0data.personalities) {
-            let card = Card("onStoryteller", 2, 2, (cardChange)=>{
+        for (let {id, cardData} of st0data.personalities) {
+            let card = Card("Storyteller", 2, 2, (cardChange)=>{
                 socket.emit("cardUpdatedStp", id, cardChange);
     
                 updateStartButton();
             });
 
-            card.set(name, abilities, goals);
+            card.set(cardData);
             card.setVisible(card.getName() != "");
             visibilityBox.setVisible(Array.from(cards.values()).some((card)=>{return card.getName() != "";}));
             visibilityBox.setVisible(true);
@@ -42,13 +42,14 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         updateStartButton();
     }
 
-    socket.on("personalityConnected", (personalityId)=>{
-        let card = Card("onStoryteller", 2, 2, (cardChange)=>{
+    socket.on("personalityConnected", (personalityId, cardData)=>{
+        let card = Card("Storyteller", 2, 2, (cardChange)=>{
             socket.emit("cardUpdatedStp", personalityId, cardChange);
 
             updateStartButton();
         });
 
+        if (cardData != undefined) {card.set(cardData)};
         card.setVisible(card.getName() != "");
 
         cards.set(personalityId, card);

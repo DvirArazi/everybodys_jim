@@ -1,9 +1,13 @@
 import chalk from "chalk";
 import { Console } from "console";
 import { io } from ".";
-import { AbilityData, Room } from "./types";
+import { AbilityData, CardChange, GoalData, Personality, Room } from "./types";
 
 export let rooms: Room[] = [];
+
+export const getRoomByRoomcode = (roomcode: string) => {
+    return rooms.find((room)=>{return room.roomcode == roomcode;});
+}
 
 export const getRoomByStoryteller = (storytellerId: string): Room | undefined => {
     return rooms.find((room)=>{return room.storyteller.id == storytellerId;});
@@ -18,7 +22,7 @@ export const getRoomByPersonality = (personalityId: string) => {
         }
     }
 
-    return {room: undefined, personality: undefined};
+    return undefined;
 }
 
 export const createRoom = (storytellerId: string): string => {
@@ -53,14 +57,16 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
     if (room != undefined) {
         room.personalities.push({
             id: personalityId,
-            name: "",
-            abilities: Array<AbilityData>(2).fill({type: ""}),
-            goals: [],
+            cardData: {
+                name: "",
+                abilities: Array<AbilityData>.from({length: 2},(_)=>{return {approved: false, description: ""}}),
+                goals: Array<GoalData>.from({length: 2},(_)=>{return {approved: false, description: "", score: ""}})
+            },
             stage: 0,
             connected: true
         });
 
-        io.to(room.storyteller.id).emit("personalityConnected", personalityId)
+        io.to(room.storyteller.id).emit("personalityConnected", personalityId, undefined);
 
         console.log(`New personality ` + chalk.yellow(personalityId) + ` connected to room ` + chalk.yellow(roomcode));
 
@@ -68,4 +74,34 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
     }
 
     return false;
+}
+
+export const updateCard = (room: Room, personality: Personality, cardChange: CardChange) => {
+    switch(cardChange.type) {
+        case "name":
+            personality.cardData.name = cardChange.value
+        break;
+        case "attribute":
+            let attribute = cardChange.columnI == 0 ?
+                personality.cardData.abilities[cardChange.attributeI] :
+                personality.cardData.goals[cardChange.attributeI];
+            switch(cardChange.attributeChange.type) {
+                case "checkbox":
+                    attribute.approved =
+                        cardChange.attributeChange.value;
+                break;
+                case "description":
+                    attribute.description =
+                        cardChange.attributeChange.value;
+                break;
+                case "score":
+                    let goal = (attribute as GoalData);
+                    if (goal.score != undefined) {
+                        goal.score =
+                            cardChange.attributeChange.value;
+                    }
+                break;
+            }
+        break;
+    }
 }
