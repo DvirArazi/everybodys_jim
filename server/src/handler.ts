@@ -8,6 +8,8 @@ import { Attribute } from "../../client/src/game/card/column/attribute";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
 import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Role, Room, ServerToClientEvents, SocketData, Storyteller } from "./types";
 
+type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
+
 export let handler = () => {
     console.log(rooms);
 
@@ -63,40 +65,34 @@ export let handler = () => {
 
             //call client based on relevant entries
             //=====================================
-            if (role.type == "Storyteller") {
-                if (relevantEntries.length == 0) {
-                    newStoryteller(socket);
-                } else if (relevantEntries.length == 1) {
-                    let room = getRoomByStoryteller(relevantEntries[0].id)!;
-                    room.storyteller.id = socket.id;
-                    socket.emit("updateEntry", relevantEntries[0].id, socket.id);
-                    socket.emit("construct", {type: "St0Data", st0data: {
-                            roomcode: room.roomcode,
-                            personalities: room.personalities
-                        }}
-                    );
-                }
-            } else if (role.type == "Personality") {
-                if (relevantEntries.length == 0) {
-                    newPersonality(socket, role.roomcode);
-                } else if (relevantEntries.length == 1) {
-                    let {room, personality} = getRoomByPersonality(relevantEntries[0].id)!;
-                    personality.id = socket.id;
-                    console.log(getRoomByPersonality(socket.id)?.room.roomcode, room.roomcode);
-                    io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
-                    socket.emit("updateEntry", relevantEntries[0].id, socket.id);
-                    socket.emit("construct", {type: "Ps0Data", ps0data: {roomcode: role.roomcode, cardData: personality.cardData}})
-                }
-            } else {
+            if (role.type == "NewUser" || relevantEntries.length > 1) {
                 socket.emit("createNewUser", potentialEntries);
+            } else if (relevantEntries.length == 0) {
+                switch(role.type) {
+                    case "Storyteller": { newStoryteller(socket); break; }
+                    case "Personality": { newPersonality(socket, role.roomcode); break; }
+                }
+            } else if (relevantEntries.length == 1) {
+                switch(role.type) {
+                    case "Storyteller": { reconnectStoryteller(socket, relevantEntries[0].id); break; }
+                    case "Personality": { reconnectPersonality(socket, relevantEntries[0].id, role.roomcode); break; }
+                }
             }
         });
 
-        socket.on("construct", (role)=>{
+        socket.on("construct", (role, entryId)=>{
             if (role.type == "Storyteller") {
-                newStoryteller(socket);
+                if (entryId == undefined) {
+                    newStoryteller(socket);
+                } else {
+                    reconnectStoryteller(socket, entryId);
+                }
             } else if (role.type == "Personality") {
-                newPersonality(socket, role.roomcode);
+                if (entryId == undefined) {
+                    newPersonality(socket, role.roomcode);
+                } else {
+                    reconnectPersonality(socket, entryId, role.roomcode);
+                }
             } else {
                 console.log(chalk.red("ERROR: ") + "No relevant role supplemented!");    
             }
@@ -178,7 +174,7 @@ export let handler = () => {
     });
 }
 
-const newStoryteller = (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>) => {
+const newStoryteller = (socket: ServerSocket) => {
     let roomcode = createRoom(socket.id);
     socket.emit("addEntry", {
         id: socket.id,
@@ -186,13 +182,12 @@ const newStoryteller = (socket: Socket<ClientToServerEvents, ServerToClientEvent
         roleType: "Storyteller"
     })
     socket.emit("construct", {type: "St0Data", st0data: {
-            roomcode: roomcode,
-            personalities: undefined
-        }}
-    );
+        roomcode: roomcode,
+        personalities: undefined
+    }});
 }
 
-const newPersonality = (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, roomcode: string) => {
+const newPersonality = (socket: ServerSocket, roomcode: string) => {
     if (connectToRoom(socket.id, roomcode)) {
         socket.emit("addEntry", {
             id: socket.id,
@@ -203,4 +198,24 @@ const newPersonality = (socket: Socket<ClientToServerEvents, ServerToClientEvent
     } else {
         socket.emit("createNewUser", []);
     }
+}
+
+const reconnectStoryteller = (socket: ServerSocket, entryId: string) => {
+    let room = getRoomByStoryteller(entryId)!;
+    room.storyteller.id = socket.id;
+    socket.emit("updateEntry", entryId, socket.id);
+    socket.emit("construct", {type: "St0Data", st0data: {
+            roomcode: room.roomcode,
+            personalities: room.personalities
+        }}
+    );
+}
+
+const reconnectPersonality = (socket: ServerSocket, entryId: string, roomcode: string) => {
+    let {room, personality} = getRoomByPersonality(entryId)!;
+    personality.id = socket.id;
+    console.log(getRoomByPersonality(socket.id)?.room.roomcode, room.roomcode);
+    io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
+    socket.emit("updateEntry", entryId, socket.id);
+    socket.emit("construct", {type: "Ps0Data", ps0data: {roomcode: roomcode, cardData: personality.cardData}})
 }

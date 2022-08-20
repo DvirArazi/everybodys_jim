@@ -12,7 +12,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     init: (role: Role, entries: Entry[]) => void;
-    construct: (role: Role) => void
+    construct: (role: Role, entryId?: string) => void
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;
@@ -26,7 +26,6 @@ export interface SocketData {
     // name: string;
     // age: number;
 }
-
 
 export type RoleType = "Storyteller" | "Personality";
 

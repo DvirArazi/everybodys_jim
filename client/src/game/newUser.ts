@@ -16,40 +16,35 @@ export const NewUser = (
 
     let roomExists = true;
     let reconnectionButtons = Elem("div", {}, (()=>{
-        let rtn: Node[] = [];
+        let rtn: HTMLElement[] = [];
 
-        let topIs: number[] = [];
-        let btmIs: number[] = [];
         if (role.type != "NewUser") {
-            if (role.type == "Storyteller") {
-                for (let i = 0; i < entries.length; i++) {
-                    if (entries[i].roleType == "Personality") {
-                        topIs.push(i);
-                    } else {
-                        btmIs.push(i);
-                    }
-                }
-            } else if (role.type == "Personality") {
-                roomExists = false;
-                for (let i = 0; i < entries.length; i++) {
-                    let entry = entries[i];
-                    if (entry.roleType == "Personality" &&
-                        entry.roomcode == role.roomcode
-                    ) {
-                        roomExists = true;
-                        topIs.push(i);
-                    } else {
-                        btmIs.push(i);
-                    }
+            let topIs: number[] = [];
+            let btmIs: number[] = [];
+            for (let i = 0; i < entries.length; i++) {
+                if (entries[i].roleType == role.type &&
+                    (role.type == "Personality" ?
+                        entries[i].roomcode == role.roomcode : true)
+                ) {
+                    topIs.push(i);
+                } else {
+                    btmIs.push(i);
                 }
             }
 
             for (let indexes of [topIs, btmIs]) {
                 for (let topI of indexes) {
-                    let {roleType: role, roomcode} = entries[topI];
-                    rtn.push(Button(
-                        `Return to room ${roomcode} as ${role == "Personality" ? "the storyteller" : "a personality"}`,
-                        ()=>{}, true, 14).elem
+                    let {roleType, roomcode} = entries[topI];
+                    rtn.push(
+                        Elem("div", {}, [
+                            Spacer(5),
+                            Button(
+                                `Rejoin room ${roomcode} as ${roleType == "Storyteller" ? "the storyteller" : "a personality"}`,
+                                ()=>{
+                                    socket.emit("construct", {type: roleType, }, )
+                                }, true, 14
+                            ).elem
+                        ])
                     );
                 }
             }
