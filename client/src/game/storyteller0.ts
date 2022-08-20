@@ -96,7 +96,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
     return Elem("div", {}, [
         Button("Copy room link", ()=>{
-            console.log("copying " + st0data.roomcode);
+            console.log("copied: " + st0data.roomcode);
             navigator.clipboard.writeText(window.location.host + "/" + st0data.roomcode);
         }).elem,
         Spacer(10),

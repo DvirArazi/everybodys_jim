@@ -17,13 +17,6 @@
 [ ] set ordered list
 [ ] enable start button by the ordered list
 [V] figure out node + browser debugging
-[ ] create the new routing system of
-            client                                       server
-    send path + entries ->
-                                     --------- send relevant {id + roomcode + role}s
-                                     V          if none - send new construction, if one - send construction                       
-                         let user choose -------|-\
-                                                | |
-                                                | |
-    construct              <--------------------/ \-> send construction
-           /\-----------------------------------------------/
+[V] create the new routing system
+[ ] make it so the reconnection button say the name of the personality
+    instead of "personality"

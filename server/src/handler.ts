@@ -74,27 +74,29 @@ export let handler = () => {
                 }
             } else if (relevantEntries.length == 1) {
                 switch(role.type) {
-                    case "Storyteller": { reconnectStoryteller(socket, relevantEntries[0].id); break; }
-                    case "Personality": { reconnectPersonality(socket, relevantEntries[0].id, role.roomcode); break; }
+                    case "Storyteller": { reconnectStoryteller(socket, relevantEntries[0]); break; }
+                    case "Personality": { reconnectPersonality(socket, relevantEntries[0]); break; }
                 }
             }
         });
 
-        socket.on("construct", (role, entryId)=>{
+        socket.on("construct", (role)=>{
             if (role.type == "Storyteller") {
-                if (entryId == undefined) {
-                    newStoryteller(socket);
-                } else {
-                    reconnectStoryteller(socket, entryId);
-                }
+                newStoryteller(socket);
             } else if (role.type == "Personality") {
-                if (entryId == undefined) {
-                    newPersonality(socket, role.roomcode);
-                } else {
-                    reconnectPersonality(socket, entryId, role.roomcode);
-                }
+                newPersonality(socket, role.roomcode);
             } else {
                 console.log(chalk.red("ERROR: ") + "No relevant role supplemented!");    
+            }
+        });
+
+        socket.on("reconnect", (entry)=>{
+            if (entry.roleType == "Storyteller") {
+                    reconnectStoryteller(socket, entry);
+            } else if (entry.roleType == "Personality") {
+                    reconnectPersonality(socket, entry);
+            } else {
+                console.log(chalk.red("ERROR: ") + "No relevant entry supplemented!");    
             }
         });
 
@@ -200,22 +202,38 @@ const newPersonality = (socket: ServerSocket, roomcode: string) => {
     }
 }
 
-const reconnectStoryteller = (socket: ServerSocket, entryId: string) => {
-    let room = getRoomByStoryteller(entryId)!;
+const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
+    let room = getRoomByRoomcode(entry.roomcode);
+    if (room == undefined) {
+        console.log(chalk.red("ERROR: ") + "Room could not be found.");
+        return;
+    }
+
     room.storyteller.id = socket.id;
-    socket.emit("updateEntry", entryId, socket.id);
+    room.storyteller.connected = true;
+    socket.emit("updateEntry", entry.id, socket.id);
+
     socket.emit("construct", {type: "St0Data", st0data: {
-            roomcode: room.roomcode,
-            personalities: room.personalities
-        }}
-    );
+        roomcode: entry.id,
+        personalities: room.personalities
+    }});
 }
 
-const reconnectPersonality = (socket: ServerSocket, entryId: string, roomcode: string) => {
-    let {room, personality} = getRoomByPersonality(entryId)!;
+const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
+    let value = getRoomByPersonality(entry.id);
+    if (value == undefined) {
+        console.log(chalk.red("ERROR: ") + "Could not find room.");
+        return;
+    }
+    let {room, personality} = value;
+
     personality.id = socket.id;
-    console.log(getRoomByPersonality(socket.id)?.room.roomcode, room.roomcode);
+    personality.connected = true;
+    socket.emit("updateEntry", entry.id, socket.id);
+
     io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
-    socket.emit("updateEntry", entryId, socket.id);
-    socket.emit("construct", {type: "Ps0Data", ps0data: {roomcode: roomcode, cardData: personality.cardData}})
+    socket.emit("construct", {type: "Ps0Data", ps0data: {
+        roomcode: entry.roomcode,
+        cardData: personality.cardData
+    }});
 }

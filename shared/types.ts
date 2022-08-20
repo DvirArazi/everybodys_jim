@@ -12,7 +12,8 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     init: (role: Role, entries: Entry[]) => void;
-    construct: (role: Role, entryId?: string) => void
+    construct: (role: Role) => void;
+    reconnect: (entry: Entry) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;

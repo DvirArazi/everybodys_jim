@@ -34,14 +34,14 @@ export const NewUser = (
 
             for (let indexes of [topIs, btmIs]) {
                 for (let topI of indexes) {
-                    let {roleType, roomcode} = entries[topI];
+                    let entry = entries[topI];
                     rtn.push(
                         Elem("div", {}, [
                             Spacer(5),
                             Button(
-                                `Rejoin room ${roomcode} as ${roleType == "Storyteller" ? "the storyteller" : "a personality"}`,
+                                `Rejoin room ${entry.roomcode} as ${entry.roleType == "Storyteller" ? "the storyteller" : "a personality"}`,
                                 ()=>{
-                                    socket.emit("construct", {type: roleType, }, )
+                                    socket.emit("reconnect", entry);
                                 }, true, 14
                             ).elem
                         ])
