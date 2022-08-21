@@ -3,11 +3,15 @@ import { Elem } from "../core/Elem";
 import { Ps0Data } from "../shared/types";
 import { Card } from "./card";
 import { Container } from "./container";
+import { updateEntryName } from "./entries";
 
 export let Personality0 = (ps0data: Ps0Data) => {
     let card = Card("Personality", 2, 2,
-        (value)=>{
-            socket.emit("cardUpdatedPts", value);
+        (cardChange)=>{
+            if (cardChange.type == "name") {
+                updateEntryName(cardChange.name);
+            }
+            socket.emit("cardUpdatedPts", cardChange);
         }
     );
 

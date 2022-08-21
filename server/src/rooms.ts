@@ -79,7 +79,7 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
 export const updateCard = (room: Room, personality: Personality, cardChange: CardChange) => {
     switch(cardChange.type) {
         case "name":
-            personality.cardData.name = cardChange.value
+            personality.cardData.name = cardChange.name
         break;
         case "attribute":
             let attribute = cardChange.columnI == 0 ?

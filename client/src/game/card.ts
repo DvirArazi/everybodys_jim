@@ -11,7 +11,6 @@ export type Card = {
     getName: ()=>string,
     update: (cardChangeType: CardChange)=>void,
     set: (cardData: CardData)=>void
-    setVisible: (visible: boolean)=>void,
     isComplete: ()=>boolean
 }
 
@@ -19,7 +18,6 @@ export let Card = (
     roleType: RoleType, abilitiesCount: number, goalsCount: number,
     onChange: (cardChangeType: CardChange)=>void
 ): Card => { 
-
     let nameDiv = Elem("div", {}, [], {
         padding: "3px 0 0px 5px",
         borderRadius: "10px 10px 0 0",
@@ -40,7 +38,7 @@ export let Card = (
                     oninput: (ev)=>{
                         let target = ev.target as HTMLTextAreaElement;
                         target.value = target.value.replace('\n', "");
-                        onChange({type: "name", value: target.value});
+                        onChange({type: "name", name: target.value});
                     },
                 }, {
                     border: "none"
@@ -64,37 +62,30 @@ export let Card = (
             onChange({type:"attribute", columnI: 1, attributeI, attributeChange: value});
         })
     ];
-
-    let visibilityBox = VisibilityBox([
-        Elem("div", {}, [
-            Spacer(2.5),
-            Elem("div", {}, [
-                nameDiv,
-                Elem("div", {}, [
-                    Elem("table", {
-                    }, [
-                        Elem("tr", {}, columns.map((column)=>{return column.elem;}))
-                    ], {
-                        width: "100%"
-                    })
-                ], {
-                    padding: "0 5px 1px 0"
-                }),
-            ], {
-                borderSpacing: "0px",
-                borderRadius: "10px",
-                background: "#00FF80"//"#00cc66"//"#4dffa6",
-            })
-        ])
-    ]);
     
     return {
-        elem: visibilityBox.elem,
+        elem: Elem("div", {}, [
+            nameDiv,
+            Elem("div", {}, [
+                Elem("table", {
+                }, [
+                    Elem("tr", {}, columns.map((column)=>{return column.elem;}))
+                ], {
+                    width: "100%"
+                })
+            ], {
+                padding: "0 5px 1px 0"
+            }),
+        ], {
+            borderSpacing: "0px",
+            borderRadius: "10px",
+            background: "#00FF80"//"#00cc66"//"#4dffa6",
+        }),
         getName: ()=>{return nameDiv.innerText;},
         update: (cardChangeType)=>{
             switch (cardChangeType.type) {
                 case "name":
-                    nameDiv.innerText = cardChangeType.value;
+                    nameDiv.innerText = cardChangeType.name;
                 break;
                 case "attribute":
                     let {columnI, attributeI, attributeChange: attributeChangeType} = cardChangeType;
@@ -107,7 +98,6 @@ export let Card = (
             columns[0].set(abilities);
             columns[1].set(goals);
         },
-        setVisible: visibilityBox.setVisible,
         isComplete: ()=>{
             return columns.every((column)=>{return column.isComplete();});
         }

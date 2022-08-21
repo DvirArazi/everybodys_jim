@@ -1,11 +1,13 @@
 import { io, Socket } from "socket.io-client";
 import { Elem } from "./core/Elem";
 import { Game } from "./game";
+import { Button } from "./game/button";
 import { Card } from "./game/card";
 import { Column } from "./game/card/column";
 import { Attribute } from "./game/card/column/attribute";
 import { initEntries } from "./game/entries";
 import { Personality0 } from "./game/personality0";
+import { Spacer } from "./game/spacer";
 import { Storyteller0 } from "./game/storyteller0";
 import { Storyteller1 } from "./game/storyteller1";
 import { ClientToServerEvents, ServerToClientEvents } from "./shared/types";
@@ -31,7 +33,3 @@ document.body.appendChild(Elem("div", {}, [
     fontWeight: "bold",
     fontSize: "20px"
 }));
-// document.body.appendChild(Game());
-// document.body.appendChild(Card("onStoryteller", 2, 2, ()=>{}, ()=>{}).elem);
-// document.body.appendChild(Attribute("goal", "goal").elem);
-// document.body.appendChild(Column("onPersonality", "goal", 2, ()=>{}).elem);

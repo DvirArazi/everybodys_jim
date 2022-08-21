@@ -1,97 +1,111 @@
+import chalk from "chalk";
 import { socket } from "..";
 import { Elem } from "../core/Elem";
-import { St0Data } from "../shared/types";
+import { CardChange, CardData, St0Data } from "../shared/types";
 import { Button } from "./button";
 import { Card } from "./card";
 import { Container } from "./container";
 import { Spacer } from "./spacer";
 import { VisibilityBox } from "./visibilityBox";
 
-export let Storyteller0 = (st0data: St0Data):HTMLElement => {
-    let orderedPersonalities: string[] = [];
+type BoxedCard = Card & VisibilityBox & {id: string};
 
-    let cards = new Map<string, Card>();
+export let Storyteller0 = (st0data: St0Data):HTMLElement => {
+    let completePers: string[] = [];
+
+    let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
     let startButton = Button("Start game", ()=>{});
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 
-    const updateStartButton = ()=>{
-        startButton.setEnabled(
-            Array.from(cards.values()).every((card)=>{return card.isComplete();})
-        );
-    }
-
-    if (st0data.personalities != undefined) {
-        for (let {id, cardData} of st0data.personalities) {
-            let card = Card("Storyteller", 2, 2, (cardChange)=>{
-                socket.emit("cardUpdatedStp", id, cardChange);
-    
-                updateStartButton();
-            });
-
-            card.set(cardData);
+    //To be executed on card update
+    //=============================
+    const onCardUpdate = (card: BoxedCard, cardChange?: CardChange) => {
+        if (cardChange == undefined || cardChange.type == "name") {
             card.setVisible(card.getName() != "");
-            visibilityBox.setVisible(Array.from(cards.values()).some((card)=>{return card.getName() != "";}));
-            visibilityBox.setVisible(true);
+            let blu = card.getName();
+            let bla = Array.from(cards.values()).some(card=>card.getName()!="");
+            visibilityBox.setVisible(bla);
+        } 
 
-            cards.set(id, card);
-            cardsContainer.append(card.elem);
+        if (card.isComplete()) {
+            completePers.push(card.id);
+        } else if(completePers.some(id=>id==card.id)) {
+            completePers.splice(completePers.indexOf(card.id), 1);
         }
-
-        updateStartButton();
+        startButton.setEnabled(completePers.length >= 2);
     }
 
-    socket.on("personalityConnected", (personalityId, cardData)=>{
+    //crate card
+    //==========
+    const createCard = (perId: string, cardData?: CardData)=>{
+        let boxedCard: BoxedCard;
+        let cardVBox = VisibilityBox([Spacer(2.5)]);
         let card = Card("Storyteller", 2, 2, (cardChange)=>{
-            socket.emit("cardUpdatedStp", personalityId, cardChange);
+            socket.emit("cardUpdatedStp", perId, cardChange);
 
-            updateStartButton();
+            onCardUpdate(boxedCard, cardChange);
         });
 
-        if (cardData != undefined) {card.set(cardData)};
-        card.setVisible(card.getName() != "");
+        boxedCard = {...card, ...cardVBox, ...{id: perId}};
 
-        cards.set(personalityId, card);
-        cardsContainer.append(card.elem);
+        cards.set(perId, boxedCard);
+        cardVBox.elem.appendChild(card.elem);
+        cardsContainer.append(cardVBox.elem);
 
-        updateStartButton();
+        if (cardData != undefined) {
+            card.set(cardData);
+            onCardUpdate(boxedCard);
+        }
+    };
+
+    //Construct cards from parameter data
+    //===================================
+    if (st0data.personalities != undefined) {
+        for (let {id, cardData} of st0data.personalities) {
+            createCard(id, cardData);
+        }
+    }
+
+    //Construct card from personality connection
+    //==========================================
+    socket.on("personalityConnected", (personalityId, cardData)=>{
+        createCard(personalityId, cardData);
     });
 
+    //Remove card on personality disconnection
+    //========================================
     socket.on("personalityDisconnected", (personalityId)=>{
         let card = cards.get(personalityId);
 
-        if (card != undefined) {
-            cardsContainer.remove(card.elem);
-            cards.delete(personalityId);
+        if (card == undefined) {
+            console.log(chalk.red("ERROR: ") + "Could not find a card to remove.");
+            return;
         }
 
-        updateStartButton();
+        cardsContainer.remove(card.elem);
+        cards.delete(personalityId);
+
+        if(completePers.some(id=>id==card!.id)) {
+            completePers.splice(completePers.indexOf(card.id), 1);
+        }
+        startButton.setEnabled(completePers.length >= 2);
+        visibilityBox.setVisible(Array.from(cards.values()).some(card=>card.getName()!=""));
     });
 
+    //Update card on call from personality
+    //====================================
     socket.on("cardUpdatedPts", (personalityId, cardChange)=> {
         let card = cards.get(personalityId);
         if (card == undefined) {
-            console.log("ERROR 404: Could not find the personality to modify.");
+            console.log(chalk.red("ERROR: ") + "Could not find a card to modify.");
             return;
         }
 
         card.update(cardChange);
 
-        if (cardChange.type == "name") { 
-            card.setVisible(cardChange.value != "")
-
-            let visible = false;
-            for (let [_, card] of cards) {
-                if (card.getName() != "") {
-                    visible = true;
-                    break;
-                }
-            }
-            visibilityBox.setVisible(visible);
-        }
-
-        updateStartButton();
+        onCardUpdate(card, cardChange);
     });
 
     return Elem("div", {}, [

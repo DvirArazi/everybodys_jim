@@ -1,15 +1,16 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem"
-import { Entry, Role } from "../shared/types";
+import { Entry, ParamData } from "../shared/types";
 import { Button } from "./button";
+import { deleteEntry, getEntries } from "./entries";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 
 export const NewUser = (
-    role: Role,
+    role: ParamData,
     entries: Entry[]
 ) => {
-    let newRole: Role;
+    let newRole: ParamData;
     let joinButton = Button("Join room", ()=>{
         socket.emit("construct", newRole);
     }, false);
@@ -18,11 +19,11 @@ export const NewUser = (
     let reconnectionButtons = Elem("div", {}, (()=>{
         let rtn: HTMLElement[] = [];
 
-        if (role.type != "NewUser") {
             let topIs: number[] = [];
             let btmIs: number[] = [];
             for (let i = 0; i < entries.length; i++) {
-                if (entries[i].roleType == role.type &&
+                if (role.type == "NewUser" ||
+                    entries[i].role.type == role.type &&
                     (role.type == "Personality" ?
                         entries[i].roomcode == role.roomcode : true)
                 ) {
@@ -33,22 +34,41 @@ export const NewUser = (
             }
 
             for (let indexes of [topIs, btmIs]) {
-                for (let topI of indexes) {
-                    let entry = entries[topI];
-                    rtn.push(
-                        Elem("div", {}, [
-                            Spacer(5),
-                            Button(
-                                `Rejoin room ${entry.roomcode} as ${entry.roleType == "Storyteller" ? "the storyteller" : "a personality"}`,
-                                ()=>{
-                                    socket.emit("reconnect", entry);
-                                }, true, 14
-                            ).elem
-                        ])
-                    );
+                for (let i = 0; i < indexes.length; i++) {
+                    let index = indexes[i];
+                    let entry = entries[index];
+                    let row = Elem("div", {}, [
+                        Spacer(5),
+                        Elem("div", {}, [Button(
+                            `Rejoin room ${entry.roomcode} as ${entry.role.type == "Storyteller" ? "the storyteller" : entry.role.name}`,
+                            ()=>{
+                                socket.emit("reconnect", entry);
+                            }, true, {
+                                fontSize: "14px",
+                                height: "45px",
+                                padding: "0 5px 0 5px",
+                                borderRadius: "10px 0 0 10px"
+                            }
+                        ).elem], {display: "inline-block"}),
+                        Elem("div", {}, [Button(
+                            `Delete`,
+                            ()=>{
+                                deleteEntry(entry.id);
+                                console.log(getEntries());
+                                reconnectionButtons.removeChild(row);
+                            }, true, {
+                                fontSize: "14px",
+                                height: "45px",
+                                padding: "0 15px 0 15px",
+                                background: "#ff3333",
+                                boxShadow: "0 5px #e60000",
+                                borderRadius: "0 10px 10px 0",
+                            }
+                        ).elem], {display: "inline-block"})
+                    ]);
+                    rtn.push(row);
                 }
             }
-        }
 
         return rtn;
     })());

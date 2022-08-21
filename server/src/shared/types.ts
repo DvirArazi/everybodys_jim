@@ -3,7 +3,7 @@ export interface ServerToClientEvents {
     personalityDisconnected: (personalityId: string) => void;
     deleteEntries: (indexes: number[]) => void;
     addEntry: (entry: Entry) => void;
-    updateEntry: (currentId: string, newId: string) => void;
+    updateEntryId: (currentId: string) => void;
     createNewUser: (entries: Entry[]) => void;
     construct: (clientData: ClientData) => void;
     cardUpdatedPts: (personalityId: string,value: CardChange) => void;
@@ -11,8 +11,8 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-    init: (role: Role, entries: Entry[]) => void;
-    construct: (role: Role) => void;
+    init: (role: ParamData, entries: Entry[]) => void;
+    construct: (role: ParamData) => void;
     reconnect: (entry: Entry) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
@@ -30,7 +30,7 @@ export interface SocketData {
 
 export type RoleType = "Storyteller" | "Personality";
 
-export type Role =
+export type ParamData =
     { type: "Storyteller",
     } |
     { type: "Personality",
@@ -43,7 +43,12 @@ export type Role =
 export type Entry = {
     id: string,
     roomcode: string,
-    roleType: RoleType,
+    role: 
+    { type: "Storyteller"
+    } |
+    { type: "Personality"
+        name: string
+    }
 };
 
 
@@ -118,7 +123,7 @@ export type AttributeChange =
 
 export type CardChange = 
     { type: "name",
-        value: string,
+        name: string,
     } |
     { type: "attribute",
         columnI: number,

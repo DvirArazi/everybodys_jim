@@ -6,7 +6,7 @@ import { io } from ".";
 import { Card } from "../../client/src/game/card";
 import { Attribute } from "../../client/src/game/card/column/attribute";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
-import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Role, Room, ServerToClientEvents, SocketData, Storyteller } from "./types";
+import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./types";
 
 type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 
@@ -53,10 +53,9 @@ export let handler = () => {
             let relevantEntries = [];
             
             for (let entry of potentialEntries) {
-                if (role.type == entry.roleType &&
-                    ((role.type == "Storyteller") ||
-                     (role.type == "Personality" &&
-                      role.roomcode == entry.roomcode)
+                if (role.type == entry.role.type &&
+                    ((role.type == "Personality" ?
+                      role.roomcode == entry.roomcode : true)
                     )
                 ) {
                     relevantEntries.push(entry);
@@ -70,7 +69,11 @@ export let handler = () => {
             } else if (relevantEntries.length == 0) {
                 switch(role.type) {
                     case "Storyteller": { newStoryteller(socket); break; }
-                    case "Personality": { newPersonality(socket, role.roomcode); break; }
+                    case "Personality": { if(!newPersonality(socket, role.roomcode)) { 
+                            socket.emit("createNewUser", potentialEntries);
+                        }
+                        break;
+                    }
                 }
             } else if (relevantEntries.length == 1) {
                 switch(role.type) {
@@ -81,19 +84,25 @@ export let handler = () => {
         });
 
         socket.on("construct", (role)=>{
-            if (role.type == "Storyteller") {
-                newStoryteller(socket);
-            } else if (role.type == "Personality") {
-                newPersonality(socket, role.roomcode);
-            } else {
-                console.log(chalk.red("ERROR: ") + "No relevant role supplemented!");    
+            switch (role.type) {
+                case "Storyteller": {
+                    newStoryteller(socket);
+                    break;
+                }
+                case "Personality": {
+                    newPersonality(socket, role.roomcode);
+                    break;
+                }
+                default: {
+                    console.log(chalk.red("ERROR: ") + "No relevant role supplied.");
+                }
             }
         });
 
         socket.on("reconnect", (entry)=>{
-            if (entry.roleType == "Storyteller") {
+            if (entry.role.type == "Storyteller") {
                     reconnectStoryteller(socket, entry);
-            } else if (entry.roleType == "Personality") {
+            } else if (entry.role.type == "Personality") {
                     reconnectPersonality(socket, entry);
             } else {
                 console.log(chalk.red("ERROR: ") + "No relevant entry supplemented!");    
@@ -109,7 +118,6 @@ export let handler = () => {
             }
 
             let {room, personality} = value;
-
             updateCard(room, personality, cardChange);
 
             io.to(room.storyteller.id).emit("cardUpdatedPts", socket.id, cardChange);
@@ -142,11 +150,8 @@ export let handler = () => {
 
                 console.log(
                     `Storyteller ` + chalk.yellow(socket.id) + ` of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
-                    `\treason: ${reason}`
+                    ` reason: ${reason}`
                 );
-
-                console.log("rooms after disconnect: ");
-                console.log(rooms);
 
                 return;
             }
@@ -181,7 +186,7 @@ const newStoryteller = (socket: ServerSocket) => {
     socket.emit("addEntry", {
         id: socket.id,
         roomcode: roomcode,
-        roleType: "Storyteller"
+        role: {type: "Storyteller"}
     })
     socket.emit("construct", {type: "St0Data", st0data: {
         roomcode: roomcode,
@@ -189,47 +194,49 @@ const newStoryteller = (socket: ServerSocket) => {
     }});
 }
 
-const newPersonality = (socket: ServerSocket, roomcode: string) => {
+const newPersonality = (socket: ServerSocket, roomcode: string): boolean => {
     if (connectToRoom(socket.id, roomcode)) {
         socket.emit("addEntry", {
             id: socket.id,
             roomcode: roomcode,
-            roleType: "Personality"
+            role: {type: "Personality", name: ""}
         });
         socket.emit("construct", {type: "Ps0Data", ps0data: {roomcode, cardData: undefined}});
+
+        return true;
     } else {
-        socket.emit("createNewUser", []);
+        return false;
     }
 }
 
 const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
     let room = getRoomByRoomcode(entry.roomcode);
     if (room == undefined) {
-        console.log(chalk.red("ERROR: ") + "Room could not be found.");
+        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
         return;
     }
 
     room.storyteller.id = socket.id;
     room.storyteller.connected = true;
-    socket.emit("updateEntry", entry.id, socket.id);
+    socket.emit("updateEntryId", entry.id);
 
     socket.emit("construct", {type: "St0Data", st0data: {
-        roomcode: entry.id,
-        personalities: room.personalities
+        roomcode: entry.roomcode,
+        personalities: room.personalities.filter((personality=>personality.connected))
     }});
 }
 
 const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
     let value = getRoomByPersonality(entry.id);
     if (value == undefined) {
-        console.log(chalk.red("ERROR: ") + "Could not find room.");
+        console.log(chalk.redBright("ERROR: ") + "Could not find room.");
         return;
     }
     let {room, personality} = value;
 
     personality.id = socket.id;
     personality.connected = true;
-    socket.emit("updateEntry", entry.id, socket.id);
+    socket.emit("updateEntryId", entry.id);
 
     io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
     socket.emit("construct", {type: "Ps0Data", ps0data: {

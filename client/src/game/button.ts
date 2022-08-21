@@ -1,6 +1,10 @@
 import { Elem } from "../core/Elem"
 
-export const Button = (text: string, onClick: ()=>void, enabled = true, fontSize = 24) => {
+export const Button = (
+    text: string, onClick: ()=>void,
+    enabled = true,
+    style?: Partial<CSSStyleDeclaration>
+) => {
     let button = Elem("button", {
         innerText: text,
         disabled: !enabled,
@@ -10,7 +14,7 @@ export const Button = (text: string, onClick: ()=>void, enabled = true, fontSize
         fontWeight: "bold",
         backgroundColor: "#00ff80",
         boxShadow: "0 5px #00e673",
-        fontSize: fontSize + "px",
+        fontSize: "24px",
         outline: "none",
         cursor: "pointer",
 
@@ -19,7 +23,8 @@ export const Button = (text: string, onClick: ()=>void, enabled = true, fontSize
         margin: "0px 0px 5px 0px",
         padding: "15px 30px",
 
-        position: "relative"
+        position: "relative",
+        ...style
     });
     
     let div = Elem("div", {
