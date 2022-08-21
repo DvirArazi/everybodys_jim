@@ -28,3 +28,4 @@
 [V] fix no options showing on blank NewUser
 [V] fix invisible personalities on Storyteller0
 [ ] reconsider the structure of the construction routing
+[ ] Let the storyteller choose the number of abilities and goals

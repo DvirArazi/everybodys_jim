@@ -21,10 +21,8 @@ export const Column = (
                 textAlign: "center"
             }),
             Elem("div", {}, attributes.map((attribute)=>{return attribute.elem;}), {
-                // background: "red"
             })
         ], {
-            // background: "AliceBlue",
             borderWidth: "0px"
         }),
         updateAttribute: (attributeI: number, value: AttributeChange)=>{attributes[attributeI].update(value);},

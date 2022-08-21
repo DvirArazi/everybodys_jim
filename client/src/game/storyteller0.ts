@@ -3,12 +3,12 @@ import { socket } from "..";
 import { Elem } from "../core/Elem";
 import { CardChange, CardData, St0Data } from "../shared/types";
 import { Button } from "./button";
-import { Card } from "./card";
+import { Card0 } from "./card0";
 import { Container } from "./container";
 import { Spacer } from "./spacer";
 import { VisibilityBox } from "./visibilityBox";
 
-type BoxedCard = Card & VisibilityBox & {id: string};
+type BoxedCard = Card0 & VisibilityBox & {id: string};
 
 export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     let completePers: string[] = [];
@@ -42,7 +42,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     const createCard = (perId: string, cardData?: CardData)=>{
         let boxedCard: BoxedCard;
         let cardVBox = VisibilityBox([Spacer(2.5)]);
-        let card = Card("Storyteller", 2, 2, (cardChange)=>{
+        let card = Card0("Storyteller", 2, 2, (cardChange)=>{
             socket.emit("cardUpdatedStp", perId, cardChange);
 
             onCardUpdate(boxedCard, cardChange);

@@ -1,8 +1,7 @@
 import { Elem } from "../../../core/Elem";
-import { AbilityData, AttributeChange, AttributeData, AttributeType, GoalData, RoleType} from "../../../shared/types";
+import { AttributeChange, AttributeData, AttributeType, GoalData, RoleType} from "../../../shared/types";
 import { Textarea } from "../../textarea";
 import { Checkbox } from "./attribute/checkbox";
-import { Description } from "./attribute/description";
 import { Scorebox } from "./attribute/scorebox";
 
 export type Attribute = {
@@ -56,7 +55,8 @@ export const Attribute = (
             Elem("table", {}, [
                 Elem("tr", {}, [
                     Elem("td", {}, leftChildren, {
-                        padding: "0px",
+                        padding: "5px 0 0 0",
+                        verticalAlign: "top"
                     }),
                     Elem("td", {}, [description.elem], {
                         padding: "0px",

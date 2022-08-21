@@ -65,6 +65,12 @@ export type Storyteller = {
     connected: boolean,
 };
 
+export type CardData = {
+    name: string,
+    abilities: AbilityData[],
+    goals: GoalData[],
+}
+
 export type Personality = {
     id: string,
     cardData: CardData
@@ -79,23 +85,24 @@ export type Room = {
     stage: number,
 };
 
-export type CardData = {
-    name: string,
-    abilities: AbilityData[],
-    goals: GoalData[],
-}
-
-export type Ps0Data = {
-    roomcode: string,
-    cardData: CardData | undefined
-};
-
 export type St0Data = {
     roomcode: string,
     personalities: {
         id: string,
+        cardData: CardData,
+    }[] | undefined,
+};
+
+export type Ps0Data = {
+    roomcode: string,
+    cardData: CardData | undefined,
+};
+
+export type St1Data = {
+    personalities: {
+        id: string,
         cardData: CardData
-    }[] | undefined
+    }[]
 };
 
 export type ClientData = 
@@ -104,6 +111,9 @@ export type ClientData =
     } |
     { type: "Ps0Data",
         ps0data: Ps0Data,
+    } |
+    { type: "St1Data",
+        st1data: St1Data,
     }
 ;
 

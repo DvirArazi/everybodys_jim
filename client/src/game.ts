@@ -5,6 +5,7 @@ import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";
 import { Spacer } from "./game/spacer";
 import { Storyteller0 } from "./game/storyteller0";
+import { Storyteller1 } from "./game/storyteller1";
 import { Title } from "./game/title";
 import { ParamData } from "./shared/types"
 
@@ -51,6 +52,10 @@ export let Game = () => {
             case "Ps0Data": {
                 history.replaceState("", "", clientData.ps0data.roomcode)
                 setPage(Personality0(clientData.ps0data));
+                break;
+            }
+            case "St1Data": {
+                setPage(Storyteller1(clientData.st1data));
                 break;
             }
         }

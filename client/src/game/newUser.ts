@@ -60,8 +60,8 @@ export const NewUser = (
                                 fontSize: "14px",
                                 height: "45px",
                                 padding: "0 15px 0 15px",
-                                background: "#ff3333",
-                                boxShadow: "0 5px #e60000",
+                                background: "#ff8080",
+                                boxShadow: "0 5px #ff6666",
                                 borderRadius: "0 10px 10px 0",
                             }
                         ).elem], {display: "inline-block"})

@@ -1,12 +1,12 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem";
 import { Ps0Data } from "../shared/types";
-import { Card } from "./card";
+import { Card0 } from "./card0";
 import { Container } from "./container";
 import { updateEntryName } from "./entries";
 
 export let Personality0 = (ps0data: Ps0Data) => {
-    let card = Card("Personality", 2, 2,
+    let card = Card0("Personality", 2, 2,
         (cardChange)=>{
             if (cardChange.type == "name") {
                 updateEntryName(cardChange.name);

@@ -6,7 +6,7 @@ import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 import { VisibilityBox } from "./visibilityBox";
 
-export type Card = {
+export type Card0 = {
     elem: Node,
     getName: ()=>string,
     update: (cardChangeType: CardChange)=>void,
@@ -14,10 +14,10 @@ export type Card = {
     isComplete: ()=>boolean
 }
 
-export let Card = (
+export let Card0 = (
     roleType: RoleType, abilitiesCount: number, goalsCount: number,
     onChange: (cardChangeType: CardChange)=>void
-): Card => { 
+): Card0 => { 
     let nameDiv = Elem("div", {}, [], {
         padding: "3px 0 0px 5px",
         borderRadius: "10px 10px 0 0",
