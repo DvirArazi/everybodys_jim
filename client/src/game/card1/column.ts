@@ -1,13 +1,19 @@
 import { Elem } from "../../core/Elem"
-import { AttributeData } from "../../shared/types";
+import { AbilityData, AttributeData, GoalData } from "../../shared/types";
 import { Attribute } from "./column/attribute";
 
-export const Column = (attributeCount: number, attributeData: AttributeData)=>{
+export const Column = (attributesData: AttributeData[])=>{
     let attributes = [];
 
-    for (let i = 0; i < attributeCount; i++) {
-        attributes.push(Attribute(attributeData));
+    for (let i = 0; i < attributesData.length; i++) {
+        attributes.push(Attribute(attributesData[i]));
     }
     
-    return Elem("td", {}, attributes);
+    return Elem("td", {}, [ 
+        Elem("div", {
+            innerText: (attributesData[0] as GoalData).score == undefined ? "Abilities" : "Goals"}, [], {
+                textAlign: "center"
+            }),
+        Elem("div", {}, attributes)
+    ]);
 }

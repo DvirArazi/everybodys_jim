@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { Console } from "console";
 import { io } from ".";
-import { AbilityData, CardChange, GoalData, Personality, Room } from "./types";
+import { AbilityData, CardChange, GoalData, Personality, Room } from "./shared/types";
 
 export let rooms: Room[] = [];
 

@@ -4,7 +4,6 @@
         "target": "es6",
         "rootDirs": [
             "./server/src",
-            "./shared"
         ],
         "outDir": "./dist",
         "esModuleInterop": true,

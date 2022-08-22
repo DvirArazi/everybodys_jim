@@ -22,7 +22,7 @@ export let Card0 = (
         padding: "3px 0 0px 5px",
         borderRadius: "10px 10px 0 0",
         backgroundColor: "#4dffa6"
-    });;
+    });
     let setName: (name: string)=>void;
     switch (roleType) {
         case "Storyteller": {
@@ -79,7 +79,7 @@ export let Card0 = (
         ], {
             borderSpacing: "0px",
             borderRadius: "10px",
-            background: "#00FF80"//"#00cc66"//"#4dffa6",
+            background: "#00FF80"
         }),
         getName: ()=>{return nameDiv.innerText;},
         update: (cardChangeType)=>{

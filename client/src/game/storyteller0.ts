@@ -15,7 +15,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
     let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
-    let startButton = Button("Start game", ()=>{});
+    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: ""})});
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 

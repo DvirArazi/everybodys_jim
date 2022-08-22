@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 import http from 'http';
 import { join } from 'path'
 import { handler as handle } from './handler';
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types';
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './shared/types';
 
 dotenv.config();
 

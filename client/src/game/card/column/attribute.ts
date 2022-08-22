@@ -31,7 +31,7 @@ export const Attribute = (
 
     let scorebox: Scorebox | undefined = undefined;
     if (attributeType == "goal") {
-        scorebox = Scorebox((value)=>{onChange({type:"score", value: value})});
+        scorebox = Scorebox((value)=>{onChange({type: "score", value: value})});
         scorebox.setEnabled(roleType == "Storyteller");
         leftChildren.push(scorebox.elem);
     }

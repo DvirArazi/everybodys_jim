@@ -7,12 +7,22 @@ export const Attribute = (attributeData: AttributeData)=>{
 
     let goalData = (attributeData as GoalData);
     if (goalData.score != undefined) {
-        leftChildren.push(Button("+1\npts", ()=>{}, true, {
+        leftChildren.push(Button("+1", ()=>{}, true, {
+            background: "#00E673",
+            boxShadow: "0 5px #00CC66",
+            padding: "5px 0 5px 0",
+            width: "40px",
+            fontSize: "18px"
         }).elem);
     }
     
-    
-    return Elem("div", {}, [
-        
-    ]);
+    return Elem("div", {}, [Elem("table", {}, [Elem("tr", {}, [
+        Elem("td", {}, leftChildren, {
+            verticalAlign: "top"
+        }),
+        Elem("td", {}, [Elem("div", {innerText: attributeData.description}, [], {
+            width: "100%",
+            height: "70px"
+        })])
+    ])])]);
 }

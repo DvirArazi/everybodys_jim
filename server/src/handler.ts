@@ -1,12 +1,8 @@
 import chalk, { Chalk } from "chalk";
-import { Console } from "console";
-import { constUndefined } from "fp-ts/lib/function";
 import { Socket } from "socket.io";
 import { io } from ".";
-import { Card0 } from "../../client/src/game/card0";
-import { Attribute } from "../../client/src/game/card/column/attribute";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
-import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./types";
+import { ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./shared/types";
 
 type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 

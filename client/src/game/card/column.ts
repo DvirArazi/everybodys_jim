@@ -20,7 +20,7 @@ export const Column = (
             }, [], {
                 textAlign: "center"
             }),
-            Elem("div", {}, attributes.map((attribute)=>{return attribute.elem;}), {
+            Elem("div", {}, attributes.map(attribute=>attribute.elem), {
             })
         ], {
             borderWidth: "0px"

@@ -1,11 +1,14 @@
 import { Elem } from "../core/Elem";
 
 export let Title = () => {
+    let color = "#000000";
+
     return Elem("div", {}, [
         Elem("div", {
             innerText: "EVERYBODY'S"
         }, [], {
-            fontSize: "44px"
+            fontSize: "44px",
+            color: color,
         }),
         Elem("div", {
             innerText: "JIM"
@@ -13,7 +16,8 @@ export let Title = () => {
             fontSize: "180px",
             lineHeight: "70%",
             position: "relative",
-            zIndex: "-1"
+            zIndex: "-1",
+            color: color
         })
     ], {
         fontFamily: "secular-one",

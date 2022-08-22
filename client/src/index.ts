@@ -21,17 +21,37 @@ document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
-    // Game()
+    Game()
     // storyteller0("AAAA")
     // Personality0()
     // Storyteller1()
-    // Card("Personality", 2, 2, ()=>{}).elem
-    Card1()
+    // Card0("Personality", 2, 2, ()=>{}).elem
+    // Card1({
+    //     name: "hello",
+    //     abilities: [{
+    //         approved: true,
+    //         description: "one"
+    //     },
+    //     {
+    //         approved: true,
+    //         description: "three"
+    //     }],
+    //     goals: [{
+    //         approved: true,
+    //         description: "two",
+    //         score: "2"
+    //     }, 
+    //     {
+    //         approved: true,
+    //         description: "four",
+    //         score: "4"
+    //     }]})
 ], {
     textAlign: "center",
     maxWidth: "500px",
     margin: "auto",
     fontFamily: "rubik",
     fontWeight: "bold",
-    fontSize: "20px"
+    fontSize: "20px",
+    userSelect: "none"
 }));

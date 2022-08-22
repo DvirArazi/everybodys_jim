@@ -21,7 +21,8 @@ export const NewUser = (
 
             let topIs: number[] = [];
             let btmIs: number[] = [];
-            for (let i = 0; i < entries.length; i++) {
+            for (let i = 0; 
+                i < entries.length; i++) {
                 if (role.type == "NewUser" ||
                     entries[i].role.type == role.type &&
                     (role.type == "Personality" ?
