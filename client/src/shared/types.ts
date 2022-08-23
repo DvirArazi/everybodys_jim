@@ -12,7 +12,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     init: (role: ParamData, entries: Entry[]) => void;
-    construct: (role: ParamData) => void;
+    construct: (role: ClientData) => void;
     reconnect: (entry: Entry) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
@@ -54,7 +54,7 @@ export type Entry = {
 
 export type AbilityData = {
     description: string,
-    approved: boolean
+    approved: boolean | undefined
 };
 export type GoalData = AbilityData & {score: string};
 
@@ -70,6 +70,8 @@ export type CardData = {
     abilities: AbilityData[],
     goals: GoalData[],
 }
+
+export type Card1Data = {score: number} & CardData;
 
 export type Personality = {
     id: string,
@@ -101,7 +103,7 @@ export type Ps0Data = {
 export type St1Data = {
     personalities: {
         id: string,
-        cardData: CardData
+        card1Data: Card1Data
     }[]
 };
 

@@ -4,7 +4,8 @@ export type Scorebox = {
     elem: Node,
     update: (value: string)=>void,
     setEnabled: (enabled: boolean)=>void,
-    isComplete: ()=>boolean
+    isComplete: ()=>boolean,
+    getValue: ()=>string
 }
 
 const isDigit = (num: number) => {
@@ -68,6 +69,7 @@ export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
             textarea.style.borderColor = enabled ? "#767676" : "#7DD6A9";
             textarea.disabled = !enabled;
         },
-        isComplete: ()=>{return textarea.value != "";}
+        isComplete: ()=>{return textarea.value != "";},
+        getValue: ()=>{return textarea.value;}
     };
 }

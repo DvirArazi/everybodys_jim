@@ -1,6 +1,5 @@
-
 import { Elem } from "../core/Elem";
-import { CardChange, CardData, RoleType } from "../shared/types";
+import { AbilityData, CardChange, CardData, GoalData, RoleType } from "../shared/types";
 import { Column } from "./card/column";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
@@ -11,7 +10,8 @@ export type Card0 = {
     getName: ()=>string,
     update: (cardChangeType: CardChange)=>void,
     set: (cardData: CardData)=>void
-    isComplete: ()=>boolean
+    isComplete: ()=>boolean,
+    getData: ()=> CardData
 }
 
 export let Card0 = (
@@ -100,6 +100,7 @@ export let Card0 = (
         },
         isComplete: ()=>{
             return columns.every((column)=>{return column.isComplete();});
-        }
+        },
+        getData: ()=>{return {name: nameDiv.innerText, abilities: columns[0].getData() as AbilityData[], goals: columns[1].getData() as GoalData[]}}
     };
 }

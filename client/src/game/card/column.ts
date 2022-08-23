@@ -31,6 +31,7 @@ export const Column = (
                 attributes[i].set(attributeDatas[i]);
             }
         },
-        isComplete: ()=>{return attributes.every((attribute)=>{return attribute.isComplete();});}
+        isComplete: ()=>{return attributes.every((attribute)=>{return attribute.isComplete();});},
+        getData: ()=>{return attributes.map(attribute=>attribute.getData())}
     };
 }

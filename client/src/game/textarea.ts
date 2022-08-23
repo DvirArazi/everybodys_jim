@@ -54,6 +54,7 @@ export const Textarea = (
     return {
         elem: div,
         update: (value: string)=>{textarea.value = value;},
-        isComplete: ()=>{return textarea.value != "";}
+        isComplete: ()=>{return textarea.value != "";},
+        getValue: ()=>{return textarea.value;}
     }
 }

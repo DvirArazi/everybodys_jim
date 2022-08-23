@@ -1,6 +1,6 @@
 import { socket } from "..";
 import { Elem } from "../core/Elem"
-import { Entry, ParamData } from "../shared/types";
+import { Entry, ParamData, ClientData } from "../shared/types";
 import { Button } from "./button";
 import { deleteEntry, getEntries } from "./entries";
 import { Spacer } from "./spacer";
@@ -10,9 +10,9 @@ export const NewUser = (
     role: ParamData,
     entries: Entry[]
 ) => {
-    let newRole: ParamData;
+    let newClientData: ClientData;
     let joinButton = Button("Join room", ()=>{
-        socket.emit("construct", newRole);
+        socket.emit("construct", newClientData);
     }, false);
 
     let roomExists = true;
@@ -76,7 +76,7 @@ export const NewUser = (
     
     
     return Elem("div", {}, [
-        Button("Create a room", ()=>{socket.emit("construct", {type:"Storyteller"})}).elem,
+        Button("Create a room", ()=>{socket.emit("construct", {type:"St0Data", st0data: {roomcode: "", personalities: undefined}})}).elem,
         Spacer(15),
         Textarea({
             placeholder: "Enter room code here",
@@ -98,7 +98,7 @@ export const NewUser = (
                 }
 
                 if (newValue.length == 4) {
-                    newRole = {type:"Personality", roomcode:newValue};
+                    newClientData = {type: "Ps0Data", ps0data: {cardData: undefined, roomcode: newValue}};
                     joinButton.setEnabled(true);
                 } else {
                     joinButton.setEnabled(false);

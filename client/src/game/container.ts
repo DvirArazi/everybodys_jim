@@ -15,7 +15,9 @@ export const Container = (title: string, color: string, children: Node[]) => {
         margin: "auto",
 
         maxWidth: "400px",
-        borderRadius: "15px"
+        borderRadius: "15px",
+
+        boxShadow: "0px 0px 15px 5px rgba(0,0,0,0.1)"
     });
 
     return {

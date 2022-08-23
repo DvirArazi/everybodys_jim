@@ -15,7 +15,11 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
     let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
-    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: ""})});
+    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", st1data: {
+        personalities: completePers.map((perId)=>{
+            return { id: perId, card1Data: {...cards.get(perId)!.getData(), ...{score: 0}}};
+        })
+    }})});
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 
@@ -30,8 +34,10 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         } 
 
         if (card.isComplete()) {
-            completePers.push(card.id);
-        } else if(completePers.some(id=>id==card.id)) {
+            if (!completePers.includes(card.id)) {
+                completePers.push(card.id);
+            }
+        } else if(completePers.includes(card.id)) {
             completePers.splice(completePers.indexOf(card.id), 1);
         }
         startButton.setEnabled(completePers.length >= 2);

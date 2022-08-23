@@ -79,14 +79,18 @@ export let handler = () => {
             }
         });
 
-        socket.on("construct", (role)=>{
-            switch (role.type) {
-                case "Storyteller": {
+        socket.on("construct", (clientData)=>{
+            switch (clientData.type) {
+                case "St0Data": {
                     newStoryteller(socket);
                     break;
                 }
-                case "Personality": {
-                    newPersonality(socket, role.roomcode);
+                case "Ps0Data": {
+                    newPersonality(socket, clientData.ps0data.roomcode);
+                    break;
+                }
+                case "St1Data": {
+                    socket.emit("construct", clientData);
                     break;
                 }
                 default: {

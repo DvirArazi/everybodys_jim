@@ -8,12 +8,12 @@ import { Spacer } from "./spacer";
 
 export const Storyteller1 = (st1data: St1Data)=>{
     let dominantBox = Container("Dominant personality", "#14c4ff", [
-        Card1(st1data.personalities[0].cardData)
+        Card1(st1data.personalities[0].card1Data)
     ]);
 
     let rest = [];
     for (let i = 1; i < st1data.personalities.length; i++) {
-        rest.push(Card1(st1data.personalities[i].cardData));
+        rest.push(Elem("div", {}, [Spacer(2.5), Card1(st1data.personalities[i].card1Data)]));
     }
     let restBox = Container("Personalities", "#14c4ff", rest);
 

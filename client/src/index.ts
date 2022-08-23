@@ -12,6 +12,7 @@ import { Storyteller0 } from "./game/storyteller0";
 import { Storyteller1 } from "./game/storyteller1";
 import { ClientToServerEvents, ServerToClientEvents } from "./shared/types";
 import { Card1 } from "./game/card1";
+import { Container } from "./game/container";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -21,31 +22,35 @@ document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
-    Game()
+    // Game()
     // storyteller0("AAAA")
     // Personality0()
     // Storyteller1()
     // Card0("Personality", 2, 2, ()=>{}).elem
-    // Card1({
-    //     name: "hello",
-    //     abilities: [{
-    //         approved: true,
-    //         description: "one"
-    //     },
-    //     {
-    //         approved: true,
-    //         description: "three"
-    //     }],
-    //     goals: [{
-    //         approved: true,
-    //         description: "two",
-    //         score: "2"
-    //     }, 
-    //     {
-    //         approved: true,
-    //         description: "four",
-    //         score: "4"
-    //     }]})
+    Container("Title", "#14c4ff", [
+        Card1({
+            name: "hello",
+            abilities: [{
+                approved: undefined,
+                description: "one"
+            },
+            {
+                approved: undefined,
+                description: "three"
+            }],
+            goals: [{
+                approved: undefined,
+                description: "two",
+                score: "2"
+            }, 
+            {
+                approved: undefined,
+                description: "four",
+                score: "4"
+            }],
+            score: 5
+        })
+    ]).elem
 ], {
     textAlign: "center",
     maxWidth: "500px",

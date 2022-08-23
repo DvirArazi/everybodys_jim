@@ -8,7 +8,8 @@ export type Attribute = {
     elem: Node,
     update: (value: AttributeChange)=>void,
     set: (attributeData: AttributeData)=>void
-    isComplete: ()=>boolean
+    isComplete: ()=>boolean,
+    getData: ()=>AttributeData
 }
 
 export const Attribute = (
@@ -84,7 +85,9 @@ export const Attribute = (
             }
         },
         set:(attributeData: AttributeData)=>{
-            checkbox.update(attributeData.approved);
+            if (attributeData.approved != undefined) {
+                checkbox.update(attributeData.approved);
+            }
             description.update(attributeData.description);
             let goalData = (attributeData as GoalData);
             if (goalData.score != undefined && scorebox != undefined) {
@@ -94,7 +97,10 @@ export const Attribute = (
         isComplete: ()=>{
             return checkbox.isComplete() && 
             description.isComplete() &&
-            ( scorebox == undefined ? true : scorebox.isComplete())
-        ;}  
+            ( scorebox == undefined ? true : scorebox.isComplete());
+        },
+        getData: ()=>{
+            return {approved: undefined, description: description.getValue(), score: scorebox?.getValue()}
+        }
     };
 }
