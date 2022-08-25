@@ -76,7 +76,7 @@ export const NewUser = (
     
     
     return Elem("div", {}, [
-        Button("Create a room", ()=>{socket.emit("construct", {type:"St0Data", st0data: {roomcode: "", personalities: undefined}})}).elem,
+        Button("Create a room", ()=>{socket.emit("construct", {type:"St0Data", st0Data: {roomcode: "", personalities: undefined}})}).elem,
         Spacer(15),
         Textarea({
             placeholder: "Enter room code here",
@@ -98,7 +98,7 @@ export const NewUser = (
                 }
 
                 if (newValue.length == 4) {
-                    newClientData = {type: "Ps0Data", ps0data: {cardData: undefined, roomcode: newValue}};
+                    newClientData = {type: "Ps0Data", ps0Data: {cardData: undefined, roomcode: newValue}};
                     joinButton.setEnabled(true);
                 } else {
                     joinButton.setEnabled(false);

@@ -3,7 +3,7 @@
         "module": "CommonJS",
         "target": "es6",
         "rootDirs": [
-            "./server/src",
+            // "./server/src",
         ],
         "outDir": "./dist",
         "esModuleInterop": true,

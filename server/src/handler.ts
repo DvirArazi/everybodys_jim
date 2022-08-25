@@ -1,10 +1,9 @@
 import chalk, { Chalk } from "chalk";
 import { Socket } from "socket.io";
 import { io } from ".";
+import { newPersonality, newStoryteller, newStoryteller1, reconnectPersonality, reconnectStoryteller } from "./construct";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
 import { ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./shared/types";
-
-type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 
 export let handler = () => {
     console.log(rooms);
@@ -86,11 +85,11 @@ export let handler = () => {
                     break;
                 }
                 case "Ps0Data": {
-                    newPersonality(socket, clientData.ps0data.roomcode);
+                    newPersonality(socket, clientData.ps0Data.roomcode);
                     break;
                 }
                 case "St1Data": {
-                    socket.emit("construct", clientData);
+                    newStoryteller1(socket, clientData.st1Data);
                     break;
                 }
                 default: {
@@ -179,68 +178,4 @@ export let handler = () => {
             );
         });
     });
-}
-
-const newStoryteller = (socket: ServerSocket) => {
-    let roomcode = createRoom(socket.id);
-    socket.emit("addEntry", {
-        id: socket.id,
-        roomcode: roomcode,
-        role: {type: "Storyteller"}
-    })
-    socket.emit("construct", {type: "St0Data", st0data: {
-        roomcode: roomcode,
-        personalities: undefined
-    }});
-}
-
-const newPersonality = (socket: ServerSocket, roomcode: string): boolean => {
-    if (connectToRoom(socket.id, roomcode)) {
-        socket.emit("addEntry", {
-            id: socket.id,
-            roomcode: roomcode,
-            role: {type: "Personality", name: ""}
-        });
-        socket.emit("construct", {type: "Ps0Data", ps0data: {roomcode, cardData: undefined}});
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
-const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
-    let room = getRoomByRoomcode(entry.roomcode);
-    if (room == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
-        return;
-    }
-
-    room.storyteller.id = socket.id;
-    room.storyteller.connected = true;
-    socket.emit("updateEntryId", entry.id);
-
-    socket.emit("construct", {type: "St0Data", st0data: {
-        roomcode: entry.roomcode,
-        personalities: room.personalities.filter((personality=>personality.connected))
-    }});
-}
-
-const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
-    let value = getRoomByPersonality(entry.id);
-    if (value == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Could not find room.");
-        return;
-    }
-    let {room, personality} = value;
-
-    personality.id = socket.id;
-    personality.connected = true;
-    socket.emit("updateEntryId", entry.id);
-
-    io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
-    socket.emit("construct", {type: "Ps0Data", ps0data: {
-        roomcode: entry.roomcode,
-        cardData: personality.cardData
-    }});
 }

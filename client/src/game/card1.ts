@@ -1,31 +1,29 @@
-import { Card1Data } from "../shared/types";
+import { CardData } from "../shared/types";
 import { Elem } from "../core/Elem";
 import { Column } from "./card1/column";
 
 export const Card1 = (
-    card1Data: Card1Data
+    card1Data: CardData
 )=>{
     let boxShadow = "-2px -4px 9px 0px rgba(0,0,0,0.1)";
     let fallDist = 2;
 
     return Elem("div", {}, [
-        Elem("div", {}, [
+        Elem("table", {}, [ Elem("tr", {}, [
             //NAME
-            Elem("div", {}, [
+            Elem("td", {}, [
                 Elem("div", {innerText: card1Data.name}, [], {
                     padding: "3px 0 2px 8px",
                 })
             ], {
-                display: "inline-block",
-                
                 textAlign: "left",
-                width: "inherit",
+                width: "100%",
                 background: "#4dffa6",
                 borderRadius: "10px 0 0px 0",
                 height: "100%",
             }),
             //SCORE
-            Elem("div", {
+            Elem("td", {
                 onclick: ()=>{
 
                 },
@@ -46,22 +44,21 @@ export const Card1 = (
                     borderRadius: "5px 10px 0 0",
                     boxShadow: boxShadow,
                     position: "relative",
-                    // top: fallDist + "px"
+                    whiteSpace: "nowrap"
                 })
             ], {
-                display: "inline-block",
-                textAlign: "left",
-                // width: "max-content",
                 background: "#4dffa6",
+                textAlign: "left",
                 borderRadius: "0px 10px 0 0",
                 cursor: "pointer"
             })
-        ], {
+        ], {})], {
             borderRadius: "10px 10px 0 0",
             backgroundColor: "#00FF80",
             position: "relative",
             zIndex: "0"
         }),
+        //BODY
         Elem("table", {}, [
             Elem("tr", {}, [
                 Column(card1Data.abilities),
@@ -77,7 +74,6 @@ export const Card1 = (
     ],
     {
         width: "100%",
-        borderSpacing: "0px",
         borderRadius: "10px",
         background: "#00FF80",
         textAlign: "center"

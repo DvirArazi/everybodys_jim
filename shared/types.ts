@@ -69,9 +69,8 @@ export type CardData = {
     name: string,
     abilities: AbilityData[],
     goals: GoalData[],
+    score: number
 }
-
-export type Card1Data = {score: number} & CardData;
 
 export type Personality = {
     id: string,
@@ -103,19 +102,24 @@ export type Ps0Data = {
 export type St1Data = {
     personalities: {
         id: string,
-        card1Data: Card1Data
+        cardData: CardData
     }[]
 };
 
+export type Ps1Data = CardData;
+
 export type ClientData = 
     { type: "St0Data", 
-        st0data: St0Data,
+        st0Data: St0Data,
     } |
     { type: "Ps0Data",
-        ps0data: Ps0Data,
+        ps0Data: Ps0Data,
     } |
     { type: "St1Data",
-        st1data: St1Data,
+        st1Data: St1Data,
+    } |
+    { type: "Ps1Data",
+        ps1Data: Ps1Data
     }
 ;
 

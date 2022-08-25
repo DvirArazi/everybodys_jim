@@ -13,6 +13,8 @@ import { Storyteller1 } from "./game/storyteller1";
 import { ClientToServerEvents, ServerToClientEvents } from "./shared/types";
 import { Card1 } from "./game/card1";
 import { Container } from "./game/container";
+import { SpinModal } from "./game/storyteller1/spinModal";
+import { VoteModal } from "./game/storyteller1/voteModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -23,34 +25,18 @@ document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
     // Game()
+    SpinModal([
+        {id: "", name: "Dvir"},
+        {id: "", name: "Yonatan"},
+        {id: "", name: "Ofir"},
+        {id: "", name: "Nadav"},
+        {id: "", name: "Yotam"},
+        {id: "", name: "G"},
+        {id: "", name: "Roy"},
+    ])
+    // SpinModal()
     // storyteller0("AAAA")
     // Personality0()
-    // Storyteller1()
-    // Card0("Personality", 2, 2, ()=>{}).elem
-    Container("Title", "#14c4ff", [
-        Card1({
-            name: "hello",
-            abilities: [{
-                approved: undefined,
-                description: "one"
-            },
-            {
-                approved: undefined,
-                description: "three"
-            }],
-            goals: [{
-                approved: undefined,
-                description: "two",
-                score: "2"
-            }, 
-            {
-                approved: undefined,
-                description: "four",
-                score: "4"
-            }],
-            score: 5
-        })
-    ]).elem
 ], {
     textAlign: "center",
     maxWidth: "500px",
@@ -60,3 +46,107 @@ document.body.appendChild(Elem("div", {}, [
     fontSize: "20px",
     userSelect: "none"
 }));
+
+// Card0("Personality", 2, 2, ()=>{}).elem
+// Container("Title", "#14c4ff", [
+//     Card1({
+//         name: "hello",
+//         abilities: [{
+//             approved: undefined,
+//             description: "one"
+//         },
+//         {
+//             approved: undefined,
+//             description: "three"
+//         }],
+//         goals: [{
+//             approved: undefined,
+//             description: "two",
+//             score: "2"
+//         }, 
+//         {
+//             approved: undefined,
+//             description: "four",
+//             score: "4"
+//         }],
+//         score: 115
+//     })
+// ]).elem
+
+// Storyteller1({personalities: [
+//     {
+//         id: "", 
+//         cardData: {
+//             name: "hello",
+//             abilities: [{
+//                 approved: undefined,
+//                 description: "one"
+//             },
+//             {
+//                 approved: undefined,
+//                 description: "three"
+//             }],
+//             goals: [{
+//                 approved: undefined,
+//                 description: "two",
+//                 score: "2"
+//             }, 
+//             {
+//                 approved: undefined,
+//                 description: "four",
+//                 score: "4"
+//             }],
+//             score: 115
+//         }
+//     },
+//     {
+//         id: "", 
+//         cardData: {
+//             name: "hello",
+//             abilities: [{
+//                 approved: undefined,
+//                 description: "one"
+//             },
+//             {
+//                 approved: undefined,
+//                 description: "three"
+//             }],
+//             goals: [{
+//                 approved: undefined,
+//                 description: "two",
+//                 score: "2"
+//             }, 
+//             {
+//                 approved: undefined,
+//                 description: "four",
+//                 score: "4"
+//             }],
+//             score: 115
+//         }
+//     },
+//     {
+//         id: "", 
+//         cardData: {
+//             name: "hello",
+//             abilities: [{
+//                 approved: undefined,
+//                 description: "one"
+//             },
+//             {
+//                 approved: undefined,
+//                 description: "three"
+//             }],
+//             goals: [{
+//                 approved: undefined,
+//                 description: "two",
+//                 score: "2"
+//             }, 
+//             {
+//                 approved: undefined,
+//                 description: "four",
+//                 score: "4"
+//             }],
+//             score: 115
+//         }
+//     }
+// ]})

@@ -1,3 +1,7 @@
+/* html {
+    touch-action: manipulation;
+} */
+
 .cardTextarea::placeholder {
     color: #00CC66
 }
@@ -5,4 +9,14 @@
 .button:active {
     box-shadow: 0 0px !important;
     transform: translate(0, 5px);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* touch-action: manipulation; */
+}
+
+table, tr, td{
+    border: none;
+    border-collapse: collapse;
+    border-width: 0px;
+    border-spacing: 0px;
+    padding: 0px
 }

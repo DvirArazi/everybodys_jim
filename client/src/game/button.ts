@@ -1,12 +1,12 @@
 import { Elem } from "../core/Elem"
 
 export const Button = (
-    text: string, onClick: ()=>void,
+    inner: string, onClick: ()=>void,
     enabled = true,
     style?: Partial<CSSStyleDeclaration>
 ) => {
     let button = Elem("button", {
-        innerText: text,
+        innerHTML: inner,
         disabled: !enabled,
         className: "button"
     }, [], {
@@ -29,7 +29,7 @@ export const Button = (
     
     let div = Elem("div", {
         onclick: ()=>{onClick();}
-    }, [button]);
+    }, [button], {padding: "0"});
 
     return {
         elem: div,

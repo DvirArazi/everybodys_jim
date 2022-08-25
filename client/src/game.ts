@@ -46,16 +46,16 @@ export let Game = () => {
         switch (clientData.type) {
             case "St0Data": {
                 history.replaceState("", "", "st")
-                setPage(Storyteller0(clientData.st0data));
+                setPage(Storyteller0(clientData.st0Data));
                 break;
             }
             case "Ps0Data": {
-                history.replaceState("", "", clientData.ps0data.roomcode)
-                setPage(Personality0(clientData.ps0data));
+                history.replaceState("", "", clientData.ps0Data.roomcode)
+                setPage(Personality0(clientData.ps0Data));
                 break;
             }
             case "St1Data": {
-                setPage(Storyteller1(clientData.st1data));
+                setPage(Storyteller1(clientData.st1Data));
                 break;
             }
         }
