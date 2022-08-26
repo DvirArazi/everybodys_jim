@@ -43,7 +43,10 @@ export const createRoom = (storytellerId: string): string => {
         roomcode,
         storyteller: {id: storytellerId, connected: true},
         personalities: [], 
-        stage: 0
+        stage: 0,
+        domi: "",
+        abilityCount: 2,
+        goalCount: 2
     });
 
     console.log(`New storyteller ` + chalk.yellow(storytellerId) + ` created room ` + chalk.yellow(roomcode));
@@ -55,16 +58,7 @@ export const connectToRoom = (personalityId: string, roomcode: String): boolean 
     let room = rooms.find((room)=>{return room.roomcode == roomcode;});
     
     if (room != undefined) {
-        room.personalities.push({
-            id: personalityId,
-            cardData: {
-                name: "",
-                abilities: Array<AbilityData>.from({length: 2},(_)=>{return {approved: false, description: ""}}),
-                goals: Array<GoalData>.from({length: 2},(_)=>{return {approved: false, description: "", score: ""}})
-            },
-            stage: 0,
-            connected: true
-        });
+        room.personalities.push(newPersonality(personalityId, room.abilityCount, room.goalCount));
 
         io.to(room.storyteller.id).emit("personalityConnected", personalityId, undefined);
 
@@ -104,4 +98,18 @@ export const updateCard = (room: Room, personality: Personality, cardChange: Car
             }
         break;
     }
+}
+
+export const newPersonality = (perId: string, abilityCount: number, goalCount: number) => {
+    return {
+        id: perId,
+        cardData: {
+            name: "",
+            abilities: Array<AbilityData>.from({length:abilityCount},(_)=>{return {approved: false, description: ""}}),
+            goals: Array<GoalData>.from({length: goalCount},(_)=>{return {approved: false, description: "", score: ""}}),
+            score: 0
+        },
+        stage: 0,
+        connected: true
+    };
 }

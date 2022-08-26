@@ -8,6 +8,7 @@ export interface ServerToClientEvents {
     construct: (clientData: ClientData) => void;
     cardUpdatedPts: (personalityId: string,value: CardChange) => void;
     cardUpdatedStp: (value: CardChange) => void;
+    wheelSet: (perList: {id: string, name: string}[], failRatio: number) => void;
 }
 
 export interface ClientToServerEvents {
@@ -17,6 +18,7 @@ export interface ClientToServerEvents {
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;
+    wheelSet: (failRatio: number) => void;
 }
 
 export interface InterServerEvents {
@@ -84,6 +86,9 @@ export type Room = {
     storyteller: Storyteller,
     personalities: Personality[],
     stage: number,
+    domi: string,
+    abilityCount: number,
+    goalCount: number
 };
 
 export type St0Data = {
@@ -109,6 +114,9 @@ export type St1Data = {
 export type Ps1Data = CardData;
 
 export type ClientData = 
+    {   type: "Message",
+        message: string,
+    } |
     { type: "St0Data", 
         st0Data: St0Data,
     } |
@@ -119,7 +127,7 @@ export type ClientData =
         st1Data: St1Data,
     } |
     { type: "Ps1Data",
-        ps1Data: Ps1Data
+        ps1Data: Ps1Data,
     }
 ;
 

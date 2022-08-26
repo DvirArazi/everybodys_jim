@@ -6,17 +6,20 @@ import { randRange } from "../../shared/utils";
 import { Button } from "../button";
 import { Modal } from "../modal"
 import { Spacer } from "../spacer";
-import { Wheel } from "./wheel";
-import { Wheel2 } from "./wheel2";
+import { Wheel } from "../storyteller1/wheel";
+import { Wheel2 } from "../storyteller1/wheel2";
+import { Wheel3 } from "../wheel3";
 
-export const SpinModal = (pers: {id: string, name: string}[])=>{
-    let wheel = Wheel2(pers.map(per=>per.name), 0.7, 300);
+export const SpinModal = (pers: {id: string, name: string}[], failRatio: number)=>{
+    let wheel = Wheel3(pers.map(per=>per.name), failRatio);
+   
 
     return Modal("Spin the wheel", false, Elem("div", {}, [
         wheel.elem,
         Spacer(15),
         Button("Spin", ()=>{
-            wheel.spin(()=>{});
+            wheel.spin();
+            // wheel.colorRed(2);
         }).elem
     ], {
         padding: "25px"

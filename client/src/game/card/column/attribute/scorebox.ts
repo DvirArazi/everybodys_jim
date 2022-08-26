@@ -43,7 +43,7 @@ export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
             },
         }, [], {
             resize: "none",
-            overflow: "hidden",
+            overflow: "clip",
             lineBreak: "none",
 
             width: "20px",
@@ -56,7 +56,7 @@ export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
             borderRadius: "4px",
             border: "2px solid #767676",
             textAlign: "center",
-            paddingTop: "3px"
+            paddingTop: "3px",
         }
     );
 

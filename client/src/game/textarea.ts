@@ -41,6 +41,7 @@ export const Textarea = (
             ...divStyle
         }
     );
+    blurColor = div.style.borderColor;
 
     textarea.onfocus = ()=>{
         div.style.borderColor = "#0000CD";

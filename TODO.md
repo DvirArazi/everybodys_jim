@@ -29,3 +29,5 @@
 [V] fix invisible personalities on Storyteller0
 [ ] reconsider the structure of the construction routing
 [ ] Let the storyteller choose the number of abilities and goals
+[ ] Make wheel with canvas instead of divs for performance
+[ ] Update Storyteller1 when a personality connects or disconnects

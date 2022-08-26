@@ -78,7 +78,7 @@ export const deleteEntry = (id: string) => {
 export const deleteEntriesByIdI = (idIs: number[]) => {
     let entries = getEntries();
 
-    for (let i = idIs.length - 1; i <= 0; i--) {
+    for (let i = idIs.length - 1; i >= 0; i--) {
         entries.splice(idIs[i], 1);
     }
 

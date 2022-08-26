@@ -1,9 +1,9 @@
 import { Elem } from "../../core/Elem";
 import { randRange } from "../../shared/utils";
 
-export const Wheel2 = (sliceNames: string[], failRatio: number, dia: number)=>{
-    let slicesCount = sliceNames.length;
-    let halfAlpha = (1 - failRatio) * Math.PI/slicesCount;
+export const Wheel2 = (pers: {id: string, name: string}[], failRatio: number, dia: number)=>{
+    let persCount = pers.length;
+    let halfAlpha = (1 - failRatio) * Math.PI/persCount;
 
     const Slice = (sliceI: number) => {
         let smallY = 0.5 / Math.tan(halfAlpha);
@@ -29,9 +29,9 @@ export const Wheel2 = (sliceNames: string[], failRatio: number, dia: number)=>{
         };
 
         let name = Elem("div", {
-            innerText: sliceNames[sliceI],
+            innerText: pers[sliceI].name,
         }, [], {
-            zIndex: "40",
+            zIndex: "60",
             position: "relative",
             transformOrigin: `0 50%`,
         });
@@ -72,7 +72,7 @@ export const Wheel2 = (sliceNames: string[], failRatio: number, dia: number)=>{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transform: `translate(${shift}px, 0) rotate(${halfBeta*(2*sliceI + 1) + halfAlpha*(2*slicesCount - 1)}rad)`,
+                transform: `translate(${shift}px, 0) rotate(${halfBeta*(2*sliceI + 1) + halfAlpha*(2*persCount - 1)}rad)`,
             });
         };
 
@@ -101,7 +101,7 @@ export const Wheel2 = (sliceNames: string[], failRatio: number, dia: number)=>{
     }
 
     let slices = [];
-    for (let i = 0; i < sliceNames.length; i++) {
+    for (let i = 0; i < persCount; i++) {
         slices.push(Slice(i));
     }
     for (let i = 0; i < failRatio*10; i++) {
@@ -144,29 +144,30 @@ export const Wheel2 = (sliceNames: string[], failRatio: number, dia: number)=>{
             width: `${dia}px`, 
             margin: "auto",
         }),
+        mark: ()=>{},
         spin: (/*angle: number, chosenI: number,*/ onStop: (result: number)=>void) => {
             let dest = Math.random() * 2*Math.PI;
             let rounds = Math.floor(randRange(4, 8)) * 2*Math.PI;
             let chosenI = Math.floor((2*Math.PI-((dest+2*Math.PI-halfAlpha)%(2*Math.PI)))/(2*halfAlpha));
-            console.log(sliceNames[chosenI]);
+            console.log(pers[chosenI]?.name);
             let a = -1.75; //deg per second^2
             let v0 = Math.sqrt(-2*a*(dest+rounds)); //deg per second
             let x = 0; //deg
-            
-            let startTime = Date.now();
-            let time = Date.now() - startTime;
 
-            let inverval = setInterval(()=>{
-                time = (Date.now() - startTime)/1000;
+            let start: number | undefined = undefined;
+            let interval = (timestamp: number)=>{
+                if (start === undefined) {start = timestamp;}
+                const time = (timestamp - start)/1000;
 
                 x = v0 * time + a*time*time/2;
 
                 wheel.style.transform = `rotate(${x}rad)`;
 
-                if (0 >= a*time+v0) {
-                    clearInterval(inverval);
+                if (0 < v0 + a*time) {
+                    window.requestAnimationFrame(interval);
                 } 
-            }, 0);
+            };
+            window.requestAnimationFrame(interval);
         }
     }
 }

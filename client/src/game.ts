@@ -3,6 +3,7 @@ import { Elem } from "./core/Elem";
 import { addEntry, deleteEntriesByIdI, getEntries, updateEntryId } from "./game/entries";
 import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";
+import { Personality1 } from "./game/personality1";
 import { Spacer } from "./game/spacer";
 import { Storyteller0 } from "./game/storyteller0";
 import { Storyteller1 } from "./game/storyteller1";
@@ -56,6 +57,10 @@ export let Game = () => {
             }
             case "St1Data": {
                 setPage(Storyteller1(clientData.st1Data));
+                break;
+            }
+            case "Ps1Data": {
+                setPage(Personality1(clientData.ps1Data))
                 break;
             }
         }

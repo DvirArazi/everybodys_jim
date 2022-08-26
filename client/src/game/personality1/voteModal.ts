@@ -2,23 +2,24 @@ import { Elem } from "../../core/Elem"
 import { Button } from "../button";
 import { Modal } from "../modal"
 import { Spacer } from "../spacer";
-import { Wheel } from "./wheel";
-import { Wheel2 } from "./wheel2";
+import { Wheel } from "../storyteller1/wheel";
+import { Wheel2 } from "../storyteller1/wheel2";
+import { Wheel3 } from "../wheel3";
 
-export const VoteModal = (pers: {id: string, name: string}[])=>{
-    let wheel = Wheel2(pers.map(per=>per.name), 0.3, 250);
+export const VoteModal = (pers: {id: string, name: string}[], failRatio: number)=>{
+    let wheel = Wheel3(pers.map(per=>per.name), failRatio);
     
-    let thumbUp = Elem("object", {
-        data: "thumb_up.svg",
-        width: "50",
-        height: "50"
+    let thumbUp = Elem("img", {
+        src: "svg/thumb_up.svg",
+        width: 50,
+        height: 50
     }, [], {
         filter: `invert(55%) sepia(37%) saturate(6477%) hue-rotate(87deg) brightness(106%) contrast(114%)`
     });
-    let thumbDown = Elem("object", {
-        data: "thumb_up.svg",
-        width: "50",
-        height: "50",
+    let thumbDown = Elem("img", {
+        src: "svg/thumb_up.svg",
+        width: 50,
+        height: 50
     }, [], {
         transform: "rotate(180deg) translate(0, -5px)",
         filter: `invert(47%) sepia(89%) saturate(5117%) hue-rotate(340deg) brightness(95%) contrast(110%)`

@@ -40,7 +40,8 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         } else if(completePers.includes(card.id)) {
             completePers.splice(completePers.indexOf(card.id), 1);
         }
-        startButton.setEnabled(completePers.length >= 3);
+        //!!!FOR TESTING!!! CHANGE BACK LATER
+        startButton.setEnabled(true /*completePers.length >= 3*/);
     }
 
     //crate card
@@ -56,6 +57,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
         boxedCard = {...card, ...cardVBox, ...{id: perId}};
 
+        boxedCard.setVisible(card.getName() != "");
         cards.set(perId, boxedCard);
         cardVBox.elem.appendChild(card.elem);
         cardsContainer.append(cardVBox.elem);
@@ -96,7 +98,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         if(completePers.some(id=>id==card!.id)) {
             completePers.splice(completePers.indexOf(card.id), 1);
         }
-        startButton.setEnabled(completePers.length >= 2);
+        startButton.setEnabled(completePers.length >= 3);
         visibilityBox.setVisible(Array.from(cards.values()).some(card=>card.getName()!=""));
     });
 

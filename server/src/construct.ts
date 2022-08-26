@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import { Socket } from "socket.io";
 import { io } from ".";
-import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller } from "./rooms";
+import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality } from "./rooms";
 import { ClientData, ClientToServerEvents, Entry, InterServerEvents, ServerToClientEvents, SocketData, St1Data } from "./shared/types";
 
 type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 
-export const newStoryteller = (socket: ServerSocket) => {
+export const newStoryteller0 = (socket: ServerSocket) => {
     let roomcode = createRoom(socket.id);
     socket.emit("addEntry", {
         id: socket.id,
@@ -19,7 +19,7 @@ export const newStoryteller = (socket: ServerSocket) => {
     }});
 }
 
-export const newPersonality = (socket: ServerSocket, roomcode: string): boolean => {
+export const newPersonality0 = (socket: ServerSocket, roomcode: string): boolean => {
     if (connectToRoom(socket.id, roomcode)) {
         socket.emit("addEntry", {
             id: socket.id,
@@ -41,12 +41,20 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
         return;
     }
 
-    socket.emit("construct", {type: "St1Data", st1Data});
-
-    for(let i = 0; i < room.personalities.length; i++) {
-        let per = room.personalities[i];
-        io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: room.personalities[i].cardData});
+    room.stage = 1;
+    room.domi = st1Data.personalities[0].id;
+    room.personalities = [];
+    for (let per of st1Data.personalities) {
+        room.personalities.push({
+            id: per.id,
+            cardData: per.cardData,
+            connected: true,
+            stage: 1
+        });
+        io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: per.cardData});
     }
+
+    socket.emit("construct", {type: "St1Data", st1Data});
 }
 
 export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
@@ -60,10 +68,24 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
     room.storyteller.connected = true;
     socket.emit("updateEntryId", entry.id);
 
-    socket.emit("construct", {type: "St0Data", st0Data: {
-        roomcode: entry.roomcode,
-        personalities: room.personalities.filter((personality=>personality.connected))
-    }});
+    switch (room.stage) {
+        case 0: {
+            socket.emit("construct", {type: "St0Data", st0Data: {
+                roomcode: entry.roomcode,
+                personalities: room.personalities.filter((personality=>personality.connected))
+            }});
+            break;
+        }
+        case 1: {
+            socket.emit("construct", {type: "St1Data", st1Data: {
+                personalities: room.personalities
+            }});
+            break;
+        }
+        default: {
+            console.log(chalk.redBright("ERROR: ") + `Invalid room stage: ${room.stage}`);
+        }
+    }
 }
 
 export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
@@ -78,9 +100,34 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
     personality.connected = true;
     socket.emit("updateEntryId", entry.id);
 
-    io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
-    socket.emit("construct", {type: "Ps0Data", ps0Data: {
-        roomcode: entry.roomcode,
-        cardData: personality.cardData
-    }});
+    switch(room.stage) {
+        case 0: {
+            if (personality.stage != 0) {
+                //IF THERE WAS AN ERROR IT WAS PROBABLY FROM HERE
+                personality = newPersonality(personality.id, room.abilityCount, room.goalCount);
+            }
+
+            socket.emit("construct", {type: "Ps0Data", ps0Data: {
+                roomcode: entry.roomcode,
+                cardData: personality.cardData
+            }});
+            io.to(room.storyteller.id).emit("personalityConnected", socket.id, personality.cardData);
+            break;
+        }
+        case 1: {
+            if (personality.stage != 1) {
+                socket.emit("construct", {
+                    type: "Message",
+                    message: `Can't connect to room ${room.roomcode}, game is already in progress :/`
+                });
+                return;
+            }
+
+            socket.emit("construct", {type: "Ps1Data", ps1Data: personality.cardData})
+            break;
+        }
+        default: {
+            console.log(chalk.redBright("ERROR: ") + `Invalid room stage: ${room.stage}`);
+        }
+    }
 }

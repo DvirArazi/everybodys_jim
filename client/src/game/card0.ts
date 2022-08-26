@@ -99,8 +99,13 @@ export let Card0 = (
             columns[1].set(goals);
         },
         isComplete: ()=>{
-            return columns.every((column)=>{return column.isComplete();});
+            return nameDiv.innerText != "" && columns.every((column)=>{return column.isComplete();});
         },
-        getData: ()=>{return {name: nameDiv.innerText, abilities: columns[0].getData() as AbilityData[], goals: columns[1].getData() as GoalData[]}}
+        getData: ()=>{return {
+            name: nameDiv.innerText,
+            abilities: columns[0].getData() as AbilityData[],
+            goals: columns[1].getData() as GoalData[],
+            score: 0
+        };}
     };
 }

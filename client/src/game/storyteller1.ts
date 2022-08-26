@@ -6,7 +6,8 @@ import { Card1 } from "./card1";
 import { Container } from "./container"
 import { Modal } from "./modal";
 import { Spacer } from "./spacer";
-import { SpinModal } from "./storyteller1/spinModal";
+import { SetWheelModal } from "./storyteller1/setWheelModal";
+import { SpinModal } from "./personality1/spinModal";
 
 export const Storyteller1 = (st1data: St1Data)=>{
     let dominantBox = Container("Dominant personality", "#14c4ff", [
@@ -25,8 +26,8 @@ export const Storyteller1 = (st1data: St1Data)=>{
         modalDiv,
         dominantBox.elem,
         Spacer(10),
-        Button("Set dice", ()=>{
-            modalDiv.appendChild(SpinModal());
+        Button("Set wheel", ()=>{
+            modalDiv.appendChild(SetWheelModal());
         }).elem,
         Spacer(10),
         restBox.elem,
