@@ -1,14 +1,20 @@
 import { Elem } from "../core/Elem"
 
+export type Button = {
+    elem: HTMLElement,
+    setEnabled: (enabled: boolean)=>void
+}
+
 export const Button = (
     inner: string, onClick: ()=>void,
     enabled = true,
     style?: Partial<CSSStyleDeclaration>
-) => {
+): Button => {
     let button = Elem("button", {
         innerHTML: inner,
         disabled: !enabled,
-        className: "button"
+        className: "button",
+        onclick: ()=>{onClick();}
     }, [], {
         fontFamily: "rubik",
         fontWeight: "bold",
@@ -28,11 +34,17 @@ export const Button = (
     });
     
     let div = Elem("div", {
-        onclick: ()=>{onClick();}
+        
     }, [button], {padding: "0"});
 
     return {
         elem: div,
-        setEnabled: (enabled: boolean)=>{button.disabled = !enabled;}
+        setEnabled: (enabled: boolean)=>{
+            button.disabled = !enabled;
+            // button.style.filter = enabled ?
+            //     `invert(0%) sepia(2%) saturate(2%) hue-rotate(197deg) brightness(112%) contrast(100%)`:
+            //     `invert(59%) sepia(92%) saturate(4151%) hue-rotate(121deg) brightness(98%) contrast(96%)`
+            // ;
+        }
     };
 }

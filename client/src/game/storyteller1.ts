@@ -8,7 +8,7 @@ import { Modal } from "./modal";
 import { Spacer } from "./spacer";
 import { SetWheelModal } from "./storyteller1/setWheelModal";
 import { SpinModal } from "./personality1/spinModal";
-import { voteSpectatorModal } from "./storyteller1/voteSpectatorModal";
+import { VoteSpectatorModal } from "./storyteller1/voteSpectatorModal";
 import { socket } from "..";
 
 export const Storyteller1 = (st1data: St1Data)=>{
@@ -25,7 +25,7 @@ export const Storyteller1 = (st1data: St1Data)=>{
     let modalDiv = Elem("div");
 
     socket.on("wheelSet", (pers, failRatio)=>{
-        modalDiv.appendChild(voteSpectatorModal(pers, failRatio));
+        modalDiv.appendChild(VoteSpectatorModal(pers, failRatio));
     });
 
     return Elem("div", {}, [

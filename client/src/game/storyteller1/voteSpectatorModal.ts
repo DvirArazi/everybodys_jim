@@ -4,7 +4,7 @@ import { Spacer } from "../spacer";
 import { TimerDiv } from "../timerDiv";
 import { Wheel3 } from "../wheel3"
 
-export const voteSpectatorModal = (
+export const VoteSpectatorModal = (
     pers: {id: string, name: string}[],
     failRatio: number
 )=>{

@@ -3,7 +3,7 @@ import { AttributeData, GoalData } from "../../../shared/types";
 import { Button } from "../../button";
 
 export const Attribute = (attributeData: AttributeData)=>{
-    let leftChildren = [Elem("div", {innerText: "•"}, [], {
+    let leftChildren: HTMLElement[] = [Elem("div", {innerText: "•"}, [], {
         margin: "0 6px 0 6px"
     })];
 

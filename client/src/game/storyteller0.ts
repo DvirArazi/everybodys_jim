@@ -40,8 +40,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         } else if(completePers.includes(card.id)) {
             completePers.splice(completePers.indexOf(card.id), 1);
         }
-        //!!!FOR TESTING!!! CHANGE BACK LATER
-        startButton.setEnabled(true /*completePers.length >= 3*/);
+        startButton.setEnabled(completePers.length >= 3);
     }
 
     //crate card

@@ -64,12 +64,16 @@ export let handler = () => {
             } else if (relevantEntries.length == 0) {
                 switch(role.type) {
                     case "Storyteller": { newStoryteller0(socket); break; }
-                    case "Personality": { if(!newPersonality0(socket, role.roomcode)) { 
+                    case "Personality": { 
+                        let room = getRoomByRoomcode(role.roomcode);
+                        if (room != undefined) {
+                            newPersonality0(socket, room);
+                        } else {
                             socket.emit("createNewUser", potentialEntries);
+                        }
                             //make connectToRoom accept a room parameter instead
                             //check here room exists, if not, create new user
                             //for now, leave the message construction in newPersonality0
-                        }
                         break;
                     }
                 }
@@ -88,7 +92,12 @@ export let handler = () => {
                     break;
                 }
                 case "Ps0Data": {
-                    newPersonality0(socket, clientData.ps0Data.roomcode);
+                    let room = getRoomByRoomcode(clientData.ps0Data.roomcode);
+                    if (room == undefined) {
+                        console.log(chalk.red("ERROR: ") + "Room does not exist.");
+                        return;
+                    }
+                    newPersonality0(socket, room);
                     break;
                 }
                 case "St1Data": {
@@ -156,15 +165,31 @@ export let handler = () => {
                 return;
             }
 
-            let pers = room.personalities.map((per)=>{return {id: per.id, name: per.cardData.name};});
+            let pers = [{id: room.domi.id, name: room.domi.cardData.name}].concat(
+                room.personalities.map((per)=>{return {id: per.id, name: per.cardData.name};})
+            );
 
             socket.emit("wheelSet", pers, failRatio);
 
+            io.to(room.domi.id).emit("spinModal", pers, failRatio);
             for (let i = 0; i < room.personalities.length; i++) {
                 let perId = room.personalities[i].id;
                 console.log(chalk.redBright(chalk.bold("Emitting wheelSet")));
                 io.to(perId).emit("wheelSet", pers, failRatio);
             }
+        });
+
+        socket.on("vote", (approve)=>{
+            let value = getRoomByPersonality(socket.id);
+            if (value == undefined) {
+                console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
+                return;
+            }
+            let {room, personality} = value;
+
+            io.to(room.storyteller.id).emit("vote", personality.id, approve);
+            io.to(room.domi.id).emit("vote", personality.id, approve);
+            room.personalities.forEach((per)=>io.to(per.id).emit("vote", personality.id, approve));
         });
 
         socket.on("disconnect", (reason)=>{

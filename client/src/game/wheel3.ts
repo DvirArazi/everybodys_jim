@@ -2,11 +2,17 @@ import { resolve } from "path";
 import { Elem } from "../core/Elem"
 import { randRange } from "../shared/utils";
 
-export const Wheel3 = (pers: string[], failRatio: number) => {
+export type Wheel3 = {
+    elem: HTMLElement,
+    spin: ()=>void,
+    color: (index: number, approve: boolean)=>void,
+}
+
+export const Wheel3 = (pers: string[], failRatio: number): Wheel3 => {
     let perCount = pers.length;
 
-    let w = 1000;
-    let h = 1000;
+    let w = 500;
+    let h = 500;
     
     let canvas = Elem("canvas", {
         width: w,
@@ -45,10 +51,10 @@ export const Wheel3 = (pers: string[], failRatio: number) => {
 
     //Draw slices
     //-----------
-    let angle = 2*Math.PI * (1-failRatio) * 0.5/perCount;
+    let alpha = 2*Math.PI * (1-failRatio) * 0.5/perCount;
     for (let per of pers) {
-        drawNextSlice( "#00FF80", angle);
-        drawNextSlice("#4DFFA6", angle);
+        drawNextSlice( "#66d9ff", alpha);
+        drawNextSlice("#b3ecff", alpha);
         
     }
 
@@ -68,13 +74,13 @@ export const Wheel3 = (pers: string[], failRatio: number) => {
         let tw = metrics.width;
         let th = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-        ctx.font = `bold ${10 * Math.min(b/tw, 0.8*(a-b/2) * 2*Math.tan(angle)/th)}px rubik`;
+        ctx.font = `bold ${10 * Math.min(b/tw, 0.8*(a-b/2) * 2*Math.tan(alpha)/th)}px rubik`;
 
         metrics = ctx.measureText(text);
         tw = metrics.width;
         th = (metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent);
         
-        ctx.rotate(-0.25*2*Math.PI + (i+0.5)*2*angle);
+        ctx.rotate(-0.25*2*Math.PI + (i+0.5)*2*alpha);
         ctx.fillText(text, a-0.5*tw, 0.5*th);
 
         ctx.restore();
@@ -93,10 +99,10 @@ export const Wheel3 = (pers: string[], failRatio: number) => {
 
     //Draw slices
     //-----------
-    angle = 2*Math.PI * 0.5/10;
+    let beta = 2*Math.PI * 0.5/10;
     for (let i = 0; i < failRatio * 10; i++) {
-        drawNextSlice("red", angle);
-        drawNextSlice("#ff4d4d", angle);
+        drawNextSlice("red", beta);
+        drawNextSlice("#ff4d4d", beta);
     }
 
     //Draw skulls
@@ -137,7 +143,7 @@ export const Wheel3 = (pers: string[], failRatio: number) => {
         spin: ()=>{
             let dest = Math.random() * 2*Math.PI;
             let rounds = Math.floor(randRange(4, 8)) * 2*Math.PI;
-            let chosenI = Math.floor((2*Math.PI - dest)/(2*angle));
+            let chosenI = Math.floor((2*Math.PI - dest)/(2*alpha));
             // console.log(chosenI, pers[chosenI]);
             let a = -1.75; //deg per second^2
             let v0 = Math.sqrt(-2*a*(dest+rounds)); //deg per second
@@ -158,9 +164,9 @@ export const Wheel3 = (pers: string[], failRatio: number) => {
             };
             window.requestAnimationFrame(interval);
         },
-        colorRed: (index: number)=>{
-            drawSlice("red", -0.25 * 2*Math.PI + index * 2*angle , angle);
-            drawSlice("#ff4d4d", -0.25 * 2*Math.PI + (index * 2 + 1)*angle , angle);
+        color: (index: number, approve: boolean)=>{
+            drawSlice(approve?"#4dff4d":"#ff0000", 2*Math.PI * (-0.25 + index/perCount * (1-failRatio)) , alpha);
+            drawSlice(approve?"#99ff99":"#ff4d4d", 2*Math.PI * (-0.25 + index/perCount * (1-failRatio)) + alpha, alpha);
 
             ctx.fillStyle = "#000000";
 

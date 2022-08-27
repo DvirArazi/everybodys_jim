@@ -27,8 +27,14 @@
 [ ] fix scorebox text height
 [V] fix no options showing on blank NewUser
 [V] fix invisible personalities on Storyteller0
-[ ] reconsider the structure of the construction routing
+[X] reconsider the structure of the construction routing
 [ ] Let the storyteller choose the number of abilities and goals
-[ ] Make wheel with canvas instead of divs for performance
+[V] Make wheel with canvas instead of divs for performance
 [ ] Update Storyteller1 when a personality connects or disconnects
 [ ] alart message to storyteller if not all personalities are set
+[ ] delete wheel 1 and 2
+[ ] send wheelSet to dominant personality
+[ ] move domi to simply be at the top of the least
+[ ] make sure to send wheelSet to domi
+[ ] color storyteller wheelModal
+[ ] update server-room about the colorings

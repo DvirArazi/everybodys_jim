@@ -18,7 +18,7 @@ import { VoteModal } from "./game/personality1/voteModal";
 import { SetWheelModal } from "./game/storyteller1/setWheelModal";
 import { Wheel2 } from "./game/storyteller1/wheel2";
 import { Wheel3 } from "./game/wheel3";
-import { voteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
+import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -29,12 +29,12 @@ document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
     Game()
-    // voteSpectatorModal([
-    //     {id: "", name: "Dvir"},
-    //     {id: "", name: "Yonatan"},
-    //     {id: "", name: "Gal"},
-    //     {id: "", name: "YotamYotam"}
-    // ], 0.6)
+    // VoteModal([
+    //     {id: "0", name: "Dvir"},
+    //     {id: "1", name: "Yonatan"},
+    //     {id: "2", name: "Gal"},
+    //     {id: "3", name: "YotamYotam"}
+    // ], 0.3).elem
 ], {
     textAlign: "center",
     maxWidth: "500px",
@@ -44,6 +44,28 @@ document.body.appendChild(Elem("div", {}, [
     fontSize: "20px",
     userSelect: "none"
 }));
+
+document.onkeydown = (e)=>{
+    if (e.code == "Enter") {
+        Array.from<HTMLInputElement>(
+            document.querySelectorAll("input[type=checkbox]")
+        ).forEach(
+            (elem) => {
+                elem.checked = true;
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
+        Array.from(
+            document.getElementsByTagName("textarea")
+        ).forEach(
+            (elem) => {
+                elem.value = "9";
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
+
+    }
+}
 
 // Card0("Personality", 2, 2, ()=>{}).elem
 // Container("Title", "#14c4ff", [

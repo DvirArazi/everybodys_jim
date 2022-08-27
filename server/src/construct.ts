@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { Socket } from "socket.io";
 import { io } from ".";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality } from "./rooms";
-import { ClientData, ClientToServerEvents, Entry, InterServerEvents, ServerToClientEvents, SocketData, St1Data } from "./shared/types";
+import { ClientData, ClientToServerEvents, Entry, InterServerEvents, Room, ServerToClientEvents, SocketData, St1Data } from "./shared/types";
 
 type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 
@@ -19,29 +19,23 @@ export const newStoryteller0 = (socket: ServerSocket) => {
     }});
 }
 
-export const newPersonality0 = (socket: ServerSocket, roomcode: string): boolean => {
-    let room = getRoomByRoomcode(roomcode);
-    if (room == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
-        return false;
-    }
+export const newPersonality0 = (socket: ServerSocket, room: Room) => {
     if (room.stage == 1) {
         socket.emit("construct", {
             type: "Message",
             message: `Can't connect to room ${room.roomcode}. Game is already in progress :/`
         });
-        return false;
+        return;
     }
-    if (!connectToRoom(socket.id, roomcode)) {
-        return false;
-    }
+    
+    connectToRoom(socket.id, room);
     
     socket.emit("addEntry", {
         id: socket.id,
-        roomcode: roomcode,
+        roomcode: room.roomcode,
         role: {type: "Personality", name: ""}
     });
-    socket.emit("construct", {type: "Ps0Data", ps0Data: {roomcode, cardData: undefined}});
+    socket.emit("construct", {type: "Ps0Data", ps0Data: {roomcode: room.roomcode, cardData: undefined}});
 
     return true;
 }
@@ -58,9 +52,15 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
     }
 
     room.stage = 1;
-    room.domi = st1Data.personalities[0].id;
+    room.domi = {
+        id: st1Data.personalities[0].id,
+        cardData: st1Data.personalities[0].cardData,
+        connected: true,
+        stage: 1
+    };
     room.personalities = [];
-    for (let per of st1Data.personalities) {
+    for (let i = 1; i < st1Data.personalities.length; i++) {
+        let per = st1Data.personalities[i];
         room.personalities.push({
             id: per.id,
             cardData: per.cardData,

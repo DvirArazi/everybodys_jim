@@ -13,10 +13,14 @@
     /* touch-action: manipulation; */
 }
 
-table, tr, td{
+table, tr, td {
     border: none;
     border-collapse: collapse;
     border-width: 0px;
     border-spacing: 0px;
     padding: 0px
+}
+
+img {
+    user-select: none;
 }

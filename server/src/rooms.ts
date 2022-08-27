@@ -44,7 +44,7 @@ export const createRoom = (storytellerId: string): string => {
         storyteller: {id: storytellerId, connected: true},
         personalities: [], 
         stage: 0,
-        domi: "",
+        domi: [][0], //I'm using this as basically a "default!" value
         abilityCount: 2,
         goalCount: 2
     });
@@ -54,20 +54,12 @@ export const createRoom = (storytellerId: string): string => {
     return roomcode;
 }
 
-export const connectToRoom = (personalityId: string, roomcode: String): boolean => {
-    let room = rooms.find((room)=>{return room.roomcode == roomcode;});
-    
-    if (room != undefined) {
-        room.personalities.push(newPersonality(personalityId, room.abilityCount, room.goalCount));
+export const connectToRoom = (personalityId: string, room: Room) => {
+    room.personalities.push(newPersonality(personalityId, room.abilityCount, room.goalCount));
 
-        io.to(room.storyteller.id).emit("personalityConnected", personalityId, undefined);
+    io.to(room.storyteller.id).emit("personalityConnected", personalityId, undefined);
 
-        console.log(`New personality ` + chalk.yellow(personalityId) + ` connected to room ` + chalk.yellow(roomcode));
-
-        return true;
-    }
-
-    return false;
+    console.log(`New personality ` + chalk.yellow(personalityId) + ` connected to room ` + chalk.yellow(room.roomcode));
 }
 
 export const updateCard = (room: Room, personality: Personality, cardChange: CardChange) => {
