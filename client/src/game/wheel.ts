@@ -2,13 +2,13 @@ import { resolve } from "path";
 import { Elem } from "../core/Elem"
 import { randRange } from "../shared/utils";
 
-export type Wheel3 = {
+export type Wheel = {
     elem: HTMLElement,
     spin: ()=>void,
     color: (index: number, approve: boolean)=>void,
 }
 
-export const Wheel3 = (pers: string[], failRatio: number): Wheel3 => {
+export const Wheel = (pers: string[], failRatio: number): Wheel => {
     let perCount = pers.length;
 
     let w = 500;

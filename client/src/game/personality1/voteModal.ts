@@ -3,10 +3,8 @@ import { Elem } from "../../core/Elem"
 import { Button } from "../button";
 import { Modal } from "../modal"
 import { Spacer } from "../spacer";
-import { Wheel } from "../storyteller1/wheel";
-import { Wheel2 } from "../storyteller1/wheel2";
 import { TimerDiv } from "../timerDiv";
-import { Wheel3 } from "../wheel3";
+import { Wheel } from "../wheel";
 import { WheelModal } from "../wheelModal";
 
 export const VoteModal = (pers: {id: string, name: string}[], failRatio: number)=>{

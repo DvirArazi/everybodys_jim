@@ -8,7 +8,6 @@ import { Container } from "./container";
 import { SpinModal } from "./personality1/spinModal";
 import { VoteModal } from "./personality1/voteModal";
 import { Spacer } from "./spacer";
-import { Wheel2 } from "./storyteller1/wheel2";
 import { WheelModal } from "./wheelModal";
 
 

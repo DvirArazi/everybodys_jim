@@ -8,9 +8,7 @@ import { randRange } from "../../shared/utils";
 import { Button } from "../button";
 import { Modal } from "../modal"
 import { Spacer } from "../spacer";
-import { Wheel } from "../storyteller1/wheel";
-import { Wheel2 } from "../storyteller1/wheel2";
-import { Wheel3 } from "../wheel3";
+import { Wheel } from "../wheel";
 import { WheelModal } from "../wheelModal";
 
 export const SpinModal = (pers: {id: string, name: string}[], failRatio: number)=>{

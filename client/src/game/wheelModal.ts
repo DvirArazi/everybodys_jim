@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { Elem } from "../core/Elem";
 import { Modal } from "./modal"
-import { Wheel3 } from "./wheel3"
+import { Wheel } from "./wheel"
 
 export type WheelModal = {
     elem: HTMLElement,
@@ -11,9 +11,9 @@ export type WheelModal = {
 export const WheelModal = (
     title: string, pers: {id: string, name: string}[],
     failRatio: number,
-    content: (wheel: Wheel3)=>HTMLElement
+    content: (wheel: Wheel)=>HTMLElement
 ): WheelModal =>{
-    let wheel = Wheel3(pers.map(per=>per.name), failRatio);
+    let wheel = Wheel(pers.map(per=>per.name), failRatio);
     return {
         elem: Modal(title, false, Elem("div", {}, [wheel.elem, content(wheel)], { padding: "25px" })),
         vote: (perId: string, approve: boolean)=>{

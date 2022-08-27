@@ -16,8 +16,7 @@ import { Container } from "./game/container";
 import { SpinModal } from "./game/personality1/spinModal";
 import { VoteModal } from "./game/personality1/voteModal";
 import { SetWheelModal } from "./game/storyteller1/setWheelModal";
-import { Wheel2 } from "./game/storyteller1/wheel2";
-import { Wheel3 } from "./game/wheel3";
+import { Wheel } from "./game/wheel";
 import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
