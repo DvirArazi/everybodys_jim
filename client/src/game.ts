@@ -45,6 +45,10 @@ export let Game = () => {
 
     socket.on("construct", (clientData)=>{
         switch (clientData.type) {
+            case "Message": {
+                setPage(Elem("div", {innerText: clientData.message}))
+                break;
+            }
             case "St0Data": {
                 history.replaceState("", "", "st")
                 setPage(Storyteller0(clientData.st0Data));

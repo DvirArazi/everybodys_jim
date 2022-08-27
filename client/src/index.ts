@@ -18,6 +18,7 @@ import { VoteModal } from "./game/personality1/voteModal";
 import { SetWheelModal } from "./game/storyteller1/setWheelModal";
 import { Wheel2 } from "./game/storyteller1/wheel2";
 import { Wheel3 } from "./game/wheel3";
+import { voteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -28,31 +29,12 @@ document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
     Game()
-    // Wheel3([
-    //     {id: "", name: "Dvir"},
-    //     {id: "", name: "Yonatan"},
-    //     {id: "", name: "Gal"},
-    //     {id: "", name: "YotamYotam"}
-    // ], 0.6).elem
-    // SpinModal([
+    // voteSpectatorModal([
     //     {id: "", name: "Dvir"},
     //     {id: "", name: "Yonatan"},
     //     {id: "", name: "Gal"},
     //     {id: "", name: "YotamYotam"}
     // ], 0.6)
-    // SetWheelModal()
-    // SpinModal([
-    //     {id: "", name: "Dvir"},
-    //     {id: "", name: "Yonatan"},
-    //     {id: "", name: "Ofir"},
-    //     {id: "", name: "Nadav"},
-    //     {id: "", name: "Yotam"},
-    //     {id: "", name: "G"},
-    //     {id: "", name: "Roy"},
-    // ], 0.3)
-    // SpinModal()
-    // storyteller0("AAAA")
-    // Personality0()
 ], {
     textAlign: "center",
     maxWidth: "500px",

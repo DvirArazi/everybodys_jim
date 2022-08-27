@@ -4,6 +4,7 @@ import { Modal } from "../modal"
 import { Spacer } from "../spacer";
 import { Wheel } from "../storyteller1/wheel";
 import { Wheel2 } from "../storyteller1/wheel2";
+import { TimerDiv } from "../timerDiv";
 import { Wheel3 } from "../wheel3";
 
 export const VoteModal = (pers: {id: string, name: string}[], failRatio: number)=>{
@@ -32,7 +33,7 @@ export const VoteModal = (pers: {id: string, name: string}[], failRatio: number)
                 padding: "10px",
             }
         ).elem]),
-        Elem("td", {}, [Elem("div", {innerText: "54 seconds to vote"}, [], {padding: "10px"})]),
+        Elem("td", {}, [TimerDiv()]),
         Elem("td", {}, [Button(
             thumbDown.outerHTML,
             ()=>{}, true, {

@@ -8,6 +8,8 @@ import { Modal } from "./modal";
 import { Spacer } from "./spacer";
 import { SetWheelModal } from "./storyteller1/setWheelModal";
 import { SpinModal } from "./personality1/spinModal";
+import { voteSpectatorModal } from "./storyteller1/voteSpectatorModal";
+import { socket } from "..";
 
 export const Storyteller1 = (st1data: St1Data)=>{
     let dominantBox = Container("Dominant personality", "#14c4ff", [
@@ -21,6 +23,10 @@ export const Storyteller1 = (st1data: St1Data)=>{
     let restBox = Container("Personalities", "#14c4ff", rest);
 
     let modalDiv = Elem("div");
+
+    socket.on("wheelSet", (pers, failRatio)=>{
+        modalDiv.appendChild(voteSpectatorModal(pers, failRatio));
+    });
 
     return Elem("div", {}, [
         modalDiv,

@@ -20,24 +20,40 @@ export const newStoryteller0 = (socket: ServerSocket) => {
 }
 
 export const newPersonality0 = (socket: ServerSocket, roomcode: string): boolean => {
-    if (connectToRoom(socket.id, roomcode)) {
-        socket.emit("addEntry", {
-            id: socket.id,
-            roomcode: roomcode,
-            role: {type: "Personality", name: ""}
-        });
-        socket.emit("construct", {type: "Ps0Data", ps0Data: {roomcode, cardData: undefined}});
-
-        return true;
-    } else {
+    let room = getRoomByRoomcode(roomcode);
+    if (room == undefined) {
+        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
         return false;
     }
+    if (room.stage == 1) {
+        socket.emit("construct", {
+            type: "Message",
+            message: `Can't connect to room ${room.roomcode}. Game is already in progress :/`
+        });
+        return false;
+    }
+    if (!connectToRoom(socket.id, roomcode)) {
+        return false;
+    }
+    
+    socket.emit("addEntry", {
+        id: socket.id,
+        roomcode: roomcode,
+        role: {type: "Personality", name: ""}
+    });
+    socket.emit("construct", {type: "Ps0Data", ps0Data: {roomcode, cardData: undefined}});
+
+    return true;
 }
 
 export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
     let room = getRoomByStoryteller(socket.id);
     if (room == undefined) {
         console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
+        return;
+    }
+    if (st1Data.personalities.length < 1) {
+        console.log(chalk.redBright("ERROR: ") + "No complete personalities were sent from the client.");
         return;
     }
 
@@ -116,10 +132,7 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
         }
         case 1: {
             if (personality.stage != 1) {
-                socket.emit("construct", {
-                    type: "Message",
-                    message: `Can't connect to room ${room.roomcode}, game is already in progress :/`
-                });
+                console.log(chalk.redBright("ERROR: ") + "Personality tried to reconnect with non-1 stage.");
                 return;
             }
 

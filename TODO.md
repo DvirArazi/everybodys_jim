@@ -31,3 +31,4 @@
 [ ] Let the storyteller choose the number of abilities and goals
 [ ] Make wheel with canvas instead of divs for performance
 [ ] Update Storyteller1 when a personality connects or disconnects
+[ ] alart message to storyteller if not all personalities are set

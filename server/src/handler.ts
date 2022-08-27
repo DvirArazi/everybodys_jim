@@ -1,7 +1,7 @@
 import chalk, { Chalk } from "chalk";
 import { Socket } from "socket.io";
 import { io } from ".";
-import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality, reconnectStoryteller } from "./construct";
+import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality as reconnectPersonality0, reconnectStoryteller as reconnectStoryteller0 } from "./construct";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
 import { ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./shared/types";
 
@@ -66,14 +66,17 @@ export let handler = () => {
                     case "Storyteller": { newStoryteller0(socket); break; }
                     case "Personality": { if(!newPersonality0(socket, role.roomcode)) { 
                             socket.emit("createNewUser", potentialEntries);
+                            //make connectToRoom accept a room parameter instead
+                            //check here room exists, if not, create new user
+                            //for now, leave the message construction in newPersonality0
                         }
                         break;
                     }
                 }
             } else if (relevantEntries.length == 1) {
                 switch(role.type) {
-                    case "Storyteller": { reconnectStoryteller(socket, relevantEntries[0]); break; }
-                    case "Personality": { reconnectPersonality(socket, relevantEntries[0]); break; }
+                    case "Storyteller": { reconnectStoryteller0(socket, relevantEntries[0]); break; }
+                    case "Personality": { reconnectPersonality0(socket, relevantEntries[0]); break; }
                 }
             }
         });
@@ -101,11 +104,11 @@ export let handler = () => {
         socket.on("reconnect", (entry)=>{
             switch (entry.role.type) {
                 case "Storyteller": {
-                    reconnectStoryteller(socket, entry);
+                    reconnectStoryteller0(socket, entry);
                     break;
                 }
                 case "Personality": {
-                    reconnectPersonality(socket, entry);
+                    reconnectPersonality0(socket, entry);
                     break;
                 }
                 default: {
@@ -153,11 +156,14 @@ export let handler = () => {
                 return;
             }
 
-            let perList = room.personalities.map((per)=>{return {id: per.id, name: per.cardData.name};});
+            let pers = room.personalities.map((per)=>{return {id: per.id, name: per.cardData.name};});
+
+            socket.emit("wheelSet", pers, failRatio);
+
             for (let i = 0; i < room.personalities.length; i++) {
                 let perId = room.personalities[i].id;
                 console.log(chalk.redBright(chalk.bold("Emitting wheelSet")));
-                io.to(perId).emit("wheelSet", perList, failRatio);
+                io.to(perId).emit("wheelSet", pers, failRatio);
             }
         });
 
