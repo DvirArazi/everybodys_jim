@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { socket } from "..";
 import { Elem } from "../core/Elem";
-import { CardChange, CardData, Personality, St0Data } from "../shared/types";
+import { CardChange, CardData, St0Data } from "../shared/types";
 import { Button } from "./button";
 import { Card0 } from "./card0";
 import { Container } from "./container";
@@ -11,13 +11,15 @@ import { VisibilityBox } from "./visibilityBox";
 type BoxedCard = Card0 & VisibilityBox & {id: string};
 
 export let Storyteller0 = (st0data: St0Data):HTMLElement => {
-    let completePers: Personality[] = [];
+    let completePers: string[] = [];
 
     let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
-    let startButton = Button("Start game", ()=>{
-        socket.emit("construct", {type: "St1Data", st1Data: {personalities: completePers}})
-    });
+    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", st1Data: {
+        personalities: completePers.map((perId)=>{
+            return { id: perId, cardData: {...cards.get(perId)!.getData(), ...{score: 0}}};
+        })
+    }})});
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 
@@ -32,7 +34,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         } 
 
         if (card.isComplete()) {
-            if (!completePers.some(per=>per.id==card.id)) {
+            if (!completePers.includes(card.id)) {
                 completePers.push(card.id);
             }
         } else if(completePers.includes(card.id)) {

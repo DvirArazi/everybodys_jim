@@ -1,6 +1,6 @@
 import { socket } from "../..";
 import { Elem } from "../../core/Elem";
-import { CardData, Personality } from "../../shared/types";
+import { Personality } from "../../shared/types";
 import { isNumber } from "../../shared/utils";
 import { Button } from "../button";
 import { Modal } from "../modal"
@@ -8,7 +8,7 @@ import { Row } from "../row";
 import { Spacer } from "../spacer";
 import { Textarea } from "../textarea";
 
-export const GrantModal = (per: {id: string, cardData: CardData}, goalI: number)=>{
+export const GrantModal = (per: Personality, goalI: number)=>{
     let goal = per.cardData.goals[goalI];
     let score = goal.score;
 
