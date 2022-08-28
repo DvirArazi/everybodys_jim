@@ -11,6 +11,11 @@ export interface ServerToClientEvents {
     wheelSet: (pers: {id: string, name: string}[], failRatio: number) => void;
     spinModal: (pers: {id: string, name: string}[], failRatio: number) => void;
     vote: (perId: string, approve: boolean) => void;
+    disableVote: () => void;
+    enableSpin: () => void;
+    spinWheel: (angle: number, success: boolean) => void;
+    continueGame: () => void;
+    reorderPersonalities: (pers: {id: string, cardData: CardData}[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -22,6 +27,9 @@ export interface ClientToServerEvents {
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;
     wheelSet: (failRatio: number) => void;
     vote: (approve: boolean) => void;
+    spinWheel: () => void;
+    continueGame: () => void;
+    grantScore: (perId: string, score: number, goalI: number, description: string) => void;
 }
 
 export interface InterServerEvents {
@@ -82,6 +90,7 @@ export type Personality = {
     cardData: CardData
     stage: number,
     connected: boolean,
+    vote?: boolean
 };
 
 export type Room = {
@@ -89,9 +98,11 @@ export type Room = {
     storyteller: Storyteller,
     personalities: Personality[],
     stage: number,
-    domi: Personality,
     abilityCount: number,
-    goalCount: number
+    goalCount: number,
+    consecutiveSuccesses: number,
+    failRatio?: number,
+    timeout?: NodeJS.Timeout
 };
 
 export type St0Data = {

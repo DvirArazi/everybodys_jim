@@ -52,14 +52,8 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
     }
 
     room.stage = 1;
-    room.domi = {
-        id: st1Data.personalities[0].id,
-        cardData: st1Data.personalities[0].cardData,
-        connected: true,
-        stage: 1
-    };
     room.personalities = [];
-    for (let i = 1; i < st1Data.personalities.length; i++) {
+    for (let i = 0; i < st1Data.personalities.length; i++) {
         let per = st1Data.personalities[i];
         room.personalities.push({
             id: per.id,

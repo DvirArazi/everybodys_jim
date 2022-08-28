@@ -15,7 +15,7 @@ export const Textarea = (
      [], {
             fontFamily: "rubik",
             fontWeight: "bold",
-            fontSize: "18px",
+            // fontSize: "18px",
 
             background: "transparent",
             border: "none",

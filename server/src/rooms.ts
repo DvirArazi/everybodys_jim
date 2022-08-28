@@ -44,9 +44,9 @@ export const createRoom = (storytellerId: string): string => {
         storyteller: {id: storytellerId, connected: true},
         personalities: [], 
         stage: 0,
-        domi: [][0], //I'm using this as basically a "default!" value
         abilityCount: 2,
-        goalCount: 2
+        goalCount: 2,
+        consecutiveSuccesses: 0
     });
 
     console.log(`New storyteller ` + chalk.yellow(storytellerId) + ` created room ` + chalk.yellow(roomcode));
@@ -92,7 +92,7 @@ export const updateCard = (room: Room, personality: Personality, cardChange: Car
     }
 }
 
-export const newPersonality = (perId: string, abilityCount: number, goalCount: number) => {
+export const newPersonality = (perId: string, abilityCount: number, goalCount: number): Personality => {
     return {
         id: perId,
         cardData: {

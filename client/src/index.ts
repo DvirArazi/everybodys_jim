@@ -18,6 +18,8 @@ import { VoteModal } from "./game/personality1/voteModal";
 import { SetWheelModal } from "./game/storyteller1/setWheelModal";
 import { Wheel } from "./game/wheel";
 import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
+import { Modal } from "./game/modal";
+import { GrantModal } from "./game/storyteller1/grantModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -27,7 +29,23 @@ document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
-    Game()
+    // Game()
+    // Modal("title", true, Elem("div"))
+    GrantModal({
+        cardData: {
+            abilities: [],
+            goals: [{
+                approved: true,
+                description: "climbing up a tree",
+                score: "3"
+            },],
+            name: "Gal",
+            score: 4,
+        },
+        connected: true, 
+        id: "0",
+        stage: 1
+    }, 0)
     // VoteModal([
     //     {id: "0", name: "Dvir"},
     //     {id: "1", name: "Yonatan"},

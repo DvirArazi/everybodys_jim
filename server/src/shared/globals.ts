@@ -1,0 +1,1 @@
+export const TIME_TO_VOTE = 60; //seconds

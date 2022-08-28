@@ -11,18 +11,30 @@ import { Spacer } from "../spacer";
 import { Wheel } from "../wheel";
 import { WheelModal } from "../wheelModal";
 
-export const SpinModal = (pers: {id: string, name: string}[], failRatio: number)=>{
+export type SpinModal = WheelModal & {
+    enableSpin: ()=>void
+}
 
-    return WheelModal("Spin the wheel", pers, failRatio,
-        (wheel)=>Elem("div", {}, [
-            wheel.elem,
-            Spacer(15),
-            Button("Spin", ()=>{
-                wheel.spin();
-                // wheel.colorRed(2);
-            }).elem
-        ], {
-            padding: "25px"
-        }
-    ));
+export const SpinModal = (pers: {id: string, name: string}[], failRatio: number): SpinModal =>{
+    let button: Button;
+
+    return {
+        ...WheelModal("Spin the wheel", pers, failRatio,
+            (wheel)=>Elem("div", {}, [
+                wheel.elem,
+                Spacer(10),
+                (()=>{
+                    button = Button("Spin", ()=>{
+                        socket.emit("spinWheel");
+                        button.setEnabled(false);
+                    }, false);
+
+                    return button.elem;
+                })()
+            ], {
+                padding: "25px"
+            }
+        )), 
+        ...{enableSpin: ()=>button.setEnabled(true)}
+};
 }

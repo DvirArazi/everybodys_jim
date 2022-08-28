@@ -39,13 +39,13 @@ export const Modal = (title: string, closeable: boolean, content: HTMLElement)=>
             maxWidth: "500px",
             margin: "auto"
         })], {
-            margin: "10px"
+            margin: "0 10px 0 10px"
             // textAlign: "center"
         })
     ], {
         position: "fixed",
         zIndex: "20",
-        paddingTop: "100px",
+        paddingTop: "60px",
         left: "0",
         top: "0",
         width: "100%",

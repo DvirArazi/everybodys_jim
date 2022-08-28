@@ -122,7 +122,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         }).elem,
         Spacer(10),
         Elem("span", {innerText: `Players can join your game by either using the link or by entering the room code: `}),
-        Elem("span", {innerText: st0data.roomcode}, [], {color: "#eb0000"}),
+        Elem("span", {innerText: st0data.roomcode}, [], {color: "#eb0000", userSelect: "text"}),
         Spacer(10),
         visibilityBox.elem,
         Spacer(10)

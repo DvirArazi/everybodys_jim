@@ -21,6 +21,12 @@ table, tr, td {
     padding: 0px
 }
 
+textarea {
+    font-family: "rubik";
+    font-weight: bold;
+    font-size: 20px;
+}
+
 img {
     user-select: none;
 }

@@ -4,7 +4,7 @@ import { randRange } from "../shared/utils";
 
 export type Wheel = {
     elem: HTMLElement,
-    spin: ()=>void,
+    spin: (angle: number, success: boolean, onStop: ()=>void)=>void,
     color: (index: number, approve: boolean)=>void,
 }
 
@@ -140,13 +140,9 @@ export const Wheel = (pers: string[], failRatio: number): Wheel => {
             margin: "auto",
             position: "relative"
         }),
-        spin: ()=>{
-            let dest = Math.random() * 2*Math.PI;
-            let rounds = Math.floor(randRange(4, 8)) * 2*Math.PI;
-            let chosenI = Math.floor((2*Math.PI - dest)/(2*alpha));
-            // console.log(chosenI, pers[chosenI]);
+        spin: (angle: number, success: boolean, onStop: ()=>void)=>{
             let a = -1.75; //deg per second^2
-            let v0 = Math.sqrt(-2*a*(dest+rounds)); //deg per second
+            let v0 = Math.sqrt(-2*a*angle); //deg per second
             let x = 0; //deg
 
             let start: number | undefined = undefined;
@@ -160,7 +156,9 @@ export const Wheel = (pers: string[], failRatio: number): Wheel => {
 
                 if (0 < v0 + a*time) {
                     window.requestAnimationFrame(interval);
-                } 
+                } else {
+                    onStop();
+                }
             };
             window.requestAnimationFrame(interval);
         },

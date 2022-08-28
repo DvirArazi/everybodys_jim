@@ -32,9 +32,14 @@
 [V] Make wheel with canvas instead of divs for performance
 [ ] Update Storyteller1 when a personality connects or disconnects
 [ ] alart message to storyteller if not all personalities are set
-[ ] delete wheel 1 and 2
+[V] delete wheel 1 and 2
 [ ] send wheelSet to dominant personality
 [ ] move domi to simply be at the top of the least
 [ ] make sure to send wheelSet to domi
 [ ] color storyteller wheelModal
 [ ] update server-room about the colorings
+[ ] save votes on server-room
+[ ] count time left to vote on server
+[ ] make sure to return the client to the same open modal on refresh
+[ ] check completePers list
+[ ] send "room does not exist" message to personality
