@@ -15,7 +15,7 @@ export interface ServerToClientEvents {
     enableSpin: () => void;
     spinWheel: (angle: number, success: boolean) => void;
     continueGame: () => void;
-    reorderPersonalities: (pers: {id: string, cardData: CardData}[]) => void;
+    reorderPersonalities: (pers: Personality[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -107,10 +107,7 @@ export type Room = {
 
 export type St0Data = {
     roomcode: string,
-    personalities: {
-        id: string,
-        cardData: CardData,
-    }[] | undefined,
+    personalities: Personality[] | undefined,
 };
 
 export type Ps0Data = {
@@ -119,10 +116,7 @@ export type Ps0Data = {
 };
 
 export type St1Data = {
-    personalities: {
-        id: string,
-        cardData: CardData
-    }[]
+    personalities: Personality[]
 };
 
 export type Ps1Data = CardData;

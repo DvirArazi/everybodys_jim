@@ -12,19 +12,28 @@ import { VoteSpectatorModal } from "./storyteller1/voteSpectatorModal";
 import { socket } from "..";
 import { WheelModal } from "./wheelModal";
 import { errMsg} from "../shared/utils";
+import { GrantModal } from "./storyteller1/grantModal";
 
-export const Storyteller1 = (st1data: St1Data)=>{
-    let dominantBox = Container("Dominant personality", "#14c4ff", [
-        perToCard(st1data.personalities[0].cardData)
-    ]);
-
-    let rest = [];
-    for (let i = 1; i < st1data.personalities.length; i++) {
-        rest.push(Elem("div", {}, [Spacer(2.5), Card1(st1data.personalities[i].cardData)]));
-    }
-    let restBox = Container("Personalities", "#14c4ff", rest);
+export const Storyteller1 = (st1Data: St1Data)=>{
 
     let modalDiv = Elem("div");
+
+    const perToCard = (per: Personality)=>{
+        return Elem("div", {}, [Spacer(2.5), Card1(per.cardData,
+            (goalI)=>{
+                modalDiv.replaceChildren(GrantModal(per, goalI));
+                // socket.emit("grantScore", per.id, )
+            }
+        )]);
+    }
+
+    let dominantBox = Container("Dominant personality", "#14c4ff", [
+        perToCard(st1Data.personalities[0])
+    ]);
+
+    let restBox = Container("Personalities", "#14c4ff", 
+        st1Data.personalities.slice(1).map(per=>perToCard(per))
+    );
 
     let wheelModal: WheelModal;
 
@@ -55,8 +64,8 @@ export const Storyteller1 = (st1data: St1Data)=>{
     });
 
     socket.on("reorderPersonalities", (pers)=>{
-        dominantBox.replaceAll([perToCard(pers[0].cardData)]);
-        restBox.replaceAll(pers.slice(1).map(per=>perToCard(per.cardData)));
+        dominantBox.replaceAll([perToCard(pers[0])]);
+        restBox.replaceAll(pers.slice(1).map(per=>perToCard(per)));
     });
 
     return Elem("div", {}, [
@@ -72,8 +81,4 @@ export const Storyteller1 = (st1data: St1Data)=>{
         Spacer(10),
         modalDiv
     ]);
-}
-
-const perToCard = (cardData: CardData)=>{
-    return Elem("div", {}, [Spacer(2.5), Card1(cardData)]);
 }

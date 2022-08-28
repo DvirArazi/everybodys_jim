@@ -2,14 +2,14 @@ import { Elem } from "../../../core/Elem"
 import { AttributeData, GoalData } from "../../../shared/types";
 import { Button } from "../../button";
 
-export const Attribute = (attributeData: AttributeData)=>{
+export const Attribute = (attributeData: AttributeData, onGoalScoreClick?: ()=>void)=>{
     let leftChildren: HTMLElement[] = [Elem("div", {innerText: "•"}, [], {
         margin: "0 6px 0 6px"
     })];
 
     let goalData = (attributeData as GoalData);
-    if (goalData.score != undefined) {
-        leftChildren.push(Button(`+${goalData.score}`, ()=>{}, true, {
+    if (goalData.score != undefined && onGoalScoreClick != undefined) {
+        leftChildren.push(Button(`+${goalData.score}`, onGoalScoreClick, true, {
             background: "#00E673",
             boxShadow: "0 5px #00CC66",
             padding: "5px 5px 5px 5px",

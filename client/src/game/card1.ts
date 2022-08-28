@@ -3,7 +3,8 @@ import { Elem } from "../core/Elem";
 import { Column } from "./card1/column";
 
 export const Card1 = (
-    card1Data: CardData
+    card1Data: CardData,
+    onGoalScoreClick: (goalI: number)=>void
 )=>{
     let boxShadow = "-2px -4px 9px 0px rgba(0,0,0,0.1)";
     let fallDist = 2;
@@ -62,7 +63,7 @@ export const Card1 = (
         Elem("table", {}, [
             Elem("tr", {}, [
                 Column(card1Data.abilities),
-                Column(card1Data.goals)
+                Column(card1Data.goals, (goalI)=>onGoalScoreClick(goalI))
             ])
         ], {
             width: "100%",
