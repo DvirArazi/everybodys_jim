@@ -6,6 +6,7 @@ import { errMsg } from "../shared/utils";
 import { Button } from "./button";
 import { Card1 } from "./card1";
 import { Container } from "./container";
+import { RecordsModal } from "./personality1/recordsModal";
 import { SpinModal } from "./personality1/spinModal";
 import { VoteModal } from "./personality1/voteModal";
 import { Spacer } from "./spacer";
@@ -13,14 +14,15 @@ import { WheelModal } from "./wheelModal";
 
 
 export const Personality1 = (ps1Data: Ps1Data)=>{
-    
+    let recordsModal = RecordsModal();
     
     let div = Elem("div", {}, [
         Container("", "#14c4ff", [
             Card1(ps1Data, (goalI)=>{
 
             })
-        ]).elem
+        ]).elem,
+        RecordsModal([]).elem
     ]);
 
     let wheelModal: WheelModal;
@@ -92,8 +94,8 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
         div.removeChild(wheelModal.elem);
     });
 
-    socket.on("grantScore", (record)=>{
-        
+    socket.on("grantScore", (score, description, reason)=>{
+
     });
 
     return div;

@@ -1,22 +1,8 @@
 import { Elem } from "../../core/Elem"
-import { Record } from "../../shared/types"
+import { Record } from "../../shared/types";
 import { Modal } from "../modal"
 
-export type PerRecord = 
-(
-    { accepted: true
-        score: number
-    } |
-    { accepted: false
-    }
-) &
-{
-    description: string,
-    explanation?: string,
-    reason?: string,
-}
-
-export const RecordsModal = (records: PerRecord[]) => {
+export const RecordsModal = (records: Record[]) => {
     let div = Elem("div", {}, [], { padding: "20px" });
     div.append(...(records.map(record=>recordToElem(record))));
 
@@ -24,14 +10,14 @@ export const RecordsModal = (records: PerRecord[]) => {
 
     return {
         elem: modal,
-        add: (record: PerRecord)=>{
+        add: (record: Record)=>{
             div.appendChild(recordToElem(record))
         },
         setVisible: ()=>{modal.style.visibility = "visible";}
     }
 }
 
-const recordToElem = (record: PerRecord) => {
+const recordToElem = (record: Record) => {
     return Elem("div", {}, (()=>{
         let tr = Elem("tr");
 

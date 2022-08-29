@@ -17,11 +17,11 @@ export const GrantModal = (per: {id: string, cardData: CardData}, goalI: number)
     let modal: HTMLDivElement;
     
     let button = Button("Send", ()=>{
-        socket.emit("grantScore", per.id, { 
-            score: parseInt(score),
-            goalI: goalI,
-            reason: reason
-        });
+        socket.emit("grantScore", per.id,
+            parseInt(score),
+            goal.description,
+            reason
+        );
         modal.parentElement?.removeChild(modal);
     });
 
