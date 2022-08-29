@@ -18,7 +18,9 @@ table, tr, td {
     border-collapse: collapse;
     border-width: 0px;
     border-spacing: 0px;
-    padding: 0px
+    padding: 0px;
+    /* text-align: center; */
+    /* margin: auto; */
 }
 
 textarea {

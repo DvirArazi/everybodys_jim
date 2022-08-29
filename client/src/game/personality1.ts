@@ -17,7 +17,9 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
     
     let div = Elem("div", {}, [
         Container("", "#14c4ff", [
-            Card1(ps1Data)
+            Card1(ps1Data, (goalI)=>{
+
+            })
         ]).elem
     ]);
 
@@ -88,6 +90,10 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
     //========
     socket.on("continueGame", ()=>{
         div.removeChild(wheelModal.elem);
+    });
+
+    socket.on("grantScore", (record)=>{
+        
     });
 
     return div;

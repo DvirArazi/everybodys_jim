@@ -40,7 +40,7 @@ export const WheelModal = (
     //return
     //======
     return {
-        elem: Modal(title, false, Elem("div", {}, [
+        elem: Modal(title, "none", Elem("div", {}, [
             wheel.elem,
             Spacer(10),
             timerDiv,

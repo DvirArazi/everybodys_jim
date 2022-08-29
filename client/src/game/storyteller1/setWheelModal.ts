@@ -75,7 +75,7 @@ export const SetWheelModal = ()=>{
         margin: "auto"
     });
 
-    let modal = Modal("Set the wheel", true, Elem("div", {}, [
+    let modal = Modal("Set the wheel", "close", Elem("div", {}, [
         Elem("div", {innerText: "Set the chance of faliure:"}),
         Spacer(10),
         Skull(),

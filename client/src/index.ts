@@ -20,6 +20,7 @@ import { Wheel } from "./game/wheel";
 import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
 import { Modal } from "./game/modal";
 import { GrantModal } from "./game/storyteller1/grantModal";
+import { RecordsModal } from "./game/personality1/recordsModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -31,21 +32,37 @@ document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
     // Game()
     // Modal("title", true, Elem("div"))
-    GrantModal({
-        cardData: {
-            abilities: [],
-            goals: [{
-                approved: true,
-                description: "climbing up a tree",
-                score: "3"
-            },],
-            name: "Gal",
+    RecordsModal([{
+            accepted: true,
+            score: 3,
+            description: "climbing up a tree",
+            reason: "You climbed that tree."
+        }, {
+            accepted: false,
+            description: "riding on a motorcycle",
+            explanation: "gimmi dem points",
+            reason: "a toy motocycle does not count as a motorcycle"
+        }, {
+            accepted: false,
+            description: "doing a double backflip"
+        }, {
+            accepted: true, 
             score: 4,
-        },
-        connected: true, 
-        id: "0",
-        stage: 1
-    }, 0)
+            description: "using mayonnaise"
+        }]).elem
+    // GrantModal({
+    //     cardData: {
+    //         abilities: [],
+    //         goals: [{
+    //             approved: true,
+    //             description: "climbing up a tree",
+    //             score: "3"
+    //         },],
+    //         name: "Gal",
+    //         score: 4,
+    //     },
+    //     id: "0",
+    // }, 0)
     // VoteModal([
     //     {id: "0", name: "Dvir"},
     //     {id: "1", name: "Yonatan"},

@@ -16,6 +16,7 @@ export interface ServerToClientEvents {
     spinWheel: (angle: number, success: boolean) => void;
     continueGame: () => void;
     reorderPersonalities: (pers: {id: string, cardData: CardData}[]) => void;
+    grantScore: (record: Record) => void;
 }
 
 export interface ClientToServerEvents {
@@ -29,7 +30,7 @@ export interface ClientToServerEvents {
     vote: (approve: boolean) => void;
     spinWheel: () => void;
     continueGame: () => void;
-    grantScore: (perId: string, score: number, goalI: number, description: string) => void;
+    grantScore: (perId: string, record: Record) => void;
 }
 
 export interface InterServerEvents {
@@ -85,12 +86,20 @@ export type CardData = {
     score: number
 }
 
+export type Record = {
+    score: number, 
+    goalI: number,
+    reason?: string,
+}
+
 export type Personality = {
     id: string,
-    cardData: CardData
-    stage: number,
+    cardData: CardData,
     connected: boolean,
-    vote?: boolean
+    stage: number,
+    score: number,
+    records: Record[],
+    vote?: boolean,
 };
 
 export type Room = {
@@ -119,7 +128,7 @@ export type Ps0Data = {
 };
 
 export type St1Data = {
-    personalities: {
+    pers: {
         id: string,
         cardData: CardData
     }[]

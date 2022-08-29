@@ -266,7 +266,7 @@ export let handler = () => {
             room.personalities.forEach(per=>io.to(per.id).emit("continueGame"));
         });
 
-        socket.on("grantScore", (perId, score, goalI, description)=>{
+        socket.on("grantScore", (perId, record)=>{
             let value = getRoomByPersonality(socket.id);
             if (value == undefined) {
                 errMsg("Room could not be found.");
@@ -274,9 +274,10 @@ export let handler = () => {
             }
             let {personality} = value;
 
-            personality.cardData.score += score;
+            personality.records.push(record);
+            personality.cardData.score += record.score;
 
-            
+            io.to(personality.id).emit("grantScore", record);
         });
 
         socket.on("disconnect", (reason)=>{

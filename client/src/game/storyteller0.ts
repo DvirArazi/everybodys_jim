@@ -16,7 +16,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
     let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", st1Data: {
-        personalities: completePers.map((perId)=>{
+        pers: completePers.map((perId)=>{
             return { id: perId, cardData: {...cards.get(perId)!.getData(), ...{score: 0}}};
         })
     }})});

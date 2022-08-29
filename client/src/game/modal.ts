@@ -1,13 +1,20 @@
 import { Elem } from "../core/Elem"
 
-export const Modal = (title: string, closeable: boolean, content: HTMLElement)=>{
+export const Modal = (title: string, closeable: "none" | "close" | "minimize", content: HTMLElement)=>{
     let modal = Elem("div", {}, [
         Elem("div", {}, [Elem("div", {}, [
-            Elem("div", {innerText: title}, closeable? [
+            Elem("div", {innerText: title}, closeable != "none" ? [
                 Elem("span", {
                     innerText: "✕",
                     onclick: ()=>{
-                        modal.parentElement?.removeChild(modal);
+                        switch (closeable) {
+                            case "close": {
+                                modal.parentElement?.removeChild(modal); break;
+                            }
+                            case "minimize": {
+                                modal.style.display = "none"; break;
+                            }
+                        }
                     },
                     onmouseover(this, ev) {
                         let target = ev.target as HTMLSpanElement;
@@ -53,6 +60,8 @@ export const Modal = (title: string, closeable: boolean, content: HTMLElement)=>
         overflow: "auto",
         backgroundColor: "rgba(0, 0, 0, 0.4)"
     });
+
+    if (closeable == "minimize") {modal.style.visibility = "none";}
 
     return modal;
 }
