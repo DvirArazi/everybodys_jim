@@ -22,7 +22,6 @@ export const SpinModal = (pers: {id: string, name: string}[], failRatio: number)
         ...WheelModal("Spin the wheel", pers, failRatio,
             (wheel)=>Elem("div", {}, [
                 wheel.elem,
-                Spacer(10),
                 (()=>{
                     button = Button("Spin", ()=>{
                         socket.emit("spinWheel");

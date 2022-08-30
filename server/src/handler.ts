@@ -168,6 +168,7 @@ export let handler = () => {
             }
 
             room.failRatio = failRatio;
+            room.personalities[0].vote = true;
 
             let pers = room.personalities.map((per)=>{return {id: per.id, name: per.cardData.name};});
 
@@ -211,13 +212,13 @@ export let handler = () => {
                 io.to(perId).emit("vote", personality.id, approve);
             }
 
-            if (room.personalities.every(per=>per.vote != undefined)) {
+            if (room.personalities.slice(1).every(per=>per.vote != undefined)) {
                 if (room.timeout != undefined) {
                     clearTimeout(room.timeout);
-                    io.to(room.storyteller.id).emit("enableSpin");
-                    room.personalities.forEach(per=>io.to(per.id).emit("enableSpin"));
                 }
-                io.to(room.personalities[0].id).emit("enableSpin");
+                io.to(room.storyteller.id).emit("enableSpin");
+                room.personalities.forEach(per=>io.to(per.id).emit("enableSpin"));
+                // io.to(room.personalities[0].id).emit("enableSpin");
             }
         });
 
@@ -242,11 +243,9 @@ export let handler = () => {
 
             io.to(room.storyteller.id).emit("spinWheel", dest + rounds, success);
             room.personalities.forEach(per=>io.to(per.id).emit("spinWheel", dest + rounds, success));
-        
+
             if (!success || room.consecutiveSuccesses >= 3) {
                 room.consecutiveSuccesses = 0;
-                room.personalities = [room.personalities.at(-1)!].concat(room.personalities.slice(0, -1));
-                io.to(room.storyteller.id).emit("reorderPersonalities", room.personalities);
             } else {
                 room.consecutiveSuccesses += 1;
             }
@@ -262,27 +261,55 @@ export let handler = () => {
             room.failRatio = undefined;
             room.personalities.forEach(per=>per.vote = undefined);
 
+            if (room.consecutiveSuccesses == 0) {
+                room.personalities = room.personalities.slice(1).concat(room.personalities[0]);
+                io.to(room.storyteller.id).emit("reorderPersonalities", room.personalities);
+            }
+
             io.to(room.storyteller.id).emit("continueGame");
             room.personalities.forEach(per=>io.to(per.id).emit("continueGame"));
         });
 
         socket.on("grantScore", (perId, score, description, reason)=>{
-            let value = getRoomByPersonality(socket.id);
+            let value = getRoomByPersonality(perId);
             if (value == undefined) {
                 errMsg("Room could not be found.");
                 return;
             }
             let {personality} = value;
 
+            personality.cardData.score += score;
             personality.records.push({
                 accepted: true,
                 score,
                 description,
                 reason
             });
-            personality.cardData.score += score;
 
             io.to(personality.id).emit("grantScore", score, description, reason);
+        });
+
+        socket.on("requestScore", (score, description, explanation)=>{
+            let value = getRoomByPersonality(socket.id);
+            if (value == undefined) {
+                errMsg("Room could not be found.");
+                return;
+            }
+            let {room, personality} = value;
+
+            room.storyteller.requests.push({
+                perId: personality.id,
+                score,
+                description,
+                explanation
+            })
+
+            io.to(room.storyteller.id).emit("requestScore", 
+                personality.id,
+                score,
+                description,
+                explanation
+            );
         });
 
         socket.on("disconnect", (reason)=>{

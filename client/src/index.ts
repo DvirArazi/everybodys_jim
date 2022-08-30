@@ -21,6 +21,8 @@ import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
 import { Modal } from "./game/modal";
 import { GrantModal } from "./game/storyteller1/grantModal";
 import { RecordsModal } from "./game/personality1/recordsModal";
+import { Personality1 } from "./game/personality1";
+import { RequestModal } from "./game/personality1/requestModal";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -30,45 +32,79 @@ document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
-    // Game()
-    // Modal("title", true, Elem("div"))
-    RecordsModal([{
-            accepted: true,
-            score: 3,
-            description: "climbing up a tree",
-            reason: "You climbed that tree."
-        }, {
-            accepted: false,
-            description: "riding on a motorcycle",
-            explanation: "gimmi dem points",
-            reason: "a toy motocycle does not count as a motorcycle"
-        }, {
-            accepted: false,
-            description: "doing a double backflip"
-        }, {
-            accepted: true, 
-            score: 4,
-            description: "using mayonnaise"
-        }]).elem
-    // GrantModal({
-    //     cardData: {
-    //         abilities: [],
-    //         goals: [{
-    //             approved: true,
-    //             description: "climbing up a tree",
-    //             score: "3"
-    //         },],
-    //         name: "Gal",
-    //         score: 4,
+    Game()
+    // Card1({
+    //     name: "hello",
+    //     abilities: [{
+    //         approved: undefined,
+    //         description: "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more rece"
     //     },
-    //     id: "0",
-    // }, 0)
-    // VoteModal([
-    //     {id: "0", name: "Dvir"},
-    //     {id: "1", name: "Yonatan"},
-    //     {id: "2", name: "Gal"},
-    //     {id: "3", name: "YotamYotam"}
-    // ], 0.3).elem
+    //     {
+    //         approved: undefined,
+    //         description: "three"
+    //     }],
+    //     goals: [{
+    //         approved: undefined,
+    //         description: "two",
+    //         score: "2"
+    //     }, 
+    //     {
+    //         approved: undefined,
+    //         description: "four",
+    //         score: "4"
+    //     }],
+    //     score: 115
+    // }, ()=>{}, ()=>{}).elem
+    // RequestModal({
+    //     approved: true, 
+    //     description: "Eating ice-cream",
+    //     score: "5"
+    // })
+    // Modal("title", true, Elem("div"))
+    // Personality1({
+    //     cardData: {
+    //         name: "hello",
+    //         abilities: [{
+    //             approved: undefined,
+    //             description: "one"
+    //         },
+    //         {
+    //             approved: undefined,
+    //             description: "three"
+    //         }],
+    //         goals: [{
+    //             approved: undefined,
+    //             description: "two",
+    //             score: "2"
+    //         }, 
+    //         {
+    //             approved: undefined,
+    //             description: "four",
+    //             score: "4"
+    //         }],
+    //         score: 115
+    //     },
+    //     records: [
+    //         // {
+    //         //     accepted: true,
+    //         //     score: 3,
+    //         //     description: "climbing up a tree",
+    //         //     reason: "You climbed that tree."
+    //         // }, {
+    //         //     accepted: false,
+    //         //     description: "riding on a motorcycle",
+    //         //     explanation: "gimmi dem points",
+    //         //     reason: "a toy motocycle does not count as a motorcycle"
+    //         // }, {
+    //         //     accepted: false,
+    //         //     description: "doing a double backflip"
+    //         // }, {
+    //         //     accepted: true, 
+    //         //     score: 4,
+    //         //     description: "using mayonnaise"
+    //         // }
+    //     ]
+    // })
 ], {
     textAlign: "center",
     maxWidth: "500px",

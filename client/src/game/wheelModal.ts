@@ -18,7 +18,10 @@ export const WheelModal = (
     content: (wheel: Wheel)=>HTMLElement,
     onStop?: ()=>void
 ): WheelModal =>{
+    //wheel
+    //=====
     let wheel = Wheel(pers.map(per=>per.name), failRatio);
+    wheel.color(0, true);
 
     //timerDiv
     //========

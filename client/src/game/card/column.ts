@@ -18,7 +18,7 @@ export const Column = (
                 innerText: attributeType == "ability" ?
                     "Abilities" : "Goals"
             }, [], {
-                textAlign: "center"
+                textAlign: "center",
             }),
             Elem("div", {}, attributes.map(attribute=>attribute.elem), {
             })

@@ -16,8 +16,20 @@ export const Column = (attributesData: AttributeData[], onGoalScoreClick?: (goal
     return Elem("td", {}, [ 
         Elem("div", {
             innerText: (attributesData[0] as GoalData).score == undefined ? "Abilities" : "Goals"}, [], {
-                textAlign: "center"
+                // textAlign: "center"
+                padding: "5px"
             }),
         Elem("div", {}, attributes)
-    ]);
+    ], {
+        // display: "flex",
+        // flexGrow: "1",
+        // overflow: "auto",
+        width: "50%",
+        verticalAlign: "text-top",
+            // justifyContent: "center",
+            // flexDirection: "column",
+        // lineBreak: "anywhere"
+        // display: "block"
+        // width: "100%"
+    });
 }

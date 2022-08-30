@@ -17,6 +17,7 @@ export interface ServerToClientEvents {
     continueGame: () => void;
     reorderPersonalities: (pers: {id: string, cardData: CardData}[]) => void;
     grantScore: (score: number, description: string, reason?: string) => void;
+    requestScore: (perId: string, score: number, description: string, explanation?: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -31,6 +32,7 @@ export interface ClientToServerEvents {
     spinWheel: () => void;
     continueGame: () => void;
     grantScore: (perId: string, score: number, description: string, reason?: string) => void;
+    requestScore: (score: number, description: string, explanation?: string) => void;
 }
 
 export interface InterServerEvents {
@@ -77,6 +79,12 @@ export type AttributeData = AbilityData | GoalData;
 export type Storyteller = {
     id: string,
     connected: boolean,
+    requests: {
+        perId: string,
+        score: number,
+        description: string,
+        explanation?: string
+    }[]
 };
 
 export type CardData = {
@@ -105,7 +113,6 @@ export type Personality = {
     cardData: CardData,
     connected: boolean,
     stage: number,
-    score: number,
     records: Record[],
     vote?: boolean,
 };
@@ -142,7 +149,10 @@ export type St1Data = {
     }[]
 };
 
-export type Ps1Data = CardData;
+export type Ps1Data = {
+    records: Record[],
+    cardData: CardData,
+};
 
 export type ClientData = 
     {   type: "Message",

@@ -4,16 +4,31 @@ import { Modal } from "../modal"
 
 export const RecordsModal = (records: Record[]) => {
     let div = Elem("div", {}, [], { padding: "20px" });
-    div.append(...(records.map(record=>recordToElem(record))));
+    let messageDiv: HTMLDivElement;
+    if (records.length == 0) {
+        messageDiv = Elem("div",
+            {innerText: "There are no records yet"}, [], {
+                height: "100px",
+                paddingBottom: "12px",
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+            }
+        );
+        div.appendChild(messageDiv);
+    } else {
+        div.append(...(records.map(record=>recordToElem(record))));
+    }
 
     let modal = Modal("Records", "minimize", div);
 
     return {
         elem: modal,
         add: (record: Record)=>{
+            if (messageDiv != undefined) {messageDiv.remove();}
             div.appendChild(recordToElem(record))
         },
-        setVisible: ()=>{modal.style.visibility = "visible";}
+        setVisible: ()=>{modal.style.display = "block";}
     }
 }
 
@@ -32,7 +47,6 @@ const recordToElem = (record: Record) => {
                     height: "50px",
                     display: "flex",
                     justifyContent: "center",
-                    // alignContent: "center",
                     flexDirection: "column",
                 })
                 // ], {

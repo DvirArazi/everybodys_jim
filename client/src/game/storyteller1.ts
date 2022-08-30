@@ -13,16 +13,22 @@ import { socket } from "..";
 import { WheelModal } from "./wheelModal";
 import { errMsg} from "../shared/utils";
 import { GrantModal } from "./storyteller1/grantModal";
+import { MailButton } from "./storyteller1/mailButton";
 
 export const Storyteller1 = (st1Data: St1Data)=>{
     let modalDiv = Elem("div");
     
     const perToCard = (per: {id: string, cardData: CardData})=>{
-        return Elem("div", {}, [Spacer(2.5), Card1(per.cardData, 
+        let card1 = Card1(per.cardData, 
+            ()=>{},
             (goalI)=>{
-                modalDiv.replaceChildren(GrantModal(per, goalI));
+                modalDiv.replaceChildren(GrantModal(per, goalI, (score)=>{
+                    card1.addScore(score);
+                }));
             }
-        )]);
+        )
+
+        return Elem("div", {}, [Spacer(2.5), card1.elem]);
     }
 
     let dominantBox = Container("Dominant personality", "#14c4ff", [
@@ -32,6 +38,8 @@ export const Storyteller1 = (st1Data: St1Data)=>{
     let restBox = Container("Personalities", "#14c4ff", st1Data.pers.slice(1).map(per=>perToCard(per)));
 
     let wheelModal: WheelModal;
+
+    let mailButton = MailButton(()=>{});
 
     socket.on("vote", (perId, approve)=>{
         if (wheelModal == undefined) {

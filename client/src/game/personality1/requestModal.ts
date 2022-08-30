@@ -1,39 +1,26 @@
-import { string } from "fp-ts";
 import { socket } from "../..";
 import { Elem } from "../../core/Elem";
-import { CardData, Personality } from "../../shared/types";
+import { GoalData } from "../../shared/types";
 import { isNumber } from "../../shared/utils";
 import { Button } from "../button";
-import { Modal } from "../modal"
-import { Row } from "../row";
+import { Modal } from "../modal";
 import { Spacer } from "../spacer";
 import { Textarea } from "../textarea";
 
-export const GrantModal = (
-    per: {id: string, cardData: CardData},
-    goalI: number,
-    onSend: (score: number)=>void
-)=>{
-    let goal = per.cardData.goals[goalI];
+export const RequestModal = (goal: GoalData)=> {
     let score = goal.score;
-    let reason: string | undefined; 
+    let explanation: string | undefined; 
 
     let modal: HTMLDivElement;
     
     let button = Button("Send", ()=>{
-        let intScore = parseInt(score);
-        onSend(intScore);
-        socket.emit("grantScore", per.id,
-            intScore,
-            goal.description,
-            reason
-        );
+        socket.emit("requestScore", parseInt(goal.score), goal.description, explanation);
         modal.parentElement?.removeChild(modal);
     });
 
     modal = Modal("Grant score", "close", Elem("div", {}, [
         Elem("div", {}, [
-            Elem("span", {innerText: `Grant ${per.cardData.name} `}),
+            Elem("span", {innerText: `Request `}),
             Textarea({
                 value: goal.score,
                 oninput: (ev)=>{
@@ -77,11 +64,11 @@ export const GrantModal = (
         ]),
         Spacer(10),
         Elem("textarea", {
-            placeholder: "Enter an optional reason",
+            placeholder: "Enter an optional explanation",
             onchange: (ev)=>{
                 let target = ev.target as HTMLTextAreaElement;
 
-                reason = target.value;
+                explanation = target.value;
             }
         }, [], {
             width: "100%",

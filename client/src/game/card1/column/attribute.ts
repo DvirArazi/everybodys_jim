@@ -4,7 +4,7 @@ import { Button } from "../../button";
 
 export const Attribute = (attributeData: AttributeData, onGoalScoreClick?: ()=>void)=>{
     let leftChildren: HTMLElement[] = [Elem("div", {innerText: "•"}, [], {
-        margin: "0 6px 0 6px"
+        margin: "0 12px 0 12px"
     })];
 
     let goalData = (attributeData as GoalData);
@@ -19,11 +19,19 @@ export const Attribute = (attributeData: AttributeData, onGoalScoreClick?: ()=>v
     
     return Elem("div", {}, [Elem("table", {}, [Elem("tr", {}, [
         Elem("td", {}, leftChildren, {
-            verticalAlign: "top"
+            verticalAlign: "top",
         }),
         Elem("td", {}, [Elem("div", {innerText: attributeData.description}, [], {
             width: "100%",
-            height: "70px"
-        })])
-    ])])]);
+            textAlign: "left",
+            verticalAlign: "text-top",
+            minHeight: "80px",
+            // height: "70px"
+        })], {
+            verticalAlign: "top",
+            paddingRight: "5px",
+        })
+    ])])], {
+        paddingBottom: "5px",
+    });
 }

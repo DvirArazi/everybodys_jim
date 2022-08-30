@@ -61,7 +61,8 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
         backgroundColor: "rgba(0, 0, 0, 0.4)"
     });
 
-    if (closeable == "minimize") {modal.style.visibility = "none";}
+    console.log("test");
+    if (closeable == "minimize") {modal.style.display = "none";}
 
     return modal;
 }

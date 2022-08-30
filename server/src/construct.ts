@@ -46,22 +46,27 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
         console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
         return;
     }
-    if (st1Data.personalities.length < 1) {
+    if (st1Data.pers.length < 1) {
         console.log(chalk.redBright("ERROR: ") + "No complete personalities were sent from the client.");
         return;
     }
 
     room.stage = 1;
     room.personalities = [];
-    for (let i = 0; i < st1Data.personalities.length; i++) {
-        let per = st1Data.personalities[i];
+    for (let i = 0; i < st1Data.pers.length; i++) {
+        let per = st1Data.pers[i];
         room.personalities.push({
             id: per.id,
             cardData: per.cardData,
             connected: true,
-            stage: 1
+            stage: 1,
+            records: [],
+            score: 0
         });
-        io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: per.cardData});
+        io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: {
+            cardData: per.cardData,
+            records: []
+        }});
     }
 
     socket.emit("construct", {type: "St1Data", st1Data});
@@ -88,7 +93,7 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
         }
         case 1: {
             socket.emit("construct", {type: "St1Data", st1Data: {
-                personalities: room.personalities
+                pers: room.personalities
             }});
             break;
         }
@@ -130,7 +135,10 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
                 return;
             }
 
-            socket.emit("construct", {type: "Ps1Data", ps1Data: personality.cardData})
+            socket.emit("construct", {type: "Ps1Data", ps1Data: {
+                cardData: personality.cardData,
+                records: personality.records
+            }})
             break;
         }
         default: {

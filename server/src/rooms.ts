@@ -41,7 +41,7 @@ export const createRoom = (storytellerId: string): string => {
 
     rooms.push({
         roomcode,
-        storyteller: {id: storytellerId, connected: true},
+        storyteller: {id: storytellerId, connected: true, requests: []},
         personalities: [], 
         stage: 0,
         abilityCount: 2,
