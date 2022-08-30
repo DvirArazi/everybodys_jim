@@ -1,16 +1,24 @@
-import { CardData } from "../shared/types";
+import { CardData, Record } from "../shared/types";
 import { Elem } from "../core/Elem";
 import { Column } from "./card1/column";
+import { RecordsModal } from "./personality1/recordsModal";
+
+export type Card1 = {
+    elem: HTMLElement,
+    addRecord: (score: number, description: string, reason?: string)=>void,
+    isRecordsModalVisible: ()=>boolean,
+}
 
 export const Card1 = (
-    card1Data: CardData,
+    cardData: CardData,
+    records: Record[],
     onScoreClick: ()=>void,
     onGoalScoreClick: (goalI: number)=>void
-)=>{
-    let allScore = card1Data.score;
-
+):Card1 =>{
     let boxShadow = "-2px -4px 9px 0px rgba(0,0,0,0.1)";
     let fallDist = 2;
+
+    let allScore = cardData.score;
 
     let scoreDiv = Elem("div", {innerText: `Score: ${allScore}`}, [], {
         padding: "3px 5px 2px 5px",
@@ -21,12 +29,14 @@ export const Card1 = (
         whiteSpace: "nowrap"
     });
 
+    let recordsModal = RecordsModal(records);
+
     return {
         elem: Elem("div", {}, [
             Elem("table", {}, [ Elem("tr", {}, [
                 //NAME
                 Elem("td", {}, [
-                    Elem("div", {innerText: card1Data.name}, [], {
+                    Elem("div", {innerText: cardData.name}, [], {
                         padding: "3px 0 2px 8px",
                     })
                 ], {
@@ -38,7 +48,10 @@ export const Card1 = (
                 }),
                 //SCORE
                 Elem("td", {
-                    onclick: onScoreClick,
+                    onclick: ()=>{
+                        recordsModal.setVisible();
+                        onScoreClick();
+                    },
                     onmousedown: (ev)=>{
                         let target = ev.target as HTMLDivElement;
                         target.style.boxShadow = "";
@@ -64,8 +77,8 @@ export const Card1 = (
             //BODY
             Elem("table", {}, [
                 Elem("tr", {}, [
-                    Column(card1Data.abilities),
-                    Column(card1Data.goals, (goalI)=>onGoalScoreClick(goalI))
+                    Column(cardData.abilities),
+                    Column(cardData.goals, (goalI)=>onGoalScoreClick(goalI))
                 ])
             ], {
                 width: "100%",
@@ -76,7 +89,8 @@ export const Card1 = (
 
                 tableLayout: "fixed"
                 // display: "flex",
-            })
+            }),
+            recordsModal.elem
         ],
         {
             width: "100%",
@@ -84,9 +98,17 @@ export const Card1 = (
             background: "#00FF80",
             textAlign: "center",
         }),
-        addScore: (score: number)=>{
+        addRecord: (score: number, description: string, reason?: string)=>{
+            recordsModal.addRecord({
+                accepted: true,
+                score: score,
+                description,
+                reason
+            });
+
             allScore += score;
             scoreDiv.innerText = `Score: ${allScore}`;
-        }
+        },
+        isRecordsModalVisible: ()=>recordsModal.elem.style.display != "none"
     };
 }

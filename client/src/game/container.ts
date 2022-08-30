@@ -22,8 +22,9 @@ export const Container = (title: string, color: string, children: Node[]) => {
 
     return {
         elem: div,
+        inner: childContainer,
         append: (child: Node)=>{ childContainer.appendChild(child); },
         remove: (child: Node)=>{ childContainer.removeChild(child); },
-        replaceAll: (children: Node[])=>{ childContainer.replaceChildren(...children) }
+        replaceAll: (children: Node[])=>{ childContainer.replaceChildren(...children); }
     };
 }

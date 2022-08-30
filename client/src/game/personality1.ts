@@ -15,15 +15,13 @@ import { WheelModal } from "./wheelModal";
 
 
 export const Personality1 = (ps1Data: Ps1Data)=>{
-    let recordsModal = RecordsModal(ps1Data.records);
     
     let bang = Bang(-13, -13);
     
-    let card1 = Card1(ps1Data.cardData,
-        ()=>{
-            recordsModal.setVisible();
-            bang.setVisibility(false);
-        },
+    let card1 = Card1(
+        ps1Data.cardData,
+        ps1Data.records,
+        ()=>bang.setVisibility(false),
         (goalI)=>{}
     );
     
@@ -32,7 +30,6 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
             bang.elem,
             card1.elem,
         ]).elem,
-        recordsModal.elem
     ]);
 
     let wheelModal: WheelModal;
@@ -105,14 +102,11 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
     });
 
     socket.on("grantScore", (score, description, reason)=>{
-        recordsModal.add({
-            accepted: true,
-            score,
-            description,
-            reason
-        });
-        card1.addScore(score);
-        bang.setVisibility(true);
+        card1.addRecord(score, description, reason);
+
+        if (!card1.isRecordsModalVisible()) {
+            bang.setVisibility(true);
+        }
     });
 
     return div;

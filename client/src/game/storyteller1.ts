@@ -1,6 +1,6 @@
 
 import { Elem } from "../core/Elem";
-import { CardData, Personality, St1Data } from "../shared/types";
+import { CardData, Personality, Record, St1Data } from "../shared/types";
 import { Button } from "./button";
 import { Card1 } from "./card1";
 import { Container } from "./container"
@@ -16,26 +16,42 @@ import { GrantModal } from "./storyteller1/grantModal";
 import { MailButton } from "./storyteller1/mailButton";
 
 export const Storyteller1 = (st1Data: St1Data)=>{
-    let modalDiv = Elem("div");
+    let card1s = new Map<string, Card1>();
     
-    const perToCard = (per: {id: string, cardData: CardData})=>{
-        let card1 = Card1(per.cardData, 
+    let modalDiv = Elem("div");
+
+    const perToCard = (per: {id: string, cardData: CardData, records: Record[]}): Card1 =>{
+        let card1 = Card1(per.cardData, per.records,
             ()=>{},
             (goalI)=>{
-                modalDiv.replaceChildren(GrantModal(per, goalI, (score)=>{
-                    card1.addScore(score);
+                let goal = per.cardData.goals[goalI];
+                modalDiv.replaceChildren(
+                    GrantModal(per.cardData.name, goal, (score, reason)=>{
+                        card1s.get(per.id)!.addRecord(score, goal.description, reason);
+                        socket.emit("grantScore", per.id,
+                            score,
+                            goal.description,
+                            reason
+                        );
                 }));
             }
         )
 
-        return Elem("div", {}, [Spacer(2.5), card1.elem]);
+        return {
+            ...card1,
+            elem: Elem("div", {}, [Spacer(2.5), card1.elem]),
+        };
     }
 
+    st1Data.pers.forEach(per=>card1s.set(per.id, perToCard(per)));
+
     let dominantBox = Container("Dominant personality", "#14c4ff", [
-        perToCard(st1Data.pers[0])
+        card1s.get(st1Data.pers[0].id)!.elem
     ]);
 
-    let restBox = Container("Personalities", "#14c4ff", st1Data.pers.slice(1).map(per=>perToCard(per)));
+    let restBox = Container("Personalities", "#14c4ff",
+        st1Data.pers.slice(1).map(per=>card1s.get(per.id)!.elem)
+    );
 
     let wheelModal: WheelModal;
 
@@ -67,9 +83,22 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         modalDiv.removeChild(wheelModal.elem);
     });
 
-    socket.on("reorderPersonalities", (pers)=>{
-        dominantBox.replaceAll([perToCard(pers[0])]);
-        restBox.replaceAll(pers.slice(1).map(per=>perToCard(per)));
+    socket.on("reorderPersonalities", (domiId)=>{
+        let prevDomi = dominantBox.inner.firstChild
+        if (prevDomi == undefined) {
+            errMsg("Domi Box doesn't have a first child for some reason.");
+            return;
+        }
+
+        restBox.append(prevDomi);
+
+        let newDomi = card1s.get(domiId);
+        if (newDomi == undefined) {
+            errMsg("Rest Box doesn't contain a personality card with the ID sent by the server.");
+            return;
+        }
+
+        dominantBox.append(newDomi.elem);
     });
 
     return Elem("div", {}, [

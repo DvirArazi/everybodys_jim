@@ -263,7 +263,7 @@ export let handler = () => {
 
             if (room.consecutiveSuccesses == 0) {
                 room.personalities = room.personalities.slice(1).concat(room.personalities[0]);
-                io.to(room.storyteller.id).emit("reorderPersonalities", room.personalities);
+                io.to(room.storyteller.id).emit("reorderPersonalities", room.personalities[0].id);
             }
 
             io.to(room.storyteller.id).emit("continueGame");

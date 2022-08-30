@@ -61,7 +61,6 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
             connected: true,
             stage: 1,
             records: [],
-            score: 0
         });
         io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: {
             cardData: per.cardData,

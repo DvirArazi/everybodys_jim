@@ -101,7 +101,6 @@ export const newPersonality = (perId: string, abilityCount: number, goalCount: n
             goals: Array<GoalData>.from({length: goalCount},(_)=>{return {approved: false, description: "", score: ""}}),
             score: 0
         },
-        score: 0,
         records: [],
         stage: 0,
         connected: true

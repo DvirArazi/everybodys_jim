@@ -24,9 +24,9 @@ export const RecordsModal = (records: Record[]) => {
 
     return {
         elem: modal,
-        add: (record: Record)=>{
+        addRecord: (record: Record)=>{
             if (messageDiv != undefined) {messageDiv.remove();}
-            div.appendChild(recordToElem(record))
+            div.prepend(recordToElem(record))
         },
         setVisible: ()=>{modal.style.display = "block";}
     }

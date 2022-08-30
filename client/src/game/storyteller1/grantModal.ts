@@ -1,7 +1,7 @@
 import { string } from "fp-ts";
 import { socket } from "../..";
 import { Elem } from "../../core/Elem";
-import { CardData, Personality } from "../../shared/types";
+import { CardData, GoalData, Personality } from "../../shared/types";
 import { isNumber } from "../../shared/utils";
 import { Button } from "../button";
 import { Modal } from "../modal"
@@ -10,30 +10,23 @@ import { Spacer } from "../spacer";
 import { Textarea } from "../textarea";
 
 export const GrantModal = (
-    per: {id: string, cardData: CardData},
-    goalI: number,
-    onSend: (score: number)=>void
+    name: string,
+    goal: GoalData,
+    onSend: (score: number, reason?: string)=>void
 )=>{
-    let goal = per.cardData.goals[goalI];
     let score = goal.score;
     let reason: string | undefined; 
 
     let modal: HTMLDivElement;
     
     let button = Button("Send", ()=>{
-        let intScore = parseInt(score);
-        onSend(intScore);
-        socket.emit("grantScore", per.id,
-            intScore,
-            goal.description,
-            reason
-        );
+        onSend(parseInt(score), reason);
         modal.parentElement?.removeChild(modal);
     });
 
     modal = Modal("Grant score", "close", Elem("div", {}, [
         Elem("div", {}, [
-            Elem("span", {innerText: `Grant ${per.cardData.name} `}),
+            Elem("span", {innerText: `Grant ${name} `}),
             Textarea({
                 value: goal.score,
                 oninput: (ev)=>{
