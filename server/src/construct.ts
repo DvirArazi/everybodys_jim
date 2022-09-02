@@ -65,7 +65,7 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
         io.to(per.id).emit("construct", {type: "Ps1Data", ps1Data: {
             cardData: per.cardData,
             records: []
-        }});
+        }, roomcode: room.roomcode});
     }
 
     socket.emit("construct", {type: "St1Data", st1Data});
@@ -92,6 +92,7 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
         }
         case 1: {
             socket.emit("construct", {type: "St1Data", st1Data: {
+                requests: room.requests,
                 pers: room.personalities
             }});
             break;
@@ -110,8 +111,10 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
     }
     let {room, personality} = value;
 
+    io.to(room.storyteller.id).emit("personality1Reconnected", personality.id, socket.id);
     personality.id = socket.id;
     personality.connected = true;
+    console.log(getRoomByPersonality(personality.id) != undefined);
     socket.emit("updateEntryId", entry.id);
 
     switch(room.stage) {
@@ -137,7 +140,10 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
             socket.emit("construct", {type: "Ps1Data", ps1Data: {
                 cardData: personality.cardData,
                 records: personality.records
-            }})
+            }, roomcode: room.roomcode})
+
+            io.to(room.storyteller.id).emit("closeModal");
+            room.personalities.forEach(per=>io.to(per.id).emit("closeModal"));
             break;
         }
         default: {

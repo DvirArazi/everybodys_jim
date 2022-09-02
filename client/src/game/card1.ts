@@ -1,17 +1,17 @@
-import { CardData, Record } from "../shared/types";
+import { CardData, GoalRecord } from "../shared/types";
 import { Elem } from "../core/Elem";
 import { Column } from "./card1/column";
 import { RecordsModal } from "./personality1/recordsModal";
 
 export type Card1 = {
     elem: HTMLElement,
-    addRecord: (score: number, description: string, reason?: string)=>void,
+    addRecord: (response: GoalRecord)=>void,
     isRecordsModalVisible: ()=>boolean,
 }
 
 export const Card1 = (
     cardData: CardData,
-    records: Record[],
+    records: GoalRecord[],
     onScoreClick: ()=>void,
     onGoalScoreClick: (goalI: number)=>void
 ):Card1 =>{
@@ -98,16 +98,13 @@ export const Card1 = (
             background: "#00FF80",
             textAlign: "center",
         }),
-        addRecord: (score: number, description: string, reason?: string)=>{
-            recordsModal.addRecord({
-                accepted: true,
-                score: score,
-                description,
-                reason
-            });
+        addRecord: (record: GoalRecord)=>{
+            recordsModal.addRecord(record);
 
-            allScore += score;
-            scoreDiv.innerText = `Score: ${allScore}`;
+            if (record.accepted) {
+                allScore += record.score;
+                scoreDiv.innerText = `Score: ${allScore}`;
+            }
         },
         isRecordsModalVisible: ()=>recordsModal.elem.style.display != "none"
     };

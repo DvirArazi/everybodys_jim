@@ -1,6 +1,6 @@
 
 import { Elem } from "../core/Elem";
-import { CardData, Personality, Record, St1Data } from "../shared/types";
+import { CardData, Personality, GoalRecord, GoalRequest, St1Data } from "../shared/types";
 import { Button } from "./button";
 import { Card1 } from "./card1";
 import { Container } from "./container"
@@ -14,36 +14,101 @@ import { WheelModal } from "./wheelModal";
 import { errMsg} from "../shared/utils";
 import { GrantModal } from "./storyteller1/grantModal";
 import { MailButton } from "./storyteller1/mailButton";
+import { MailModal } from "./storyteller1/mailModal";
+import { map } from "fp-ts/lib/Functor";
+
+export type RequestSt = {
+    perId: string,
+    perName: string
+} & GoalRequest
+
+export type Card1St = Card1 & {
+    getName:()=>string,
+    getConnected: ()=>boolean,
+    setConnected: (connected: boolean)=>void,
+}
 
 export const Storyteller1 = (st1Data: St1Data)=>{
-    let card1s = new Map<string, Card1>();
+    let domiPerId = st1Data.pers[0].id;
+    
+    let card1s = new Map<string, Card1St>();
     
     let modalDiv = Elem("div");
 
-    const perToCard = (per: {id: string, cardData: CardData, records: Record[]}): Card1 =>{
+    let wheelModal: WheelModal;
+
+    const perToCard = (per: {id: string, connected: boolean, cardData: CardData, records: GoalRecord[]}):Card1St =>{
         let card1 = Card1(per.cardData, per.records,
             ()=>{},
             (goalI)=>{
                 let goal = per.cardData.goals[goalI];
                 modalDiv.replaceChildren(
                     GrantModal(per.cardData.name, goal, (score, reason)=>{
-                        card1s.get(per.id)!.addRecord(score, goal.description, reason);
-                        socket.emit("grantScore", per.id,
+                        let record = {
+                            accepted: true,
                             score,
-                            goal.description,
+                            description: goal.description,
                             reason
-                        );
+                        };
+                        card1s.get(per.id)!.addRecord(record);
+                        socket.emit("grantScore", per.id, record);
                 }));
             }
         )
 
+        let cover = Elem("div", {}, [
+            Elem("div", {innerText: "Disconnected"}, [
+
+            ], {
+                fontSize: "40px",
+                textShadow: "0px 0px 8px rgba(206,89,55,0.35)",
+                // background: "red",
+                position: "absolute",
+                translate: "-50% -50%",
+                rotate: "-10deg",
+                top: "50%",
+                left: "50%"
+            })
+        ], {
+            width: "100%",
+            height: "calc(100% - 5px)",
+            background: "rgba(255, 255, 255, 0.3)",
+            position: "absolute",
+            borderRadius: "10px",
+            zIndex: "15",
+            display: per.connected ? "none" : "block",
+        })
+
+        let perConnected = per.connected;
         return {
             ...card1,
-            elem: Elem("div", {}, [Spacer(2.5), card1.elem]),
+            elem: Elem("div", {}, [Spacer(2.5), cover, card1.elem], {position: "relative"}),
+            getName: ()=>per.cardData.name,
+            getConnected: ()=>perConnected,
+            setConnected: (connected: boolean)=>{
+                perConnected = connected;
+                cover.style.display = connected ? "none" : "block";
+            }
         };
     }
 
     st1Data.pers.forEach(per=>card1s.set(per.id, perToCard(per)));
+
+    let requestSts: RequestSt[] = [];
+    for (let i = 0; i < st1Data.requests.length; i++) {
+        let req = st1Data.requests[i];
+        let card1 = card1s.get(req.perId);
+        if (card1 == undefined) {
+            errMsg("Could not find perId in cards map.");
+            continue;
+        }
+
+        requestSts.push({perName: card1.getName(), ...req});
+    }
+
+    let mailModal = MailModal(requestSts);
+
+    let mailButton = MailButton(()=>mailModal.setVisible());
 
     let dominantBox = Container("Dominant personality", "#14c4ff", [
         card1s.get(st1Data.pers[0].id)!.elem
@@ -53,9 +118,33 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         st1Data.pers.slice(1).map(per=>card1s.get(per.id)!.elem)
     );
 
-    let wheelModal: WheelModal;
+    socket.on("personalityDisconnected", (perId)=>{
+        let card1 = card1s.get(perId);
+        if (card1 == undefined) {
+            errMsg("Could not find card by perId.");
+            return
+        }
 
-    let mailButton = MailButton(()=>{});
+        card1.setConnected(false);
+    });
+
+    socket.on("personality1Reconnected", (oldId, newId)=>{
+        let card1 = card1s.get(oldId);
+        if (card1 == undefined) {
+            errMsg("Could not find card by oldId.");
+            return;
+        }
+
+        card1s.set(newId, card1);
+        card1s.delete(oldId);
+
+        card1.setConnected(true);
+    });
+
+    socket.on("wheelSet", (pers, failRatio)=>{
+        wheelModal = VoteSpectatorModal(pers, failRatio);
+        modalDiv.appendChild(wheelModal.elem);
+    });
 
     socket.on("vote", (perId, approve)=>{
         if (wheelModal == undefined) {
@@ -64,11 +153,6 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         }
 
         wheelModal.vote(perId, approve);
-    });
-
-    socket.on("wheelSet", (pers, failRatio)=>{
-        wheelModal = VoteSpectatorModal(pers, failRatio);
-        modalDiv.appendChild(wheelModal.elem);
     });
 
     socket.on("enableSpin", ()=>{
@@ -98,8 +182,58 @@ export const Storyteller1 = (st1Data: St1Data)=>{
             return;
         }
 
+        domiPerId = domiId;
+
         dominantBox.append(newDomi.elem);
     });
+
+    socket.on("requestScore", (perId, request)=>{
+        let card1 = card1s.get(perId);
+        if (card1 == undefined) {
+            errMsg("Cannot find card with the ID given from the server.");
+            return;
+        }
+        if (mailModal.elem.style.display == "none") {
+            mailButton.setBangVisibility(true);
+        }
+
+        mailModal.addRequest({
+            perId,
+            perName: card1.getName(),
+            ...request
+        });
+    });
+
+    socket.on("closeModal", ()=>{
+        wheelModal.elem.remove();
+    });
+
+    let endGameModal = Modal("New Game", "close", Elem("div", {}, [
+        Elem("div", {innerText: "Are you sure you want\n to start a new game?"}, [], {
+            paddingBottom: "10px"
+        }),
+        Elem("table", {}, [Elem("tr", {}, [
+            Elem("td", {}, [Button("Yes", ()=>{
+                socket.emit("newGame");
+            }, true, {
+                fontSize: "22px",
+                width: "60px",
+                padding: "5px 10px 5px 10px",
+                background: "#00E673",
+                boxShadow: "0 5px #00CC66",
+            }).elem]),
+            Elem("td", {}, [], {width: "10px"}),
+            Elem("td", {}, [Button("No", ()=>{
+                endGameModal.remove();
+            }, true, {
+                fontSize: "22px",
+                width: "60px",
+                padding: "5px 10px 5px 10px",
+                background: "#ff4d4d",
+                boxShadow: "0 5px #ff0000",
+            }).elem]),
+        ])], {margin: "auto"})
+    ], {padding: "20px"}));
 
     return Elem("div", {}, [
         dominantBox.elem,
@@ -110,8 +244,12 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         Spacer(10),
         restBox.elem,
         Spacer(10),
-        Button("End game", ()=>{}).elem,
+        Button("End game", ()=>{
+            modalDiv.append(endGameModal);
+        }).elem,
         Spacer(10),
-        modalDiv
+        mailButton.elem,
+        modalDiv,
+        mailModal.elem
     ]);
 }

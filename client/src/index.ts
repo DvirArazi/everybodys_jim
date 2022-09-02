@@ -33,6 +33,118 @@ document.body.style.overflowY = "scroll";
 document.body.style.background = "#14ffff";
 document.body.appendChild(Elem("div", {}, [
     Game()
+    // Storyteller1({
+    //     requests: [
+    //         {
+    //             perId: "1",
+    //             score: 4,
+    //             description: "s",
+    //             explanation: "I"
+    //         },
+    //         {
+    //             perId: "1",
+    //             score: 4,
+    //             description: "swimming",
+    //             explanation: "I was swimming!jjjjjjjjjjjjjjjj"
+    //         },
+    //     ],
+    //     pers: [
+    //     {
+    //         id: "1",
+    //         connected: true,
+    //         cardData: {
+    //             name: "hello",
+    //             abilities: [{
+    //                 approved: undefined,
+    //                 description: "one"
+    //             },
+    //             {
+    //                 approved: undefined,
+    //                 description: "three"
+    //             }],
+    //             goals: [{
+    //                 approved: undefined,
+    //                 description: "two",
+    //                 score: "2"
+    //             }, 
+    //             {
+    //                 approved: undefined,
+    //                 description: "four",
+    //                 score: "4"
+    //             }],
+    //             score: 115
+    //         },
+    //         records: [
+    //             {
+    //                 accepted: true,
+    //                 score: 3,
+    //                 description: "climbing up a tree",
+    //                 reason: "You climbed that tree."
+    //             }, {
+    //                 accepted: false,
+    //                 description: "riding on a motorcycle",
+    //                 explanation: "gimmi dem points",
+    //                 reason: "a toy motocycle does not count as a motorcycle"
+    //             }, {
+    //                 accepted: false,
+    //                 description: "doing a double backflip"
+    //             }, {
+    //                 accepted: true, 
+    //                 score: 4,
+    //                 description: "using mayonnaise"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         id: "2",
+    //         connected: false,
+    //         cardData: {
+    //             name: "hello",
+    //             abilities: [{
+    //                 approved: undefined,
+    //                 description: "one"
+    //             },
+    //             {
+    //                 approved: undefined,
+    //                 description: "three"
+    //             }],
+    //             goals: [{
+    //                 approved: undefined,
+    //                 description: "two",
+    //                 score: "2"
+    //             }, 
+    //             {
+    //                 approved: undefined,
+    //                 description: "four",
+    //                 score: "4"
+    //             }],
+    //             score: 115
+    //         },
+    //         records: [
+    //             {
+    //                 accepted: true,
+    //                 score: 3,
+    //                 description: "climbing up a tree",
+    //                 reason: "You climbed that tree."
+    //             }, {
+    //                 accepted: false,
+    //                 description: "riding on a motorcycle",
+    //                 explanation: "gimmi dem points",
+    //                 reason: "a toy motocycle does not count as a motorcycle"
+    //             }, {
+    //                 accepted: false,
+    //                 description: "doing a double backflip"
+    //             }, {
+    //                 accepted: true, 
+    //                 score: 4,
+    //                 description: "using mayonnaise"
+    //             }
+    //         ]
+    //     },    
+    // ]})
+
+
+
     // Card1({
     //     name: "hello",
     //     abilities: [{

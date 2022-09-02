@@ -17,3 +17,9 @@ export const isNumber = (value: string | number):boolean => {
            (value !== '') &&
            !isNaN(Number(value.toString())));
 }
+
+export const compare = (obj0: any, obj1: any): boolean => {
+    return Object.keys(obj0).every((key)=>
+        Object.prototype.hasOwnProperty.call(obj1, key) && obj0[key] == obj1[key]
+    );
+}

@@ -41,11 +41,12 @@ export const createRoom = (storytellerId: string): string => {
 
     rooms.push({
         roomcode,
-        storyteller: {id: storytellerId, connected: true, requests: []},
+        storyteller: {id: storytellerId, connected: true},
         personalities: [], 
         stage: 0,
         abilityCount: 2,
         goalCount: 2,
+        requests: [],
         consecutiveSuccesses: 0
     });
 

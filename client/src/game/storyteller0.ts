@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { socket } from "..";
 import { Elem } from "../core/Elem";
 import { CardChange, CardData, St0Data } from "../shared/types";
+import { errMsg } from "../shared/utils";
 import { Button } from "./button";
 import { Card0 } from "./card0";
 import { Container } from "./container";
@@ -15,15 +16,19 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
     let cards = new Map<string, BoxedCard>();
     let cardsContainer = Container("Personalities", "#14c4ff", []);
-    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", st1Data: {
-        pers: completePers.map((perId)=>{
-            return {
-                id: perId,
-                cardData: {...cards.get(perId)!.getData(), ...{score: 0}},
-                records: []
-            };
-        })
-    }})});
+    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", 
+        st1Data: {
+            requests: [],
+            pers: completePers.map((perId)=>{
+                return {
+                    id: perId,
+                    connected: true,
+                    cardData: {...cards.get(perId)!.getData(), ...{score: 0}},
+                    records: []
+                };
+            })
+        }
+    })});
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 
@@ -110,7 +115,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     socket.on("cardUpdatedPts", (personalityId, cardChange)=> {
         let card = cards.get(personalityId);
         if (card == undefined) {
-            console.log(chalk.red("ERROR: ") + "Could not find a card to modify.");
+            errMsg("Could not find a card to modify.");
             return;
         }
 

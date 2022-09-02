@@ -14,7 +14,11 @@ export const RequestModal = (goal: GoalData)=> {
     let modal: HTMLDivElement;
     
     let button = Button("Send", ()=>{
-        socket.emit("requestScore", parseInt(goal.score), goal.description, explanation);
+        socket.emit("requestScore", {
+            score: parseInt(goal.score),
+            description: goal.description,
+            explanation
+        });
         modal.parentElement?.removeChild(modal);
     });
 

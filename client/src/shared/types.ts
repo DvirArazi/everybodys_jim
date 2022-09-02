@@ -1,6 +1,7 @@
 export interface ServerToClientEvents {
     personalityConnected: (personalityId: string, cardData: CardData | undefined) => void;
     personalityDisconnected: (personalityId: string) => void;
+    personality1Reconnected: (oldId: string, newId: string) => void;
     deleteEntries: (indexes: number[]) => void;
     addEntry: (entry: Entry) => void;
     updateEntryId: (currentId: string) => void;
@@ -16,8 +17,9 @@ export interface ServerToClientEvents {
     spinWheel: (angle: number, success: boolean) => void;
     continueGame: () => void;
     reorderPersonalities: (domiId: string) => void;
-    grantScore: (score: number, description: string, reason?: string) => void;
-    requestScore: (perId: string, score: number, description: string, explanation?: string) => void;
+    grantScore: (record: GoalRecord) => void;
+    requestScore: (perId: string, request: GoalRequest) => void;
+    closeModal: () => void;
 }
 
 export interface ClientToServerEvents {
@@ -31,8 +33,10 @@ export interface ClientToServerEvents {
     vote: (approve: boolean) => void;
     spinWheel: () => void;
     continueGame: () => void;
-    grantScore: (perId: string, score: number, description: string, reason?: string) => void;
-    requestScore: (score: number, description: string, explanation?: string) => void;
+    grantScore: (perId: string, record: GoalRecord) => void;
+    requestScore: (request: GoalRequest) => void;
+    responseScore: (perId: string, response: GoalRecord) => void;
+    newGame: () => void
 }
 
 export interface InterServerEvents {
@@ -79,12 +83,6 @@ export type AttributeData = AbilityData | GoalData;
 export type Storyteller = {
     id: string,
     connected: boolean,
-    requests: {
-        perId: string,
-        score: number,
-        description: string,
-        explanation?: string
-    }[]
 };
 
 export type CardData = {
@@ -94,7 +92,7 @@ export type CardData = {
     score: number
 }
 
-export type Record = 
+export type GoalRecord = 
 (
     { accepted: true
         score: number
@@ -108,12 +106,18 @@ export type Record =
     reason?: string,
 }
 
+export type GoalRequest = {
+    score: number,
+    description: string,
+    explanation?: string
+}
+
 export type Personality = {
     id: string,
     cardData: CardData,
     connected: boolean,
     stage: number,
-    records: Record[],
+    records: GoalRecord[],
     vote?: boolean,
 };
 
@@ -124,6 +128,7 @@ export type Room = {
     stage: number,
     abilityCount: number,
     goalCount: number,
+    requests: ({perId: string} & GoalRequest)[],
     consecutiveSuccesses: number,
     failRatio?: number,
     timeout?: NodeJS.Timeout
@@ -143,15 +148,17 @@ export type Ps0Data = {
 };
 
 export type St1Data = {
+    requests: ({perId: string} & GoalRequest)[],
     pers: {
         id: string,
+        connected: boolean,
         cardData: CardData,
-        records: Record[]
+        records: GoalRecord[]
     }[]
 };
 
 export type Ps1Data = {
-    records: Record[],
+    records: GoalRecord[],
     cardData: CardData,
 };
 
@@ -170,6 +177,7 @@ export type ClientData =
     } |
     { type: "Ps1Data",
         ps1Data: Ps1Data,
+        roomcode: string
     }
 ;
 

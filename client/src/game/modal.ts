@@ -61,7 +61,6 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
         backgroundColor: "rgba(0, 0, 0, 0.4)"
     });
 
-    console.log("test");
     if (closeable == "minimize") {modal.style.display = "none";}
 
     return modal;

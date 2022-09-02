@@ -40,6 +40,7 @@ export let Game = () => {
     })
 
     socket.on("createNewUser", (entries)=>{
+        history.replaceState("", "", "/");
         setPage(NewUser(role, entries));
     });
 
@@ -50,20 +51,22 @@ export let Game = () => {
                 break;
             }
             case "St0Data": {
-                history.replaceState("", "", "st")
+                history.replaceState("", "", "st");
                 setPage(Storyteller0(clientData.st0Data));
                 break;
             }
             case "Ps0Data": {
-                history.replaceState("", "", clientData.ps0Data.roomcode)
+                history.replaceState("", "", clientData.ps0Data.roomcode);
                 setPage(Personality0(clientData.ps0Data));
                 break;
             }
             case "St1Data": {
+                history.replaceState("", "", "st");
                 setPage(Storyteller1(clientData.st1Data));
                 break;
             }
             case "Ps1Data": {
+                history.replaceState("", "", clientData.roomcode);
                 setPage(Personality1(clientData.ps1Data))
                 break;
             }

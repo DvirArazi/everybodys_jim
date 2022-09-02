@@ -1,8 +1,8 @@
 import { Elem } from "../../core/Elem"
-import { Record } from "../../shared/types";
+import { GoalRecord } from "../../shared/types";
 import { Modal } from "../modal"
 
-export const RecordsModal = (records: Record[]) => {
+export const RecordsModal = (records: GoalRecord[]) => {
     let div = Elem("div", {}, [], { padding: "20px" });
     let messageDiv: HTMLDivElement;
     if (records.length == 0) {
@@ -24,7 +24,7 @@ export const RecordsModal = (records: Record[]) => {
 
     return {
         elem: modal,
-        addRecord: (record: Record)=>{
+        addRecord: (record: GoalRecord)=>{
             if (messageDiv != undefined) {messageDiv.remove();}
             div.prepend(recordToElem(record))
         },
@@ -32,7 +32,7 @@ export const RecordsModal = (records: Record[]) => {
     }
 }
 
-const recordToElem = (record: Record) => {
+const recordToElem = (record: GoalRecord) => {
     return Elem("div", {}, (()=>{
         let tr = Elem("tr");
 
@@ -62,7 +62,7 @@ const recordToElem = (record: Record) => {
             Elem("div", {innerText:
                 record.description +
                 (record.explanation != undefined ?
-                    ` - \n${record.explanation}` :
+                    ` - ${record.explanation}` :
                     ""
                 )
             })

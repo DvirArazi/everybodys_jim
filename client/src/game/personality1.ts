@@ -8,6 +8,7 @@ import { Button } from "./button";
 import { Card1 } from "./card1";
 import { Container } from "./container";
 import { RecordsModal } from "./personality1/recordsModal";
+import { RequestModal } from "./personality1/requestModal";
 import { SpinModal } from "./personality1/spinModal";
 import { VoteModal } from "./personality1/voteModal";
 import { Spacer } from "./spacer";
@@ -22,7 +23,7 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
         ps1Data.cardData,
         ps1Data.records,
         ()=>bang.setVisibility(false),
-        (goalI)=>{}
+        (goalI)=>{div.append(RequestModal(ps1Data.cardData.goals[goalI]));}
     );
     
     let div = Elem("div", {}, [
@@ -74,6 +75,8 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
         spinModal.disableVote();
     });
 
+    //Enable to spin the wheel and stop timer
+    //=======================================
     socket.on("enableSpin", ()=>{
         if (wheelModal == undefined) {
             errMsg("'wheelModal' is not yet defined.");
@@ -91,6 +94,8 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
         spinModal.enableSpin();
     });
 
+    //On wheel spin
+    //=============
     socket.on("spinWheel", (angle, success)=>{
         wheelModal.spin(angle, success);
     });
@@ -101,8 +106,14 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
         div.removeChild(wheelModal.elem);
     });
 
-    socket.on("grantScore", (score, description, reason)=>{
-        card1.addRecord(score, description, reason);
+    socket.on("closeModal", ()=>{
+        div.removeChild(wheelModal.elem);
+    });
+
+    //Add record
+    //==========
+    socket.on("grantScore", (record)=>{
+        card1.addRecord(record);
 
         if (!card1.isRecordsModalVisible()) {
             bang.setVisibility(true);
