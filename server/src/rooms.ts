@@ -1,9 +1,14 @@
 import chalk from "chalk";
 import { Console } from "console";
 import { io } from ".";
+import { roomsCollection } from "./models/database.service";
 import { AbilityData, CardChange, GoalData, Personality, Room } from "./shared/types";
 
 export let rooms: Room[] = [];
+
+export const retrieveRooms = async () => {
+    rooms = (await roomsCollection.find({}).toArray()) as Room[];
+}
 
 export const getRoomByRoomcode = (roomcode: string) => {
     return rooms.find((room)=>{return room.roomcode == roomcode;});

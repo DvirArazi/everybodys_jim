@@ -5,6 +5,7 @@ import http from 'http';
 import { join } from 'path'
 import { handler as handle } from './handler';
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './shared/types';
+import { connectToDatabase } from './models/database.service';
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ app.use(express.static(join(__dirname, "../../dist/client")));
 //serve index.html
 //================
 app.get('/*', (req: Request, res: Response) => {
-  res.sendFile("./index.html", {root: srcDir});
+    res.sendFile("./index.html", { root: srcDir });
 });
 
 //create socket.io server
@@ -31,8 +32,16 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents, InterSe
 //============================
 handle();
 
-//listen on port
-//==============
-server.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
+
+// connectToDatabase()
+//     .then(() => {
+        //listen on port
+        //==============
+        server.listen(port, () => {
+            console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+        });
+    // })
+    // .catch((error: Error) => {
+    //     console.error("Database connection failed", error);
+    //     process.exit();
+    // });

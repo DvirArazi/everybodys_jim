@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface ServerToClientEvents {
     personalityConnected: (personalityId: string, cardData: CardData | undefined) => void;
     personalityDisconnected: (personalityId: string) => void;
@@ -132,6 +134,8 @@ export type Room = {
     consecutiveSuccesses: number,
     failRatio?: number,
     timeout?: NodeJS.Timeout
+
+    id?: ObjectId
 };
 
 export type St0Data = {

@@ -1,17 +1,42 @@
 import chalk, { Chalk } from "chalk";
 import { Socket } from "socket.io";
 import { io } from ".";
-import { TIME_TO_VOTE } from "../../client/src/shared/globals";
+import { TIME_TO_VOTE } from "./shared/globals";
 import { compare, errMsg, randRange } from "../../client/src/shared/utils";
 import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality as reconnectPersonality0, reconnectStoryteller as reconnectStoryteller0 } from "./construct";
-import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality, rooms, updateCard } from "./rooms";
+import { connectToDatabase, roomsCollection } from "./models/database.service";
+import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality, retrieveRooms, rooms, updateCard } from "./rooms";
 import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./shared/types";
+import { onExit } from "./onExit";
 
-export let handler = () => {
-    console.log(rooms);
+export let handler = async () => {
+    connectToDatabase()
+    .then( async() => {
+        console.log("Retrieving rooms from the database.");
+        await retrieveRooms();
+    })
+    .catch((error: Error) => {
+        console.error("Database connection failed", error);
+        process.exit();
+    });
 
-    process.on('SIGTERM', ()=>{
+    onExit((done: ()=>void)=>{
+        console.log("hello?");
+        
+            console.log("Saving rooms to the database.");
+            rooms.forEach(room=>{
+                room.storyteller.connected = false;
+                room.personalities.forEach(per=>{
+                    per.connected = false;
+                });
+            })
 
+            roomsCollection.deleteMany({}).then(()=>{
+                roomsCollection.insertMany(rooms).then((result)=>{
+                    if (!result) { errMsg("Could not insert rooms to database."); }
+                    done();
+                });
+            });
     });
 
     io.on("connection", (socket) => {
