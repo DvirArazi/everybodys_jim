@@ -5,7 +5,6 @@ import http from 'http';
 import { join } from 'path'
 import { handler as handle } from './handler';
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './shared/types';
-import { connectToDatabase } from './models/database.service';
 
 dotenv.config();
 
@@ -32,16 +31,8 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents, InterSe
 //============================
 handle();
 
-
-// connectToDatabase()
-//     .then(() => {
-        //listen on port
-        //==============
-        server.listen(port, () => {
-            console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-        });
-    // })
-    // .catch((error: Error) => {
-    //     console.error("Database connection failed", error);
-    //     process.exit();
-    // });
+//listen on port
+//==============
+server.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+});

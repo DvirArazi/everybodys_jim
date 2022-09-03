@@ -20,10 +20,11 @@
     "nodemon": "^2.0.19"
   },
   "scripts": {
+    "start": "concurrently \"npm run build\" \"node dist/server/index.js\"",
     "build": "concurrently \"npm run build-server\" \"npm run build-client\"",
     "build-server": "esbuild server/src/index.ts --bundle --outdir=dist/server --platform=node --target=node16.16.0",
     "build-client": "esbuild client/src/index.ts --bundle --outdir=dist/client",
-    "start": "node server/src/index.ts",
+
     "dev": "concurrently \"npm run watch-server\" \"npm run watch-client\" \"nodemon --enable-source-maps -q dist/server/index.js\"",
     "watch-server": "esbuild server/src/index.ts --sourcemap --bundle --watch --outdir=dist/server --platform=node --target=node16.16.0",
     "watch-client": "esbuild client/src/index.ts --sourcemap --bundle --watch --outdir=dist/client"
