@@ -3,7 +3,7 @@ import { transform } from "esbuild";
 import { random } from "fp-ts";
 import { toNamespacedPath } from "path";
 import { socket } from "../..";
-import { Elem } from "../../core/Elem";
+import { Elem } from "../../core/elem";
 import { randRange } from "../../shared/utils";
 import { Button } from "../button";
 import { Modal } from "../modal"

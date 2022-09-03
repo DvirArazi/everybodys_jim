@@ -1,5 +1,5 @@
 import { socket } from "..";
-import { Elem } from "../core/Elem"
+import { Elem } from "../core/elem"
 import { Entry, ParamData, ClientData } from "../shared/types";
 import { Button } from "./button";
 import { deleteEntry, getEntries } from "./entries";

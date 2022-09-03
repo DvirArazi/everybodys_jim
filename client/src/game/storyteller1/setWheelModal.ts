@@ -1,5 +1,5 @@
 import { socket } from "../.."
-import { Elem } from "../../core/Elem"
+import { Elem } from "../../core/elem"
 import { Button } from "../button"
 import { Modal } from "../modal"
 import { Spacer } from "../spacer"

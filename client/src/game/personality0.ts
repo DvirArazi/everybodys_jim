@@ -1,5 +1,5 @@
 import { socket } from "..";
-import { Elem } from "../core/Elem";
+import { Elem } from "../core/elem";
 import { Ps0Data } from "../shared/types";
 import { Card0 } from "./card0";
 import { Container } from "./container";

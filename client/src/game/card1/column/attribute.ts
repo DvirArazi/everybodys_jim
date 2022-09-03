@@ -1,4 +1,4 @@
-import { Elem } from "../../../core/Elem"
+import { Elem } from "../../../core/elem"
 import { AttributeData, GoalData } from "../../../shared/types";
 import { Button } from "../../button";
 

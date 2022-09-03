@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { Elem } from "../core/Elem";
+import { Elem } from "../core/elem";
 import { TIME_TO_VOTE } from "../shared/globals";
 import { Modal } from "./modal"
 import { Spacer } from "./spacer";

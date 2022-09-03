@@ -1,5 +1,5 @@
 import { socket } from ".";
-import { Elem } from "./core/Elem";
+import { Elem } from "./core/elem";
 import { addEntry, deleteEntriesByIdI, getEntries, updateEntryId } from "./game/entries";
 import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";

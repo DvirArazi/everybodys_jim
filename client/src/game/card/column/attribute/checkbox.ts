@@ -1,4 +1,4 @@
-import { Elem } from "../../../../core/Elem";
+import { Elem } from "../../../../core/elem";
 
 export const Checkbox = (enabled: boolean, onChange: (checked: boolean)=>void) => {
     let checkbox = Elem("input", {

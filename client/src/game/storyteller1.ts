@@ -1,5 +1,5 @@
 
-import { Elem } from "../core/Elem";
+import { Elem } from "../core/elem";
 import { CardData, Personality, GoalRecord, GoalRequest, St1Data } from "../shared/types";
 import { Button } from "./button";
 import { Card1 } from "./card1";

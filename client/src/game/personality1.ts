@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { socket } from "..";
-import { Elem } from "../core/Elem";
+import { Elem } from "../core/elem";
 import { Ps1Data } from "../shared/types";
 import { errMsg } from "../shared/utils";
 import { Bang } from "./bang";

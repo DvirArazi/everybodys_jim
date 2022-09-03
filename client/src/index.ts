@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { Elem } from "./core/Elem";
+import { Elem } from "./core/elem";
 import { Game } from "./game";
 import { Button } from "./game/button";
 import { Card0 } from "./game/card0";
