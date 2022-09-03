@@ -1,5 +1,5 @@
 import { CardData, GoalRecord } from "../shared/types";
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 import { Column } from "./card1/column";
 import { RecordsModal } from "./personality1/recordsModal";
 

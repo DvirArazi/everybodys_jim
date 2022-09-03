@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem"
+import { Elem } from "../core/elemm"
 
 export const Modal = (title: string, closeable: "none" | "close" | "minimize", content: HTMLElement)=>{
     let modal = Elem("div", {}, [

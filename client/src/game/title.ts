@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 
 export let Title = () => {
     let color = "#000000";

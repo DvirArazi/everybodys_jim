@@ -1,6 +1,6 @@
 import { string } from "fp-ts";
 import { socket } from "../..";
-import { Elem } from "../../core/elem";
+import { Elem } from "../../core/elemm";
 import { CardData, GoalData, Personality } from "../../shared/types";
 import { isNumber } from "../../shared/utils";
 import { Button } from "../button";

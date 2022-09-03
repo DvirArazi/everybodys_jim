@@ -1,4 +1,4 @@
-import { Elem } from "../../core/elem"
+import { Elem } from "../../core/elemm"
 import { Bang } from "../bang";
 
 export const MailButton = (onClick: ()=>void)=>{

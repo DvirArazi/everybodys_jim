@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem"
+import { Elem } from "../core/elemm"
 
 export const Bang = (x: number, y: number)=>{
     let div = Elem("div", {}, [

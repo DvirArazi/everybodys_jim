@@ -1,4 +1,4 @@
-import { Elem } from "../../core/elem";
+import { Elem } from "../../core/elemm";
 import { AttributeChange, AttributeData, AttributeType, RoleType } from "../../shared/types";
 import { Attribute } from "./column/attribute";
 

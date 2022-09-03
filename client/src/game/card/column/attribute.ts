@@ -1,4 +1,4 @@
-import { Elem } from "../../../core/elem";
+import { Elem } from "../../../core/elemm";
 import { AttributeChange, AttributeData, AttributeType, GoalData, RoleType} from "../../../shared/types";
 import { Textarea } from "../../textarea";
 import { Checkbox } from "./attribute/checkbox";

@@ -1,5 +1,5 @@
 import { socket } from "../..";
-import { Elem } from "../../core/elem";
+import { Elem } from "../../core/elemm";
 import { GoalRecord, GoalRequest } from "../../shared/types";
 import { Button } from "../button";
 import { Modal } from "../modal";

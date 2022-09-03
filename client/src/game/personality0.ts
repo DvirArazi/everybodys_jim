@@ -1,9 +1,9 @@
 import { socket } from "..";
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 import { Ps0Data } from "../shared/types";
 import { Card0 } from "./card0";
 import { Container } from "./container";
-import { updateEntryName } from "./entries";
+import { updateEntryName } from "./entriess";
 
 export let Personality0 = (ps0data: Ps0Data) => {
     let card = Card0("Personality", 2, 2,

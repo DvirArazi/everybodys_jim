@@ -1,6 +1,6 @@
 import { socket } from ".";
-import { Elem } from "./core/elem";
-import { addEntry, deleteEntriesByIdI, getEntries, updateEntryId } from "./game/entries";
+import { Elem } from "./core/elemm";
+import { addEntry, deleteEntriesByIdI, getEntries, updateEntryId } from "./game/entriess";
 import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";
 import { Personality1 } from "./game/personality1";

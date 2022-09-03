@@ -1,4 +1,4 @@
-import { Elem } from "../../core/elem"
+import { Elem } from "../../core/elemm"
 import { GoalRecord } from "../../shared/types";
 import { Modal } from "../modal"
 

@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 import { AbilityData, CardChange, CardData, GoalData, RoleType } from "../shared/types";
 import { Column } from "./card/column";
 import { Spacer } from "./spacer";

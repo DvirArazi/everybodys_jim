@@ -1,5 +1,5 @@
 import { socket } from "../..";
-import { Elem } from "../../core/elem";
+import { Elem } from "../../core/elemm";
 import { GoalData } from "../../shared/types";
 import { isNumber } from "../../shared/utils";
 import { Button } from "../button";

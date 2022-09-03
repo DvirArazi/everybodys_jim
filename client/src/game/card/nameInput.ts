@@ -1,4 +1,4 @@
-import { Elem } from "../../core/elem";
+import { Elem } from "../../core/elemm";
 
 export const NameInput = (placeholder: string, onChange: (value: string)=>void)=> {
     return Elem("div", {}, [

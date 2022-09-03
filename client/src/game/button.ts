@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem"
+import { Elem } from "../core/elemm"
 
 export type Button = {
     elem: HTMLElement,

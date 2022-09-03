@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 
 export const Textarea = (
     textareaProperties?: Partial<HTMLTextAreaElement>,

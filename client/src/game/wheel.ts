@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { Elem } from "../core/elem"
+import { Elem } from "../core/elemm"
 import { randRange } from "../shared/utils";
 
 export type Wheel = {

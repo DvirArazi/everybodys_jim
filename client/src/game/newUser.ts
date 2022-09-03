@@ -1,8 +1,8 @@
 import { socket } from "..";
-import { Elem } from "../core/elem"
+import { Elem } from "../core/elemm"
 import { Entry, ParamData, ClientData } from "../shared/types";
 import { Button } from "./button";
-import { deleteEntry, getEntries } from "./entries";
+import { deleteEntry, getEntries } from "./entriess";
 import { Spacer } from "./spacer";
 import { Textarea } from "./textarea";
 

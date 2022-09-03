@@ -1,11 +1,11 @@
 import { io, Socket } from "socket.io-client";
-import { Elem } from "./core/elem";
+import { Elem } from "./core/elemm";
 import { Game } from "./game";
 import { Button } from "./game/button";
 import { Card0 } from "./game/card0";
 import { Column } from "./game/card/column";
 import { Attribute } from "./game/card/column/attribute";
-import { initEntries } from "./game/entries";
+import { initEntries } from "./game/entriess";
 import { Personality0 } from "./game/personality0";
 import { Spacer } from "./game/spacer";
 import { Storyteller0 } from "./game/storyteller0";

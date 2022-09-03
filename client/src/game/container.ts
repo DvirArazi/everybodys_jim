@@ -1,4 +1,4 @@
-import { Elem } from "../core/elem";
+import { Elem } from "../core/elemm";
 
 export const Container = (title: string, color: string, children: Node[]) => {
     let childContainer = Elem("div", {}, children, {});
