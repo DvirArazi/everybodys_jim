@@ -13,6 +13,15 @@
     /* touch-action: manipulation; */
 }
 
+.allScoreButton {
+    box-shadow: -2px -4px 9px 0px rgba(0,0,0,0.1);
+    top: 0px;
+}
+.allScoreButton:active {
+    box-shadow: none;
+    top: 2px;
+}
+
 table, tr, td {
     border: none;
     border-collapse: collapse;

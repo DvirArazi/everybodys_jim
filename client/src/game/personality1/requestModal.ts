@@ -68,6 +68,7 @@ export const RequestModal = (goal: GoalData)=> {
         ]),
         Spacer(10),
         Elem("textarea", {
+            autocomplete: "nope",
             placeholder: "Enter an optional explanation",
             onchange: (ev)=>{
                 let target = ev.target as HTMLTextAreaElement;

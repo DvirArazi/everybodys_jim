@@ -92,7 +92,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
 
     //Remove card on personality disconnection
     //========================================
-    socket.on("personalityDisconnected", (personalityId)=>{
+    socket.on("personality0Disconnected", (personalityId)=>{
         let card = cards.get(personalityId);
 
         if (card == undefined) {

@@ -1,18 +1,17 @@
 import chalk, { Chalk } from "chalk";
-import { Socket } from "socket.io";
 import { io } from ".";
 import { TIME_TO_VOTE } from "./shared/globals";
-import { compare, errMsg, randRange } from "../../client/src/shared/utils";
-import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality as reconnectPersonality0, reconnectStoryteller as reconnectStoryteller0 } from "./construct";
+import { compare, errMsg, randRange } from "./shared/utils";
+import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality, reconnectStoryteller} from "./construct";
 import { connectToDatabase, roomsCollection } from "./models/database.service";
-import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality, retrieveRooms, rooms, updateCard } from "./rooms";
-import { AbilityData, ClientToServerEvents, Entry, GoalData, InterServerEvents, Personality, Room, ServerToClientEvents, SocketData, Storyteller } from "./shared/types";
+import { getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, retrieveRooms, rooms, updateCard } from "./rooms";
+import { AbilityData, GoalData} from "./shared/types";
 import { onExit } from "./onExit";
 
 export let handler = async () => {
     connectToDatabase()
     .then( async() => {
-        console.log("Retrieving rooms from the database.");
+        console.log(chalk.green("Retrieving rooms from the database."));
         await retrieveRooms();
     })
     .catch((error: Error) => {
@@ -21,9 +20,7 @@ export let handler = async () => {
     });
 
     onExit((done: ()=>void)=>{
-        console.log("hello?");
-        
-            console.log("Saving rooms to the database.");
+            console.log(chalk.green("Saving rooms to the database."));
             rooms.forEach(room=>{
                 room.storyteller.connected = false;
                 room.personalities.forEach(per=>{
@@ -106,8 +103,8 @@ export let handler = async () => {
                 }
             } else if (relevantEntries.length == 1) {
                 switch(role.type) {
-                    case "Storyteller": { reconnectStoryteller0(socket, relevantEntries[0]); break; }
-                    case "Personality": { reconnectPersonality0(socket, relevantEntries[0]); break; }
+                    case "Storyteller": { reconnectStoryteller(socket, relevantEntries[0]); break; }
+                    case "Personality": { reconnectPersonality(socket, relevantEntries[0]); break; }
                 }
             }
         });
@@ -121,7 +118,7 @@ export let handler = async () => {
                 case "Ps0Data": {
                     let room = getRoomByRoomcode(clientData.ps0Data.roomcode);
                     if (room == undefined) {
-                        console.log(chalk.red("ERROR: ") + "Room does not exist.");
+                        errMsg("Room does not exist.");
                         return;
                     }
                     newPersonality0(socket, room);
@@ -132,7 +129,7 @@ export let handler = async () => {
                     break;
                 }
                 default: {
-                    console.log(chalk.red("ERROR: ") + "No relevant role supplied.");
+                    errMsg("No relevant role supplied.");
                 }
             }
         });
@@ -140,24 +137,40 @@ export let handler = async () => {
         socket.on("reconnect", (entry)=>{
             switch (entry.role.type) {
                 case "Storyteller": {
-                    reconnectStoryteller0(socket, entry);
+                    reconnectStoryteller(socket, entry);
                     break;
                 }
                 case "Personality": {
-                    reconnectPersonality0(socket, entry);
+                    reconnectPersonality(socket, entry);
                     break;
                 }
                 default: {
-                    console.log(chalk.red("ERROR: ") + "No relevant entry supplemented.");
+                    errMsg("No relevant entry supplemented.");
                 }
             }
+        });
+
+        socket.on("updatedEntryId", (oldId)=>{
+            let roomSt = getRoomByStoryteller(oldId);
+            if (roomSt != undefined) {
+                roomSt.storyteller.id = socket.id;
+                return;
+            }
+
+            let value = getRoomByPersonality(oldId);
+            if (value != undefined) {
+                value.personality.id = socket.id;
+                return;
+            }
+
+            errMsg("oldId not found in rooms.");
         });
 
         socket.on("cardUpdatedPts", (cardChange)=>{
             let value = getRoomByPersonality(socket.id);
 
             if (value == undefined) {
-                console.log(chalk.red("ERROR: ") + "Couldn't find room.");
+                errMsg("Couldn't find room.");
                 return;
             }
 
@@ -170,13 +183,13 @@ export let handler = async () => {
         socket.on("cardUpdatedStp", (personalityId, cardChange)=>{
             let room = getRoomByStoryteller(socket.id);
             if (room == undefined) {
-                console.log(chalk.red("ERROR: ") + "Couldn't find room.");
+                errMsg("Couldn't find room.");
                 return;
             }
 
             let personality = room.personalities.find((personality)=>personality.id == personalityId);
             if (personality == undefined) {
-                console.log(chalk.red("ERROR: ") + "Couldn't find personality in room.");
+                errMsg("Couldn't find personality in room.");
                 return;
             }
 
@@ -211,7 +224,7 @@ export let handler = async () => {
 
             room.timeout = setTimeout(()=>{
                 if (room == undefined) {
-                    console.log(chalk.red("ERROR: ") + "Couldn't find room.");
+                    errMsg("Couldn't find room.");
                     return;
                 }
 
@@ -228,7 +241,7 @@ export let handler = async () => {
         socket.on("vote", (approve)=>{
             let value = getRoomByPersonality(socket.id);
             if (value == undefined) {
-                console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
+                errMsg("Room could not be found.");
                 return;
             }
             let {room, personality} = value;
@@ -408,7 +421,7 @@ export let handler = async () => {
                 room.storyteller.connected = false;
 
                 console.log(
-                    `Storyteller ` + chalk.yellow(socket.id) + ` of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
+                    `Storyteller of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
                     ` reason: ${reason}`
                 );
 
@@ -421,9 +434,12 @@ export let handler = async () => {
                 ({room, personality} = value);
                 
                 personality.connected = false;
-                io.to(room.storyteller.id).emit("personalityDisconnected", socket.id);
+                if (room.stage == 0) {
+                    io.to(room.storyteller.id).emit("personality0Disconnected", socket.id);
+                }
+                else if (room.stage == 1) {
+                    io.to(room.storyteller.id).emit("personality1Disconnected", socket.id);
 
-                if (room.stage == 1) {
                     let reorder = false;
                     while (!room.personalities[0].connected && room.personalities.some(per=>per.connected)) {
                         reorder = true;
@@ -437,7 +453,7 @@ export let handler = async () => {
                 }
 
                 console.log(
-                    `Peronality ` + chalk.yellow(socket.id) + ` of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
+                    `Peronality ` + chalk.yellow(personality.cardData.name) + ` of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +
                     ` reason: ${reason}`
                 );
 

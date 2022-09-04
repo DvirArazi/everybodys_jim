@@ -3,6 +3,7 @@ import { Socket } from "socket.io";
 import { io } from ".";
 import { connectToRoom, createRoom, getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, newPersonality } from "./rooms";
 import { ClientData, ClientToServerEvents, Entry, InterServerEvents, Room, ServerToClientEvents, SocketData, St1Data } from "./shared/types";
+import { errMsg } from "./shared/utils";
 
 type ServerSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 
@@ -43,11 +44,11 @@ export const newPersonality0 = (socket: ServerSocket, room: Room) => {
 export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
     let room = getRoomByStoryteller(socket.id);
     if (room == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
+        errMsg("Room could not be found.");
         return;
     }
     if (st1Data.pers.length < 1) {
-        console.log(chalk.redBright("ERROR: ") + "No complete personalities were sent from the client.");
+        errMsg("No complete personalities were sent from the client.");
         return;
     }
 
@@ -74,11 +75,11 @@ export const newStoryteller1 = (socket: ServerSocket, st1Data: St1Data) => {
 export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
     let room = getRoomByRoomcode(entry.roomcode);
     if (room == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Room could not be found.");
+        errMsg("Room could not be found.");
         return;
     }
 
-    room.storyteller.id = socket.id;
+    // room.storyteller.id = socket.id;
     room.storyteller.connected = true;
     socket.emit("updateEntryId", entry.id);
 
@@ -98,7 +99,7 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
             break;
         }
         default: {
-            console.log(chalk.redBright("ERROR: ") + `Invalid room stage: ${room.stage}`);
+            errMsg(`Invalid room stage: ${room.stage}`);
         }
     }
 }
@@ -106,15 +107,15 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
 export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
     let value = getRoomByPersonality(entry.id);
     if (value == undefined) {
-        console.log(chalk.redBright("ERROR: ") + "Could not find room.");
+        errMsg("Could not find room.");
         return;
     }
     let {room, personality} = value;
 
-    io.to(room.storyteller.id).emit("personality1Reconnected", personality.id, socket.id);
-    personality.id = socket.id;
+    // personality.id = socket.id;
     personality.connected = true;
-    console.log(getRoomByPersonality(personality.id) != undefined);
+
+    io.to(room.storyteller.id).emit("personality1Reconnected", personality.id, socket.id);
     socket.emit("updateEntryId", entry.id);
 
     switch(room.stage) {
@@ -133,7 +134,7 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
         }
         case 1: {
             if (personality.stage != 1) {
-                console.log(chalk.redBright("ERROR: ") + "Personality tried to reconnect with non-1 stage.");
+                errMsg("Personality tried to reconnect with non-1 stage.");
                 return;
             }
 
@@ -147,7 +148,7 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
             break;
         }
         default: {
-            console.log(chalk.redBright("ERROR: ") + `Invalid room stage: ${room.stage}`);
+            errMsg(`Invalid room stage: ${room.stage}`);
         }
     }
 }

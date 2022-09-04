@@ -10,6 +10,7 @@ export const Textarea = (
 
     let textarea = Elem("textarea", {
             className: "textarea",
+            autocomplete: "nope",
             ...textareaProperties
         },
      [], {

@@ -27,7 +27,7 @@ export const SetWheelModal = ()=>{
     let row = Elem("table", {}, [Elem("tr", {}, [
         Elem("td", {}, [
             Textarea({
-                placeholder: "1-7",
+                placeholder: "0-9",
                 rows: 1,
                 oninput: (ev)=>{
                     let target = ev.target as HTMLTextAreaElement;
@@ -43,10 +43,10 @@ export const SetWheelModal = ()=>{
                     if (newValue.length > 0) {
                         let num = parseInt(target.value);
     
-                        if (num > 7) {
-                            target.value = "7";
-                        } else if (num < 1) {
-                            target.value = "1";
+                        if (num > 9) {
+                            target.value = "9";
+                        } else if (num < 0) {
+                            target.value = "0";
                         } else {
                             target.value = num.toString();
                         }

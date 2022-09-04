@@ -103,11 +103,15 @@ export const Personality1 = (ps1Data: Ps1Data)=>{
     //Continue
     //========
     socket.on("continueGame", ()=>{
-        div.removeChild(wheelModal.elem);
+        if (wheelModal != undefined) {
+            wheelModal.elem.remove();
+        }
     });
 
     socket.on("closeModal", ()=>{
-        div.removeChild(wheelModal.elem);
+        if (wheelModal != undefined) {
+            wheelModal.elem.remove();
+        }
     });
 
     //Add record

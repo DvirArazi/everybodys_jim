@@ -2,7 +2,8 @@ import { ObjectId } from "mongodb";
 
 export interface ServerToClientEvents {
     personalityConnected: (personalityId: string, cardData: CardData | undefined) => void;
-    personalityDisconnected: (personalityId: string) => void;
+    personality0Disconnected: (personalityId: string) => void;
+    personality1Disconnected: (personalityId: string) => void;
     personality1Reconnected: (oldId: string, newId: string) => void;
     deleteEntries: (indexes: number[]) => void;
     addEntry: (entry: Entry) => void;
@@ -28,6 +29,7 @@ export interface ClientToServerEvents {
     init: (role: ParamData, entries: Entry[]) => void;
     construct: (role: ClientData) => void;
     reconnect: (entry: Entry) => void;
+    updatedEntryId: (oldId: string) => void;
     createRoom: (callback: (roomcode: string) => void) => void;
     cardUpdatedPts: (value: CardChange) => void;
     cardUpdatedStp: (personalityId: string, value: CardChange) => void;

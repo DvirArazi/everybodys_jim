@@ -35,6 +35,9 @@ export const updateEntryId = (currentId: string) => {
         if (entry.id == currentId) {
             entry.id = socket.id;
             setEntries(entries);
+
+            socket.emit("updatedEntryId", currentId);
+
             return;
         }
     }

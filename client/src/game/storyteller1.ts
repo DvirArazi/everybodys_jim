@@ -118,7 +118,7 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         st1Data.pers.slice(1).map(per=>card1s.get(per.id)!.elem)
     );
 
-    socket.on("personalityDisconnected", (perId)=>{
+    socket.on("personality1Disconnected", (perId)=>{
         let card1 = card1s.get(perId);
         if (card1 == undefined) {
             errMsg("Could not find card by perId.");
@@ -205,7 +205,9 @@ export const Storyteller1 = (st1Data: St1Data)=>{
     });
 
     socket.on("closeModal", ()=>{
-        wheelModal.elem.remove();
+        if (wheelModal != undefined) {
+            wheelModal.elem.remove();
+        }
     });
 
     let endGameModal = Modal("New Game", "close", Elem("div", {}, [

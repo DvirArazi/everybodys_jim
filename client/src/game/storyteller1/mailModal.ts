@@ -37,6 +37,7 @@ export const MailModal = (requestSts: RequestSt[])=>{
     
         let reasonDiv = Elem("div", {}, [
             Elem("textarea", {
+                autocomplete: "nope",
                 placeholder: "Enter an optional reason for refusal",
                 onchange: (ev)=>{
                     let target = ev.target as HTMLTextAreaElement;

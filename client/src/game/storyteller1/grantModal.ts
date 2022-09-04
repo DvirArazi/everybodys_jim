@@ -70,6 +70,7 @@ export const GrantModal = (
         ]),
         Spacer(10),
         Elem("textarea", {
+            autocomplete: "nope",
             placeholder: "Enter an optional reason",
             onchange: (ev)=>{
                 let target = ev.target as HTMLTextAreaElement;

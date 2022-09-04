@@ -10,7 +10,7 @@ dotenv.config();
 
 const app: Express = express();
 const server = http.createServer(app)
-const port = process.env.PORT;
+const port = process.env.PORT || "1234";
 const assetsDir = join(__dirname, "../../client/assets");
 const srcDir = join(__dirname, "../../client/src");
 

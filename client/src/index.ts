@@ -1,28 +1,10 @@
 import { io, Socket } from "socket.io-client";
 import { Elem } from "./core/elemm";
 import { Game } from "./game";
-import { Button } from "./game/button";
-import { Card0 } from "./game/card0";
-import { Column } from "./game/card/column";
-import { Attribute } from "./game/card/column/attribute";
 import { initEntries } from "./game/entriess";
-import { Personality0 } from "./game/personality0";
-import { Spacer } from "./game/spacer";
-import { Storyteller0 } from "./game/storyteller0";
-import { Storyteller1 } from "./game/storyteller1";
 import { ClientToServerEvents, ServerToClientEvents } from "./shared/types";
 import { Card1 } from "./game/card1";
-import { Container } from "./game/container";
-import { SpinModal } from "./game/personality1/spinModal";
-import { VoteModal } from "./game/personality1/voteModal";
-import { SetWheelModal } from "./game/storyteller1/setWheelModal";
-import { Wheel } from "./game/wheel";
-import { VoteSpectatorModal } from "./game/storyteller1/voteSpectatorModal";
-import { Modal } from "./game/modal";
-import { GrantModal } from "./game/storyteller1/grantModal";
-import { RecordsModal } from "./game/personality1/recordsModal";
-import { Personality1 } from "./game/personality1";
-import { RequestModal } from "./game/personality1/requestModal";
+
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -143,8 +125,6 @@ document.body.appendChild(Elem("div", {}, [
     //     },    
     // ]})
 
-
-
     // Card1({
     //     name: "hello",
     //     abilities: [{
@@ -166,7 +146,7 @@ document.body.appendChild(Elem("div", {}, [
     //         score: "4"
     //     }],
     //     score: 115
-    // }, ()=>{}, ()=>{}).elem
+    // }, [], ()=>{}, ()=>{}).elem
     // RequestModal({
     //     approved: true, 
     //     description: "Eating ice-cream",

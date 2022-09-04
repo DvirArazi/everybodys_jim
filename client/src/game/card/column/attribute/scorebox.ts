@@ -14,51 +14,51 @@ const isDigit = (num: number) => {
 
 export const Scorebox = (onChange: (value: string)=>void): Scorebox => {
     let textarea = Elem("textarea", {
-            oninput: (ev)=>{
-                let target = ev.target as HTMLTextAreaElement;
-                
-                let newValue = "";
+        autocomplete: "nope",
+        oninput: (ev)=>{
+            let target = ev.target as HTMLTextAreaElement;
+            
+            let newValue = "";
 
-                for (let char of target.value) {
-                    if (char >= '0' && char <= '9') {
-                        newValue += char;
-                    }
+            for (let char of target.value) {
+                if (char >= '0' && char <= '9') {
+                    newValue += char;
                 }
+            }
 
-                if (newValue.length > 0) {
-                    let num = parseInt(target.value);
+            if (newValue.length > 0) {
+                let num = parseInt(target.value);
 
-                    if (num > 10) {
-                        target.value = "10";
-                    } else if (num < 1) {
-                        target.value = "1";
-                    } else {
-                        target.value = num.toString();
-                    }
+                if (num > 10) {
+                    target.value = "10";
+                } else if (num < 1) {
+                    target.value = "1";
                 } else {
-                    target.value = newValue;
+                    target.value = num.toString();
                 }
+            } else {
+                target.value = newValue;
+            }
 
-                onChange(target.value);
-            },
-        }, [], {
-            resize: "none",
-            overflow: "clip",
-            lineBreak: "none",
+            onChange(target.value);
+        },
+    }, [], {
+        resize: "none",
+        overflow: "clip",
+        lineBreak: "none",
 
-            width: "20px",
-            height: "18px",
+        width: "20px",
+        height: "18px",
 
-            fontFamily: "rubik",
-            fontWeight: "bold",
-            fontSize: "18px",
-            backgroundColor: "#80FFBF",
-            borderRadius: "4px",
-            border: "2px solid #767676",
-            textAlign: "center",
-            paddingTop: "3px",
-        }
-    );
+        fontFamily: "rubik",
+        fontWeight: "bold",
+        fontSize: "18px",
+        backgroundColor: "#80FFBF",
+        borderRadius: "4px",
+        border: "2px solid #767676",
+        textAlign: "center",
+        paddingTop: "3px",
+    });
 
     return {
         elem: Elem("div", {}, [textarea], {

@@ -15,21 +15,22 @@ export const Card1 = (
     onScoreClick: ()=>void,
     onGoalScoreClick: (goalI: number)=>void
 ):Card1 =>{
-    let boxShadow = "-2px -4px 9px 0px rgba(0,0,0,0.1)";
-    let fallDist = 2;
-
     let allScore = cardData.score;
 
-    let scoreDiv = Elem("div", {innerText: `Score: ${allScore}`}, [], {
+    let scoreDiv = Elem("div", {
+        className: "allScoreButton",
+        innerText: `Score: ${allScore}`
+    }, [], {
         padding: "3px 5px 2px 5px",
         background: "#00FF80",
         borderRadius: "5px 10px 0 0",
-        boxShadow: boxShadow,
         position: "relative",
         whiteSpace: "nowrap"
     });
 
     let recordsModal = RecordsModal(records);
+
+    let isDown = false;
 
     return {
         elem: Elem("div", {}, [
@@ -48,21 +49,12 @@ export const Card1 = (
                 }),
                 //SCORE
                 Elem("td", {
-                    onclick: ()=>{
+                    onclick: (ev)=>{
                         recordsModal.setVisible();
                         onScoreClick();
                     },
-                    onmousedown: (ev)=>{
-                        let target = ev.target as HTMLDivElement;
-                        target.style.boxShadow = "";
-                        target.style.top = fallDist + "px";
-                    },
-                    onmouseup: (ev)=>{
-                        let target = ev.target as HTMLDivElement;
-                        target.style.boxShadow = boxShadow;
-                        target.style.top = "0px";
-                    }
                 }, [scoreDiv], {
+                    // position: "absolute",
                     background: "#4dffa6",
                     textAlign: "left",
                     borderRadius: "0px 10px 0 0",
