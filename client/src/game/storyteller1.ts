@@ -216,7 +216,7 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         }),
         Elem("table", {}, [Elem("tr", {}, [
             Elem("td", {}, [Button("Yes", ()=>{
-                socket.emit("newGame");
+                socket.emit("endGame");
             }, true, {
                 fontSize: "22px",
                 width: "60px",

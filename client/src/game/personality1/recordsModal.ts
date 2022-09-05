@@ -41,8 +41,11 @@ const recordToElem = (record: GoalRecord) => {
             //=========
             tr.appendChild(Elem("td", {}, [
                 // Elem("div", {}, [
-                Elem("div", {innerText: `+${record.score}`}, [], {
-                    background: "linear-gradient(45deg, rgba(153,255,153,1) 3%, rgba(0,237,255,1) 100%)",
+                Elem("div", {
+                    className: "score",
+                    innerText: `+${record.score}`,
+                }, [], {
+                    // background: "linear-gradient(45deg, rgba(153,255,153,1) 3%, rgba(0,237,255,1) 100%)",
                     borderRadius: "5px",
                     height: "50px",
                     display: "flex",

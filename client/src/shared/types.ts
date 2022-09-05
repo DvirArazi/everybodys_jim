@@ -40,7 +40,9 @@ export interface ClientToServerEvents {
     grantScore: (perId: string, record: GoalRecord) => void;
     requestScore: (request: GoalRequest) => void;
     responseScore: (perId: string, response: GoalRecord) => void;
-    newGame: () => void
+    endGame: () => void;
+    newGame: () => void;
+    deleteRoom: (stId: string) => void;
 }
 
 export interface InterServerEvents {
@@ -135,7 +137,8 @@ export type Room = {
     requests: ({perId: string} & GoalRequest)[],
     consecutiveSuccesses: number,
     failRatio?: number,
-    timeout?: NodeJS.Timeout
+    timeout?: NodeJS.Timeout,
+    winnerCount?: number,
 
     id?: ObjectId
 };
@@ -184,6 +187,11 @@ export type ClientData =
     { type: "Ps1Data",
         ps1Data: Ps1Data,
         roomcode: string
+    } |
+    { type: "EndGame",
+        pers: Personality[],
+        winnerCount: number,
+        addButton: boolean
     }
 ;
 

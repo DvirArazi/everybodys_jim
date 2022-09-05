@@ -95,9 +95,6 @@ export let handler = async () => {
                         } else {
                             socket.emit("createNewUser", potentialEntries);
                         }
-                            //make connectToRoom accept a room parameter instead
-                            //check here room exists, if not, create new user
-                            //for now, leave the message construction in newPersonality0
                         break;
                     }
                 }
@@ -381,6 +378,35 @@ export let handler = async () => {
             io.to(personality.id).emit("grantScore", response); 
         });
 
+        socket.on("endGame", ()=>{
+            let room = getRoomByStoryteller(socket.id);
+            if (room == undefined) {
+                errMsg("Could not find room by storyteller ID.");
+                return;
+            }
+
+            room.stage = 2;
+
+            room.personalities.sort((per0, per1)=>{
+                if (per0.cardData.score > per1.cardData.score) {return -1;}
+                if (per0.cardData.score < per1.cardData.score) {return 1;}
+                return 0;
+            })
+            let winnerCount = 1;
+            for (let i = 1; i < room.personalities.length; i++) {
+                let per = room.personalities[i];
+                if (per.cardData.score == room.personalities[0].cardData.score) {
+                    winnerCount++;
+                } else {
+                    break;
+                }
+            }
+            room.winnerCount = winnerCount;
+
+            io.to(room.storyteller.id).emit("construct", {type: "EndGame", pers: room.personalities, winnerCount, addButton: true});
+            room.personalities.forEach(per=>io.to(per.id).emit("construct", {type: "EndGame", pers: room!.personalities, winnerCount, addButton: false}));
+        });
+
         socket.on("newGame", ()=>{
             let room = getRoomByStoryteller(socket.id);
             if (room == undefined) {
@@ -392,6 +418,7 @@ export let handler = async () => {
             room.requests = [];
             room.stage = 0;
             clearTimeout(room.timeout);
+            room.winnerCount = undefined;
 
             room.personalities.forEach((per)=>{
                 per.cardData.abilities =  Array<AbilityData>.from({length: room!.abilityCount},(_)=>{return {approved: false, description: ""}});
@@ -414,11 +441,26 @@ export let handler = async () => {
             })
         });
 
+        socket.on("deleteRoom", (stId)=>{
+            let room = getRoomByStoryteller(stId);
+            if (room == undefined) {
+                errMsg("Could not find room by storyteller ID.");
+                return;
+            }
+
+            rooms.splice(rooms.indexOf(room), 1);
+        });
+
         socket.on("disconnect", (reason)=>{
             let room = getRoomByStoryteller(socket.id);
             if (room != undefined) {
                 
                 room.storyteller.connected = false;
+
+                if (room.stage == 1) {
+                    io.to(room.storyteller.id).emit("closeModal");
+                    room.personalities.forEach(per=>io.to(per.id).emit("closeModal"));
+                }
 
                 console.log(
                     `Storyteller of room ` + chalk.yellow(room.roomcode) + ` disconnected\n` +

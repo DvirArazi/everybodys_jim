@@ -15,7 +15,13 @@ export const NewUser = (
         socket.emit("construct", newClientData);
     }, false);
 
-    let roomExists = true;
+    let noRoomText = "";
+    if (role.type == "Personality" &&
+        !entries.some(entry=>entry.roomcode == role.roomcode)
+    ) {
+        noRoomText = `Room ${role.roomcode} does not exist`;
+    }
+
     let reconnectionButtons = Elem("div", {}, (()=>{
         let rtn: HTMLElement[] = [];
 
@@ -38,35 +44,44 @@ export const NewUser = (
                 for (let i = 0; i < indexes.length; i++) {
                     let index = indexes[i];
                     let entry = entries[index];
-                    let row = Elem("div", {}, [
+                    let row = Elem("table", {}, [
                         Spacer(5),
-                        Elem("div", {}, [Button(
-                            `Rejoin room ${entry.roomcode} as ${entry.role.type == "Storyteller" ? "the storyteller" : entry.role.name}`,
-                            ()=>{
-                                socket.emit("reconnect", entry);
-                            }, true, {
-                                fontSize: "14px",
-                                height: "45px",
-                                padding: "0 5px 0 5px",
-                                borderRadius: "10px 0 0 10px"
-                            }
-                        ).elem], {display: "inline-block"}),
-                        Elem("div", {}, [Button(
-                            `Delete`,
-                            ()=>{
-                                deleteEntry(entry.id);
-                                console.log(getEntries());
-                                reconnectionButtons.removeChild(row);
-                            }, true, {
-                                fontSize: "14px",
-                                height: "45px",
-                                padding: "0 15px 0 15px",
-                                background: "#ff8080",
-                                boxShadow: "0 5px #ff6666",
-                                borderRadius: "0 10px 10px 0",
-                            }
-                        ).elem], {display: "inline-block"})
-                    ]);
+                        Elem("tr", {}, [
+                            Elem("td", {}, [Button(
+                                `Rejoin room ${entry.roomcode} as ${entry.role.type == "Storyteller" ? "the storyteller" : entry.role.name}`,
+                                ()=>{
+                                    socket.emit("reconnect", entry);
+                                }, true, {
+                                    fontSize: "14px",
+                                    height: "45px",
+                                    padding: "0 5px 0 5px",
+                                    borderRadius: "10px 0 0 10px"
+                                }
+                            ).elem]),
+                            Elem("td", {}, [Button(
+                                `Delete`,
+                                ()=>{
+                                    deleteEntry(entry.id);
+                                    console.log(getEntries());
+                                    reconnectionButtons.removeChild(row);
+                                    if (entry.role.type == "Storyteller") {
+                                        socket.emit("deleteRoom", entry.id);
+                                    }
+                                }, true, {
+                                    fontSize: "14px",
+                                    height: "45px",
+                                    padding: "0 15px 0 15px",
+                                    background: "#ff8080",
+                                    boxShadow: "0 5px #ff6666",
+                                    borderRadius: "0 10px 10px 0",
+                                }
+                            ).elem])
+                        ])
+                    ], {
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    });
+
                     rtn.push(row);
                 }
             }
@@ -121,9 +136,7 @@ export const NewUser = (
         Spacer(10),
         joinButton.elem,
         Spacer(10),
-        Elem("div", {innerText: roomExists? "" :
-            `Room ${role} does not exist :/`    
-        }),
+        Elem("div", {innerText: noRoomText}),
         reconnectionButtons
     ]);
 }

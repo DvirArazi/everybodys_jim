@@ -1,5 +1,6 @@
 import { socket } from ".";
 import { Elem } from "./core/elemm";
+import { EndScreen } from "./game/endScreen";
 import { addEntry, deleteEntriesByIdI, getEntries, updateEntryId } from "./game/entriess";
 import { NewUser } from "./game/newUser";
 import { Personality0 } from "./game/personality0";
@@ -68,6 +69,10 @@ export let Game = () => {
             case "Ps1Data": {
                 history.replaceState("", "", clientData.roomcode);
                 setPage(Personality1(clientData.ps1Data))
+                break;
+            }
+            case "EndGame": {
+                setPage(EndScreen(clientData.pers, clientData.winnerCount, clientData.addButton));
                 break;
             }
         }

@@ -98,6 +98,19 @@ export const reconnectStoryteller = (socket: ServerSocket, entry: Entry) => {
             }});
             break;
         }
+        case 2: {
+            if (room.winnerCount == undefined) {
+                errMsg("winnerCount is undefined.");
+                return;
+            }
+
+            socket.emit("construct", {type: "EndGame", 
+                pers: room.personalities,
+                winnerCount: room.winnerCount,
+                addButton: true
+            });
+            break;
+        }
         default: {
             errMsg(`Invalid room stage: ${room.stage}`);
         }
@@ -145,6 +158,19 @@ export const reconnectPersonality = (socket: ServerSocket, entry: Entry) => {
 
             io.to(room.storyteller.id).emit("closeModal");
             room.personalities.forEach(per=>io.to(per.id).emit("closeModal"));
+            break;
+        }
+        case 2: {
+            if (room.winnerCount == undefined) {
+                errMsg("winnerCount is undefined.");
+                return;
+            }
+
+            socket.emit("construct", {type: "EndGame", 
+                pers: room.personalities,
+                winnerCount: room.winnerCount,
+                addButton: false
+            });
             break;
         }
         default: {
