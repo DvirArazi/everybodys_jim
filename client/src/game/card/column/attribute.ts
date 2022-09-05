@@ -73,6 +73,7 @@ export const Attribute = (
             switch (attributeChange.type) {
                 case "checkbox":
                     checkbox.update(attributeChange.value);
+                    description.setEnabled(!attributeChange.value);
                 break;
                 case "score":
                     if (scorebox != undefined) {
@@ -89,6 +90,7 @@ export const Attribute = (
                 checkbox.update(attributeData.approved);
             }
             description.update(attributeData.description);
+            description.setEnabled(!attributeData.approved);
             let goalData = (attributeData as GoalData);
             if (goalData.score != undefined && scorebox != undefined) {
                 scorebox.update(goalData.score);

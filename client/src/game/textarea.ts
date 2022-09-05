@@ -57,6 +57,7 @@ export const Textarea = (
         elem: div,
         update: (value: string)=>{textarea.value = value;},
         isComplete: ()=>{return textarea.value != "";},
-        getValue: ()=>{return textarea.value;}
+        getValue: ()=>{return textarea.value;},
+        setEnabled: (enable: boolean)=>{ textarea.disabled = !enable; }
     }
 }

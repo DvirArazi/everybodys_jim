@@ -6,6 +6,7 @@ import { errMsg } from "../shared/utils";
 import { Button } from "./button";
 import { Card0 } from "./card0";
 import { Container } from "./container";
+import { Modal } from "./modal";
 import { Spacer } from "./spacer";
 import { VisibilityBox } from "./visibilityBox";
 
@@ -14,9 +15,9 @@ type BoxedCard = Card0 & VisibilityBox & {id: string};
 export let Storyteller0 = (st0data: St0Data):HTMLElement => {
     let completePers: string[] = [];
 
-    let cards = new Map<string, BoxedCard>();
-    let cardsContainer = Container("Personalities", "#14c4ff", []);
-    let startButton = Button("Start game", ()=>{socket.emit("construct", {type: "St1Data", 
+    //onstart
+    //=======
+    let startGame = ()=>{socket.emit("construct", {type: "St1Data", 
         st1Data: {
             requests: [],
             pers: completePers.map((perId)=>{
@@ -28,7 +29,48 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
                 };
             })
         }
-    })});
+    })};
+
+    //noticeModal
+    //===========
+    let noticeModal = Modal("Notice", "close", Elem("div", {}, [
+        Elem("div", {innerText: "\
+            Some personalities are not yet fully approved and will not join the game,\n\
+            are you sure you want to start a new game?"}, [], {
+            paddingBottom: "10px"
+        }),
+        Elem("table", {}, [Elem("tr", {}, [
+            Elem("td", {}, [Button("Yes", startGame, true, {
+                fontSize: "22px",
+                width: "60px",
+                padding: "5px 10px 5px 10px",
+                background: "#00E673",
+                boxShadow: "0 5px #00CC66",
+            }).elem]),
+            Elem("td", {}, [], {width: "10px"}),
+            Elem("td", {}, [Button("No", ()=>{
+                noticeModal.remove();
+            }, true, {
+                fontSize: "22px",
+                width: "60px",
+                padding: "5px 10px 5px 10px",
+                background: "#ff4d4d",
+                boxShadow: "0 5px #ff0000",
+            }).elem]),
+        ])], {margin: "auto"})
+    ], {padding: "20px"}));
+
+    //More variables
+    //==============
+    let cards = new Map<string, BoxedCard>();
+    let cardsContainer = Container("Personalities", "#14c4ff", []);
+    let startButton = Button("Start game", ()=>{
+        if (completePers.length == cards.size) {
+            startGame();
+        } else {
+            visibilityBox.elem.append(noticeModal);
+        }
+    });
     let visibilityBox = VisibilityBox([cardsContainer.elem, Spacer(10), startButton.elem]);
     visibilityBox.setVisible(false);
 
@@ -106,7 +148,7 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         if(completePers.some(id=>id==card!.id)) {
             completePers.splice(completePers.indexOf(card.id), 1);
         }
-        startButton.setEnabled(completePers.length >= 3);
+        startButton.setEnabled(completePers.length >= 2);
         visibilityBox.setVisible(Array.from(cards.values()).some(card=>card.getName()!=""));
     });
 
