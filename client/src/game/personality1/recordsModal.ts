@@ -7,7 +7,7 @@ export const RecordsModal = (records: GoalRecord[]) => {
     let messageDiv: HTMLDivElement;
     if (records.length == 0) {
         messageDiv = Elem("div",
-            {innerText: "There are no records yet"}, [], {
+            {innerText: "There are no requests"}, [], {
                 height: "100px",
                 paddingBottom: "12px",
                 display: "flex",

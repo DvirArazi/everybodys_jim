@@ -10,9 +10,9 @@ export const MailModal = (
     requestSts: RequestSt[],
     onSend: (perId: string, record: GoalRecord)=>void,
 )=>{
-    let div = Elem("div", {}, [], { padding: "15px 25px 25px 25px" });
+    let div = Elem("div", {}, [], { padding: "5px 15px 15px 15px" });
     let messageDiv = Elem("div",
-        {innerText: "There are no records yet"}, [], {
+        {innerText: "There are no requests"}, [], {
             height: "100px",
             paddingBottom: "12px",
             display: "flex",
@@ -82,6 +82,7 @@ export const MailModal = (
                             fontSize: "28px",
                             textAlign: "left",
                             paddingLeft: "15px",
+                            wordBreak: "break-all",
                         }),
                         Elem("div", {innerText: `\
                             requests ${req.score} points for \
@@ -90,18 +91,22 @@ export const MailModal = (
                             textAlign: "left",
                             paddingLeft: "10px",
                             paddingBottom: "5px",
+                            wordBreak: "break-all",
                         }),
                         Elem("div", {innerText: req.explanation}, [], {
                             background: "#80eeff",
                             borderRadius: "5px",
                             padding: "5px",
                             marginBottom: "15px",
+                            wordBreak: "break-all",
                         }),
                     ], {
                         marginRight: "10px",
                     })
                 ], {
-                    width: "100%"
+                    width: "100%",
+                    // display: "inline-block",
+                    // wordBreak: "word-break",
                 }),
                 Elem("td", {}, [
                     Button("Accept", ()=>{

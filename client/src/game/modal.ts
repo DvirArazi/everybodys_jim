@@ -38,27 +38,43 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
                 padding: "8px 16px",
                 borderRadius: "10px 10px 0 0"
             }),
-            Elem("div", {}, [content], {
+            Elem("div", {}, [
+                Elem("div", {}, [content], {
+                    // maxHeight: "100%",
+                    // overflowY: "auto",
+                    // overflowX: "clip",
+                    flexShrink: "3", overflowY: "scroll",// maxHeight: "100vh",
+                })
+            ], {
                 backgroundColor: "#fefefe",
-                borderRadius: "0 0 10px 10px"
+                borderRadius: "0 0 10px 10px",
+                padding: "10px",
             })
         ], {
             maxWidth: "500px",
-            margin: "auto"
+            // height: "100%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            borderRadius: "10px",
+            boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)",
+            // overflowY: "scroll",
         })], {
-            margin: "0 10px 0 10px"
-            // textAlign: "center"
+            margin: "60px 10px 60px 10px",
+            height: "calc(100% - 120px)",
+            display: "flex",
+            flexDirection: "column",
+
+            boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)", //delete later
         })
     ], {
         position: "fixed",
         zIndex: "20",
-        paddingTop: "60px",
         left: "0",
         top: "0",
         width: "100%",
         height: "100%",
         overflow: "auto",
-        backgroundColor: "rgba(0, 0, 0, 0.4)"
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
     });
 
     if (closeable == "minimize") {modal.style.display = "none";}
