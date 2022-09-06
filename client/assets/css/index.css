@@ -1,6 +1,7 @@
-/* html {
-    touch-action: manipulation;
-} */
+html {
+    /* touch-action: manipulation; */
+    -webkit-tap-highlight-color: transparent;
+}
 
 .cardTextarea::placeholder {
     color: #00CC66

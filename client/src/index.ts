@@ -22,7 +22,7 @@ document.body.appendChild(Elem("div", {}, [
     margin: "auto",
     fontFamily: "rubik",
     fontWeight: "bold",
-    fontSize: "20px",
+fontSize: "20px",
     userSelect: "none"
 }));
 

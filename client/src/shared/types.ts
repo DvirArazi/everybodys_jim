@@ -39,7 +39,7 @@ export interface ClientToServerEvents {
     continueGame: () => void;
     grantScore: (perId: string, record: GoalRecord) => void;
     requestScore: (request: GoalRequest) => void;
-    responseScore: (perId: string, response: GoalRecord) => void;
+    responseScore: (perId: string, record: GoalRecord) => void;
     endGame: () => void;
     newGame: () => void;
     deleteRoom: (stId: string) => void;

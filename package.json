@@ -20,12 +20,19 @@
     "nodemon": "^2.0.19"
   },
   "scripts": {
-    "start": "concurrently \"npm run build\" \"node dist/server/index.js\"",
-    "build": "concurrently \"npm run build-server\" \"npm run build-client\"",
+    "watch-server-build": "esbuild server/src/index.ts --sourcemap --bundle --watch --outdir=dist/server --platform=node --target=node16.16.0",
+    "watch-server-run": "nodemon --enable-source-maps -q dist/server/index.js",
+    "watch-client": "esbuild client/src/index.ts --sourcemap --bundle --watch --outdir=dist/client",
+
+    "dev": "concurrently \"npm run watch-server-build\"  \"npm run watch-client\"  \"npm run watch-server-run\"",
+
+
     "build-server": "esbuild server/src/index.ts --bundle --outdir=dist/server --platform=node --target=node16.16.0",
     "build-client": "esbuild client/src/index.ts --bundle --outdir=dist/client",
-    "dev": "concurrently \"npm run watch-server\" \"npm run watch-client\" \"nodemon --enable-source-maps -q dist/server/index.js\"",
-    "watch-server": "esbuild server/src/index.ts --sourcemap --bundle --watch --outdir=dist/server --platform=node --target=node16.16.0",
-    "watch-client": "esbuild client/src/index.ts --sourcemap --bundle --watch --outdir=dist/client"
+    
+    "build": "npm run build-server && npm run build-client",
+    "start": "node dist/server/index.js",
+
+    "build-and-start": "npm run build && npm run start"
   }
 }

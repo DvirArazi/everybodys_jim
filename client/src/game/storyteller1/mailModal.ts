@@ -6,7 +6,10 @@ import { Modal } from "../modal";
 import { Spacer } from "../spacer";
 import { RequestSt } from "../storyteller1";
 
-export const MailModal = (requestSts: RequestSt[])=>{
+export const MailModal = (
+    requestSts: RequestSt[],
+    onSend: (perId: string, record: GoalRecord)=>void,
+)=>{
     let div = Elem("div", {}, [], { padding: "15px 25px 25px 25px" });
     let messageDiv = Elem("div",
         {innerText: "There are no records yet"}, [], {
@@ -26,7 +29,8 @@ export const MailModal = (requestSts: RequestSt[])=>{
 
         let rtn: HTMLDivElement;
 
-        let onSend = ()=>{
+        let onSendInner = (perId: string, record: GoalRecord)=>{
+            onSend(perId, record);
             rtn.remove();
             if (div.children.length <= 1) {
                 messageDiv.style.display = "flex";
@@ -56,12 +60,11 @@ export const MailModal = (requestSts: RequestSt[])=>{
                 padding: "5px",
             }),
             Button("Send", ()=>{
-                socket.emit("responseScore", req.perId, {
+                onSendInner(req.perId, {
                     accepted: false,
                     reason,
                     ...req,
                 });
-                onSend();
             }, true, {
                 fontSize: "22px",
                 padding: "5px 10px 5px 10px",
@@ -102,11 +105,10 @@ export const MailModal = (requestSts: RequestSt[])=>{
                 }),
                 Elem("td", {}, [
                     Button("Accept", ()=>{
-                        socket.emit("responseScore", req. perId, {
+                        onSendInner(req. perId, {
                             accepted: true,
                             ...req,
                         });
-                        onSend();
                     }, true, {
                         fontSize: "18px",
                         padding: "5px 10px 5px 10px",

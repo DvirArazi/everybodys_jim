@@ -11,7 +11,7 @@ import { onExit } from "./onExit";
 export let handler = async () => {
     connectToDatabase()
     .then( async() => {
-        console.log(chalk.green("Retrieving rooms from the database."));
+        console.log(chalk.greenBright("Retrieving rooms from the database."));
         await retrieveRooms();
     })
     .catch((error: Error) => {
@@ -20,7 +20,7 @@ export let handler = async () => {
     });
 
     onExit((done: ()=>void)=>{
-            console.log(chalk.green("Saving rooms to the database."));
+            console.log(chalk.greenBright("Saving rooms to the database."));
             rooms.forEach(room=>{
                 room.storyteller.connected = false;
                 room.personalities.forEach(per=>{
@@ -355,7 +355,7 @@ export let handler = async () => {
             );
         });
 
-        socket.on("responseScore", (perId, response)=>{
+        socket.on("responseScore", (perId, record)=>{
             let value = getRoomByPersonality(perId);
             if (value == undefined) {
                 errMsg("Could not find room by personality ID.");
@@ -364,18 +364,19 @@ export let handler = async () => {
 
             let {room, personality} = value;
 
-            let requestI = room.requests.findIndex(req=>compare(req, response));
+            let requestI = room.requests.findIndex(req=>compare(req, record));
             if (requestI == undefined) {
                 errMsg("Request could not be found in room.");
                 return;
             }
 
+            personality.records.push(record);
             room.requests.splice(requestI, 1);
-            if (response.accepted) {
-                personality.cardData.score += response.score;
+            if (record.accepted) {
+                personality.cardData.score += record.score;
             }
 
-            io.to(personality.id).emit("grantScore", response); 
+            io.to(personality.id).emit("grantScore", record); 
         });
 
         socket.on("endGame", ()=>{

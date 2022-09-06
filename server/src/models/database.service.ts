@@ -3,14 +3,13 @@ import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
 import { errMsg } from "../../../client/src/shared/utils";
 import { GoalRequest, Personality, Room, Storyteller } from "../shared/types";
+import chalk from "chalk";
 
 // Global Variables
 export let roomsCollection: mongoDB.Collection<Room>;
 
 // Initialize Connection
 export async function connectToDatabase() {
-    console.log("Connecting to database.");
-
     dotenv.config();
 
     let dbConnString = process.env.DB_CONN_STRING;
@@ -31,5 +30,5 @@ export async function connectToDatabase() {
     }
     roomsCollection = db.collection(roomsCollectionName);
        
-    console.log(`Successfully connected to database: ${db.databaseName} and collection: ${roomsCollection.collectionName}`);
+    console.log(chalk.greenBright(`Successfully connected to database: ${db.databaseName} and collection: ${roomsCollection.collectionName}`));
  }

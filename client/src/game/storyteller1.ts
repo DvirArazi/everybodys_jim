@@ -106,7 +106,10 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         requestSts.push({perName: card1.getName(), ...req});
     }
 
-    let mailModal = MailModal(requestSts);
+    let mailModal = MailModal(requestSts, (perId, record)=>{
+        card1s.get(perId)!.addRecord(record);
+        socket.emit("responseScore", perId, record);
+    });
 
     let mailButton = MailButton(()=>mailModal.setVisible());
 

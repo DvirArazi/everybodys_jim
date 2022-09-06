@@ -19,7 +19,7 @@ app.use(express.static(join(__dirname, "../../dist/client")));
 
 //serve index.html
 //================
-app.get('/*', (req: Request, res: Response) => {
+app.get('/*', (req, res) => {
     res.sendFile("./index.html", { root: srcDir });
 });
 
