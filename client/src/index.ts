@@ -7,51 +7,59 @@ import { Card1 } from "./game/card1";
 import { EndScreen } from "./game/endScreen";
 import { Modal } from "./game/modal";
 import { MailModal } from "./game/storyteller1/mailModal";
+import { RecordsModal } from "./game/personality1/recordsModal";
+import { rules } from "./rules";
+import { Spacer } from "./game/spacer";
 
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
 initEntries();
 
-let bla = MailModal([], (a, b)=>{})
-bla.setVisible();
-
 document.body.style.overflowX = "hidden";
-document.body.style.overflowY = "scroll";
+document.body.style.overflowY = "auto";
 document.body.style.background = "#14ffff";
-document.body.appendChild(Elem("div", {}, [
-    Modal("hello", "close", Elem("div", {innerText: "loremi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi\nlormi"}))
-], {
-    textAlign: "center",
-    maxWidth: "500px",
-    margin: "auto",
-    fontFamily: "rubik",
-    fontWeight: "bold",
-    fontSize: "20px",
-    userSelect: "none"
-}));
+document.body.appendChild(
+    Elem("div", {}, [
+        rules,
+        Elem("div", {}, [
+            Spacer(10),
+            Game(),
+        ], {
+            textAlign: "center",
+            maxWidth: "500px",
+            margin: "auto",
+        })
+    ], {
+        fontFamily: "rubik",
+        fontWeight: "bold",
+        fontSize: "20px",
+        userSelect: "none",
+        position: "relative"
+    })
+);
 
-// document.onkeydown = (e)=>{
-//     if (e.code == "Enter") {
-//         Array.from<HTMLInputElement>(
-//             document.querySelectorAll("input[type=checkbox]")
-//         ).forEach(
-//             (elem) => {
-//                 elem.checked = true;
-//                 // elem.oninput!(new Event("⚡️"));
-//             }
-//         )
-//         Array.from(
-//             document.getElementsByTagName("textarea")
-//         ).forEach(
-//             (elem) => {
-//                 elem.value = "9";
-//                 // elem.oninput!(new Event("⚡️"));
-//             }
-//         )
+document.onkeydown = (e)=>{
+    if (e.code == "Enter") {
+        Array.from<HTMLInputElement>(
+            document.querySelectorAll("input[type=checkbox]")
+        ).forEach(
+            (elem) => {
+                elem.checked = true;
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
+        Array.from(
+            document.getElementsByTagName("textarea")
+        ).forEach(
+            (elem) => {
+                elem.value = "9";
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
 
-//     }
-// }
+    }
+}
 
 // Card0("Personality", 2, 2, ()=>{}).elem
 // Container("Title", "#14c4ff", [

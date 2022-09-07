@@ -40,22 +40,16 @@ const recordToElem = (record: GoalRecord) => {
             //Score div
             //=========
             tr.appendChild(Elem("td", {}, [
-                // Elem("div", {}, [
                 Elem("div", {
                     className: "score",
                     innerText: `+${record.score}`,
                 }, [], {
-                    // background: "linear-gradient(45deg, rgba(153,255,153,1) 3%, rgba(0,237,255,1) 100%)",
                     borderRadius: "5px",
                     height: "50px",
                     display: "flex",
                     justifyContent: "center",
                     flexDirection: "column",
                 })
-                // ], {
-                //     textAlign: "center",
-                    // background: "red"
-                // })
             ], {width: "50px", paddingRight: "5px",}))
         }
 
@@ -71,6 +65,7 @@ const recordToElem = (record: GoalRecord) => {
             })
         ], {
             width: "100%",
+            wordBreak: "break-all",
         });
 
         if (record.reason != undefined) {

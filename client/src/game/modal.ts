@@ -3,6 +3,7 @@ import { Elem } from "../core/elemm"
 export const Modal = (title: string, closeable: "none" | "close" | "minimize", content: HTMLElement)=>{
     let modal = Elem("div", {}, [
         Elem("div", {}, [Elem("div", {}, [
+            // Elem("div", {}, [
             Elem("div", {innerText: title}, closeable != "none" ? [
                 Elem("span", {
                     innerText: "✕",
@@ -40,31 +41,28 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
             }),
             Elem("div", {}, [
                 Elem("div", {}, [content], {
-                    // maxHeight: "100%",
-                    // overflowY: "auto",
-                    // overflowX: "clip",
-                    flexShrink: "3", overflowY: "scroll",// maxHeight: "100vh",
+                    flex: "1",
+                    overflowY: "auto",
                 })
             ], {
                 backgroundColor: "#fefefe",
                 borderRadius: "0 0 10px 10px",
                 padding: "10px",
+                maxHeight: "calc(100% - 70px)",
+                display: "flex",
+                flexDirection: "column",
             })
         ], {
             maxWidth: "500px",
-            // height: "100%",
+            height: "calc(100%)",
             marginLeft: "auto",
             marginRight: "auto",
             borderRadius: "10px",
-            boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)",
-            // overflowY: "scroll",
         })], {
             margin: "60px 10px 60px 10px",
             height: "calc(100% - 120px)",
-            display: "flex",
-            flexDirection: "column",
 
-            boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)", //delete later
+            // boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)", //delete later
         })
     ], {
         position: "fixed",
