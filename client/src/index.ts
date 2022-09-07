@@ -39,27 +39,27 @@ document.body.appendChild(
     })
 );
 
-document.onkeydown = (e)=>{
-    if (e.code == "Enter") {
-        Array.from<HTMLInputElement>(
-            document.querySelectorAll("input[type=checkbox]")
-        ).forEach(
-            (elem) => {
-                elem.checked = true;
-                // elem.oninput!(new Event("⚡️"));
-            }
-        )
-        Array.from(
-            document.getElementsByTagName("textarea")
-        ).forEach(
-            (elem) => {
-                elem.value = "9";
-                // elem.oninput!(new Event("⚡️"));
-            }
-        )
+// document.onkeydown = (e)=>{
+//     if (e.code == "Enter") {
+//         Array.from<HTMLInputElement>(
+//             document.querySelectorAll("input[type=checkbox]")
+//         ).forEach(
+//             (elem) => {
+//                 elem.checked = true;
+//                 // elem.oninput!(new Event("⚡️"));
+//             }
+//         )
+//         Array.from(
+//             document.getElementsByTagName("textarea")
+//         ).forEach(
+//             (elem) => {
+//                 elem.value = "9";
+//                 // elem.oninput!(new Event("⚡️"));
+//             }
+//         )
 
-    }
-}
+//     }
+// }
 
 // Card0("Personality", 2, 2, ()=>{}).elem
 // Container("Title", "#14c4ff", [
