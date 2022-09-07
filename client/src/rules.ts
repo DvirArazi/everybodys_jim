@@ -9,5 +9,6 @@ export const rules = Elem("a", {
     top: "0px",
     left: "0px",
 
-    color: "#0e65f1"
+    fontFamily: "calibri",
+    fontWeight: "500",
 });

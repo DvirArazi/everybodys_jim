@@ -10,6 +10,7 @@ import { MailModal } from "./game/storyteller1/mailModal";
 import { RecordsModal } from "./game/personality1/recordsModal";
 import { rules } from "./rules";
 import { Spacer } from "./game/spacer";
+import { signature } from "./signature";
 
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
@@ -29,15 +30,16 @@ document.body.appendChild(
             textAlign: "center",
             maxWidth: "500px",
             margin: "auto",
-        })
+        }),
     ], {
         fontFamily: "rubik",
         fontWeight: "bold",
         fontSize: "20px",
         userSelect: "none",
         position: "relative"
-    })
+    }),
 );
+document.body.append(signature)
 
 // document.onkeydown = (e)=>{
 //     if (e.code == "Enter") {
