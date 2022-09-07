@@ -20,6 +20,12 @@ initEntries();
 document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "auto";
 document.body.style.background = "#14ffff";
+document.body.style.margin = "8px";
+document.body.style.padding = "0px";
+document.body.style.minHeight = `calc(${window.innerHeight}px - 16px)`;
+document.body.style.display = "flex";
+document.body.style.flexDirection = "column";
+document.body.style.justifyContent = "space-between";
 document.body.appendChild(
     Elem("div", {}, [
         rules,
@@ -39,7 +45,13 @@ document.body.appendChild(
         position: "relative"
     }),
 );
-document.body.append(signature)
+document.body.append(signature);
+
+// const resizeObserver = new ResizeObserver(entries=>{
+//     document.body.style.minHeight = `calc(${window.innerHeight}px - 16px)`;
+// }); 
+
+// resizeObserver.observe(document.body);
 
 // document.onkeydown = (e)=>{
 //     if (e.code == "Enter") {

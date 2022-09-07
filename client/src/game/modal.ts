@@ -54,7 +54,7 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
             })
         ], {
             maxWidth: "500px",
-            height: "calc(100%)",
+            height: "100%",
             marginLeft: "auto",
             marginRight: "auto",
             borderRadius: "10px",
