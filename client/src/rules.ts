@@ -2,7 +2,7 @@ import { Elem } from "./core/elemm";
 
 export const rules = Elem("a", {
     innerText: "Rules",
-    href: "https://drive.google.com/file/d/1dWIC9sUTOeUDoBGfjPl9kCqXqeVim5Kf/view?usp=sharing",
+    href: "https://drive.google.com/file/d/10pV7-9lJQFRZTzzAW7kAqcoKpfg2OiMj/view?usp=sharing",
     target: "_blank"
 }, [], {
     position: "absolute",
