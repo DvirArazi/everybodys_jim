@@ -16,20 +16,26 @@ export const Attribute = (attributeData: AttributeData, onGoalScoreClick?: ()=>v
             fontSize: "18px"
         }).elem);
     }
+
+    let description = Elem("div", {innerText: attributeData.description}, [], {
+        width: "100%",
+        textAlign: "left",
+        verticalAlign: "text-top",
+        overflow: "auto",
+        minHeight: "70px",
+        maxHeight: "140px",
+        paddingLeft: "5px",
+        paddingRight: "5px",
+    });
     
     return Elem("div", {}, [Elem("table", {}, [Elem("tr", {}, [
         Elem("td", {}, leftChildren, {
             verticalAlign: "top",
         }),
-        Elem("td", {}, [Elem("div", {innerText: attributeData.description}, [], {
-            width: "100%",
-            textAlign: "left",
-            verticalAlign: "text-top",
-            minHeight: "80px",
-            // height: "70px"
-        })], {
+        Elem("td", {}, [description], {
             verticalAlign: "top",
             paddingRight: "5px",
+            wordBreak: "break-all",
         })
     ])])], {
         paddingBottom: "5px",

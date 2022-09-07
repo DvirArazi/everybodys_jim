@@ -12,24 +12,17 @@ export const Column = (attributesData: AttributeData[], onGoalScoreClick?: (goal
             attributes.push(Attribute(attributesData[i]));
         }
     }
+
+    let isGoal = (attributesData[0] as GoalData).score != undefined;
     
     return Elem("td", {}, [ 
-        Elem("div", {
-            innerText: (attributesData[0] as GoalData).score == undefined ? "Abilities" : "Goals"}, [], {
-                // textAlign: "center"
-                padding: "5px"
+        Elem("div", {innerText: isGoal ? "Goals" : "Abilities"}, [], {
+                padding: "5px",
             }),
         Elem("div", {}, attributes)
     ], {
-        // display: "flex",
-        // flexGrow: "1",
-        // overflow: "auto",
         width: "50%",
         verticalAlign: "text-top",
-            // justifyContent: "center",
-            // flexDirection: "column",
-        // lineBreak: "anywhere"
-        // display: "block"
-        // width: "100%"
+        paddingRight: "10px",
     });
 }

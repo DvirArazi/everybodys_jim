@@ -14,8 +14,9 @@ Elem("div", {}, [
     fontSize: "14px",
     fontWeight: "normal",
     color: "#535a5f",
+    paddingBottom: "10px",
 
     textAlign: "center",
-    bottom: "15px",
     left: "50%",
+    zIndex: "-1",
 })

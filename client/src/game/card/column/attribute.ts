@@ -43,13 +43,14 @@ export const Attribute = (
             target.value = target.value.replace('\n', "");
 
             target.style.height = "0px";
-            target.style.height = target.scrollHeight > 70 ?
-                target.scrollHeight + "px" :
-                "70px";
+            target.style.height = 
+                target.scrollHeight < 70 ? "70px" : 
+                target.scrollHeight > 140 ? "140px" :
+                target.scrollHeight + "px";
 
             onChange({type: "description", value: target.value});
         },
-    }, {}, {height: "70px"});
+    }, {}, {height: "70px", overflow: "auto",});
 
     return {
         elem: Elem("div" , {}, [
@@ -60,14 +61,11 @@ export const Attribute = (
                         verticalAlign: "top"
                     }),
                     Elem("td", {}, [description.elem], {
-                        padding: "0px",
+                        paddingLeft: "5px",
                         width: "100%"
                     })
-                ], {
-                })
-            ], {
-                borderSpacing: "0px",
-            })
+                ])
+            ])
         ]),
         update: (attributeChange) => { 
             switch (attributeChange.type) {

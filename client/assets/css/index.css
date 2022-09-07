@@ -68,4 +68,25 @@ img {
     0% { background-position: 0% 100%; }
     100% { background-position: 100% 0%; }
 }
-  
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(241, 241, 241, 0.0);
+    border-radius: 9999px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(136, 136, 136, 0.3); 
+    border-radius: 9999px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(85, 85, 85, 0.3);
+}

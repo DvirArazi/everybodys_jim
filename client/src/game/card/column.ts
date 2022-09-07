@@ -23,7 +23,8 @@ export const Column = (
             Elem("div", {}, attributes.map(attribute=>attribute.elem), {
             })
         ], {
-            borderWidth: "0px"
+            verticalAlign: "text-top",
+            paddingRight: attributeType == "ability" ? "5px" : "0px",
         }),
         updateAttribute: (attributeI: number, value: AttributeChange)=>{attributes[attributeI].update(value);},
         set: (attributeDatas: AttributeData[])=>{

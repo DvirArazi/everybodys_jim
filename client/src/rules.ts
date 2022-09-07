@@ -6,8 +6,8 @@ export const rules = Elem("a", {
     target: "_blank"
 }, [], {
     position: "absolute",
-    top: "0px",
-    left: "0px",
+    top: "5px",
+    left: "10px",
 
     fontFamily: "calibri",
     fontWeight: "500",

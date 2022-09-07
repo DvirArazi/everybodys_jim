@@ -84,6 +84,7 @@ export const RequestModal = (goal: GoalData)=> {
             borderRadius: "5px",
             borderWidth: "3px",
             padding: "5px",
+            wordBreak: "break-all",
         }),
         Spacer(10),
         button.elem
