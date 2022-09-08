@@ -33,6 +33,7 @@ let content = Elem("div", {}, [
         textAlign: "center",
         maxWidth: "500px",
         height: `${window.innerHeight - signatureHeight}px`,
+        padding: "0 15px 0 15px",
         margin: "auto",
     }),
 ], {
