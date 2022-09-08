@@ -170,7 +170,7 @@ export let Storyteller0 = (st0data: St0Data, isOnMobile: boolean):HTMLElement =>
     //===========
     let linkButton =
     isOnMobile ?
-        Button("Share room link", async ()=>{
+        Button("Everybody's Jim room link", async ()=>{
             await navigator.share({
                 title: "Everybody's Jim",
                 text: "Share room link",
