@@ -168,18 +168,19 @@ export let Storyteller0 = (st0data: St0Data, isOnMobile: boolean):HTMLElement =>
 
     //Link button
     //===========
+    let roomUrl = window.location.protocol + "//" + window.location.host + "/" + st0data.roomcode;
     let linkButton =
     isOnMobile ?
         Button("Share room link", async ()=>{
             await navigator.share({
                 title: "Everybody's Jim",
                 // text: "Share room link",
-                url: window.location.protocol + "//" + window.location.host + "/"
+                url: roomUrl
             })
         }).elem :
         Button("Copy room link", ()=>{
             console.log("copied: " + st0data.roomcode);
-            navigator.clipboard.writeText(window.location.protocol + "//" + window.location.host + "/" + st0data.roomcode);
+            navigator.clipboard.writeText(roomUrl);
         }).elem;
 
     return Elem("div", {}, [
