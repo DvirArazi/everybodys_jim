@@ -11,7 +11,7 @@ import { Storyteller1 } from "./game/storyteller1";
 import { Title } from "./game/title";
 import { ParamData } from "./shared/types"
 
-export let Game = () => {
+export let Game = (isOnMobile: boolean) => {
     let clientPageContainer = Elem("div");
     let setPage = (elem: Node)=>{
         clientPageContainer.innerHTML = "";
@@ -53,7 +53,7 @@ export let Game = () => {
             }
             case "St0Data": {
                 history.replaceState("", "", "st");
-                setPage(Storyteller0(clientData.st0Data));
+                setPage(Storyteller0(clientData.st0Data, isOnMobile));
                 break;
             }
             case "Ps0Data": {

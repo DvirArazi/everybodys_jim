@@ -22,11 +22,13 @@ document.body.append(signature);
 let signatureHeight = signature.clientHeight;
 document.body.removeChild(signature);
 
+let isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 let content = Elem("div", {}, [
     rules,
     Elem("div", {}, [
         Spacer(10),
-        Game(),
+        Game(isOnMobile),
     ], {
         textAlign: "center",
         maxWidth: "500px",
@@ -46,44 +48,35 @@ document.body.style.overflowY = "auto";
 document.body.style.background = "#14ffff";
 document.body.style.margin = "0px";
 document.body.style.padding = "0px";
-// document.body.style.minHeight = `${window.innerHeight}px`;
-// document.body.style.display = "flex";
-// document.body.style.flexDirection = "column";
-// document.body.style.justifyContent = "space-between";
 
 document.body.append(
     content,
     signature
 );
-// document.body.append(signature);
 
-// const resizeObserver = new ResizeObserver(entries=>{
-//     document.body.style.minHeight = `calc(${window.innerHeight}px - 16px)`;
-// }); 
+/*
+document.onkeydown = (e)=>{
+    if (e.code == "Enter") {
+        Array.from<HTMLInputElement>(
+            document.querySelectorAll("input[type=checkbox]")
+        ).forEach(
+            (elem) => {
+                elem.checked = true;
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
+        Array.from(
+            document.getElementsByTagName("textarea")
+        ).forEach(
+            (elem) => {
+                elem.value = "9";
+                // elem.oninput!(new Event("⚡️"));
+            }
+        )
 
-// resizeObserver.observe(document.body);
-
-// document.onkeydown = (e)=>{
-//     if (e.code == "Enter") {
-//         Array.from<HTMLInputElement>(
-//             document.querySelectorAll("input[type=checkbox]")
-//         ).forEach(
-//             (elem) => {
-//                 elem.checked = true;
-//                 // elem.oninput!(new Event("⚡️"));
-//             }
-//         )
-//         Array.from(
-//             document.getElementsByTagName("textarea")
-//         ).forEach(
-//             (elem) => {
-//                 elem.value = "9";
-//                 // elem.oninput!(new Event("⚡️"));
-//             }
-//         )
-
-//     }
-// }
+    }
+}
+*/
 
 /*
 Card0("Personality", 2, 2, ()=>{}).elem

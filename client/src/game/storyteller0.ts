@@ -12,7 +12,7 @@ import { VisibilityBox } from "./visibilityBox";
 
 type BoxedCard = Card0 & VisibilityBox & {id: string};
 
-export let Storyteller0 = (st0data: St0Data):HTMLElement => {
+export let Storyteller0 = (st0data: St0Data, isOnMobile: boolean):HTMLElement => {
     let completePers: string[] = [];
 
     //onstart
@@ -166,11 +166,24 @@ export let Storyteller0 = (st0data: St0Data):HTMLElement => {
         onCardUpdate(card, cardChange);
     });
 
-    return Elem("div", {}, [
+    //Link button
+    //===========
+    let linkButton =
+    isOnMobile ?
+        Button("Share room link", async ()=>{
+            await navigator.share({
+                title: "Everybody's Jim",
+                text: "Share room link",
+                url: window.location.protocol + "//" + window.location.host + "/"
+            })
+        }).elem :
         Button("Copy room link", ()=>{
             console.log("copied: " + st0data.roomcode);
             navigator.clipboard.writeText(window.location.protocol + "//" + window.location.host + "/" + st0data.roomcode);
-        }).elem,
+        }).elem;
+
+    return Elem("div", {}, [
+        linkButton,
         Spacer(10),
         Elem("span", {innerText: `Players can join your game by either using the link or by entering the room code: `}),
         Elem("span", {innerText: st0data.roomcode}, [], {color: "#eb0000", userSelect: "text"}),
