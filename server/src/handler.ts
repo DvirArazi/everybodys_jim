@@ -20,9 +20,9 @@ export let handler = async () => {
         process.exit();
     });
 
-    setInterval(async ()=>{
-        await fetch("https://everybodysjimapp.herokuapp.com/");
-    }, 50*60*1000);
+    // setInterval(async ()=>{
+    //     await fetch("https://everybodysjimapp.herokuapp.com/");
+    // }, 50*60*1000);
 
     onExit((done: ()=>void)=>{
             console.log(chalk.greenBright("Saving rooms to the database."));
