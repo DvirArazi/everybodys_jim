@@ -2,13 +2,14 @@
   "type": "commonjs",
   "dependencies": {
     "chalk": "^5.0.1",
-    "concurrently": "^7.3.0",
+    "concurrently": "^7.4.0",
     "dotenv": "^16.0.1",
     "esbuild": "^0.14.54",
     "express": "^4.18.1",
     "fp-ts": "^2.12.2",
     "io-ts": "^2.2.17",
     "mongodb": "^4.9.1",
+    "node-fetch": "^3.2.10",
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.1",
     "ts-node": "^10.9.1",
@@ -17,11 +18,12 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^18.6.5",
+    "@types/node-fetch": "^2.6.2",
     "nodemon": "^2.0.19"
   },
   "scripts": {
     "watch-server-build": "esbuild server/src/index.ts --sourcemap --bundle --watch --outdir=dist/server --platform=node --target=node16.16.0",
-    "watch-server-run": "nodemon --enable-source-maps -q dist/server/index.js",
+    "watch-server-start": "nodemon --enable-source-maps ./dist/server/index.js",
     "watch-client": "esbuild client/src/index.ts --sourcemap --bundle --watch --outdir=dist/client",
     "dev": "concurrently \"npm run watch-server-build\"  \"npm run watch-client\"  \"npm run watch-server-run\"",
     "build-server": "esbuild server/src/index.ts --bundle --outdir=dist/server --platform=node --target=node16.16.0",

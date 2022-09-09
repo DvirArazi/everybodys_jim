@@ -32,10 +32,16 @@ let content = Elem("div", {}, [
     ], {
         textAlign: "center",
         maxWidth: "500px",
-        height: `${window.innerHeight - signatureHeight}px`,
+        minHeight: `${
+            Math.max(
+                0,// window.innerHeight - signatureHeight,
+                document.documentElement.clientHeight - signatureHeight 
+            )
+        }px`,
         padding: "0 15px 0 15px",
         margin: "auto",
     }),
+    signature
 ], {
     fontFamily: "rubik",
     fontWeight: "bold",
@@ -52,9 +58,7 @@ document.body.style.padding = "0px";
 
 document.body.append(
     content,
-    signature
 );
-
 /*
 document.onkeydown = (e)=>{
     if (e.code == "Enter") {

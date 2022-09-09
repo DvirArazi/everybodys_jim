@@ -17,6 +17,5 @@ Elem("div", {}, [
     paddingBottom: "10px",
 
     textAlign: "center",
-    left: "50%",
     zIndex: "-1",
 })

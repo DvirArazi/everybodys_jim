@@ -7,6 +7,7 @@ import { connectToDatabase, roomsCollection } from "./models/database.service";
 import { getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, retrieveRooms, rooms, updateCard } from "./rooms";
 import { AbilityData, GoalData} from "./shared/types";
 import { onExit } from "./onExit";
+import fetch from "node-fetch";
 
 export let handler = async () => {
     connectToDatabase()
@@ -18,6 +19,10 @@ export let handler = async () => {
         console.error("Database connection failed", error);
         process.exit();
     });
+
+    setInterval(async ()=>{
+        await fetch("https://everybodysjimapp.herokuapp.com/");
+    }, 50*60*1000);
 
     onExit((done: ()=>void)=>{
             console.log(chalk.greenBright("Saving rooms to the database."));
@@ -422,8 +427,8 @@ export let handler = async () => {
             room.winnerCount = undefined;
 
             room.personalities.forEach((per)=>{
-                per.cardData.abilities =  Array<AbilityData>.from({length: room!.abilityCount},(_)=>{return {approved: false, description: ""}});
-                per.cardData.goals = Array<GoalData>.from({length: room!.goalCount},(_)=>{return {approved: false, description: "", score: ""}});
+                per.cardData.abilities =  Array.from({length: room!.abilityCount},(_)=>{return {approved: false, description: ""}});
+                per.cardData.goals = Array.from({length: room!.goalCount},(_)=>{return {approved: false, description: "", score: ""}});
                 per.cardData.score = 0;
                 per.records = [],
                 per.stage = 0

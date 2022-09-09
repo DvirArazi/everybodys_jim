@@ -26,6 +26,7 @@ export type Card1St = Card1 & {
     getName:()=>string,
     getConnected: ()=>boolean,
     setConnected: (connected: boolean)=>void,
+    setId: (newId: string)=>void,
 }
 
 export const Storyteller1 = (st1Data: St1Data)=>{
@@ -38,6 +39,7 @@ export const Storyteller1 = (st1Data: St1Data)=>{
     let wheelModal: WheelModal;
 
     const perToCard = (per: {id: string, connected: boolean, cardData: CardData, records: GoalRecord[]}):Card1St =>{
+        let perId = per.id;
         let card1 = Card1(per.cardData, per.records,
             ()=>{},
             (goalI)=>{
@@ -50,8 +52,8 @@ export const Storyteller1 = (st1Data: St1Data)=>{
                             description: goal.description,
                             reason
                         };
-                        card1s.get(per.id)!.addRecord(record);
-                        socket.emit("grantScore", per.id, record);
+                        card1s.get(perId)!.addRecord(record);
+                        socket.emit("grantScore", perId, record);
                 }));
             }
         )
@@ -88,7 +90,8 @@ export const Storyteller1 = (st1Data: St1Data)=>{
             setConnected: (connected: boolean)=>{
                 perConnected = connected;
                 cover.style.display = connected ? "none" : "block";
-            }
+            },
+            setId: (newId)=>{perId = newId;},
         };
     }
 
@@ -137,7 +140,7 @@ export const Storyteller1 = (st1Data: St1Data)=>{
             errMsg("Could not find card by oldId.");
             return;
         }
-
+        card1.setId(newId);
         card1s.set(newId, card1);
         card1s.delete(oldId);
 

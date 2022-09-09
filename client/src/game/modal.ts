@@ -43,6 +43,7 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
                 Elem("div", {}, [content], {
                     flex: "1",
                     overflowY: "auto",
+                    overflowX: "clip",
                 })
             ], {
                 backgroundColor: "#fefefe",
