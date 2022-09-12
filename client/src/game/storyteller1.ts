@@ -216,8 +216,8 @@ export const Storyteller1 = (st1Data: St1Data)=>{
         }
     });
 
-    let endGameModal = Modal("New Game", "close", Elem("div", {}, [
-        Elem("div", {innerText: "Are you sure you want\n to start a new game?"}, [], {
+    let endGameModal = Modal("End Game", "close", Elem("div", {}, [
+        Elem("div", {innerText: "Are you sure you want\nto end the game?"}, [], {
             paddingBottom: "10px"
         }),
         Elem("table", {}, [Elem("tr", {}, [

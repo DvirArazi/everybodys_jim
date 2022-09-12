@@ -82,7 +82,7 @@ export const MailModal = (
                             fontSize: "28px",
                             textAlign: "left",
                             paddingLeft: "15px",
-                            wordBreak: "break-all",
+                            wordBreak: "break-word",
                         }),
                         Elem("div", {innerText: `\
                             requests ${req.score} points for \
@@ -91,14 +91,14 @@ export const MailModal = (
                             textAlign: "left",
                             paddingLeft: "10px",
                             paddingBottom: "5px",
-                            wordBreak: "break-all",
+                            wordBreak: "break-word",
                         }),
                         Elem("div", {innerText: req.explanation}, [], {
                             background: "#80eeff",
                             borderRadius: "5px",
                             padding: "5px",
                             marginBottom: "15px",
-                            wordBreak: "break-all",
+                            wordBreak: "break-word",
                         }),
                     ], {
                         marginRight: "10px",

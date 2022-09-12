@@ -86,9 +86,11 @@ export const Attribute = (
         set:(attributeData: AttributeData)=>{
             if (attributeData.approved != undefined) {
                 checkbox.update(attributeData.approved);
+                if (roleType == "Personality") {
+                    description.setEnabled(!attributeData.approved);
+                }
             }
             description.update(attributeData.description);
-            description.setEnabled(!attributeData.approved);
             let goalData = (attributeData as GoalData);
             if (goalData.score != undefined && scorebox != undefined) {
                 scorebox.update(goalData.score);
@@ -100,7 +102,11 @@ export const Attribute = (
             ( scorebox == undefined ? true : scorebox.isComplete());
         },
         getData: ()=>{
-            return {approved: undefined, description: description.getValue(), score: scorebox?.getValue()}
+            return {
+                approved: undefined,
+                description: description.getValue(),
+                score: scorebox?.getValue()
+            }
         }
     };
 }

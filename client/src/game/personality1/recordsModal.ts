@@ -7,7 +7,7 @@ export const RecordsModal = (records: GoalRecord[]) => {
     let messageDiv: HTMLDivElement;
     if (records.length == 0) {
         messageDiv = Elem("div",
-            {innerText: "There are no requests"}, [], {
+            {innerText: "There are no records"}, [], {
                 height: "100px",
                 paddingBottom: "12px",
                 display: "flex",
@@ -65,7 +65,7 @@ const recordToElem = (record: GoalRecord) => {
             })
         ], {
             width: "100%",
-            wordBreak: "break-all",
+            wordBreak: "break-word",
         });
 
         if (record.reason != undefined) {
@@ -92,5 +92,8 @@ const recordToElem = (record: GoalRecord) => {
         padding: "5px",
         margin: "10px",
         borderRadius: "10px",
+
+        minWidth: "250px",
+        display: "inline-block",
     })
 }

@@ -24,6 +24,16 @@ document.body.removeChild(signature);
 
 let isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+let bla = RecordsModal([
+    {
+        accepted: true,
+        score: 3,
+        description: "climbing ",
+        reason: "You "
+    },
+]);
+bla.setVisible();
+
 let content = Elem("div", {}, [
     rules,
     Elem("div", {}, [
@@ -33,10 +43,7 @@ let content = Elem("div", {}, [
         textAlign: "center",
         maxWidth: "500px",
         minHeight: `${
-            Math.max(
-                0,// window.innerHeight - signatureHeight,
-                document.documentElement.clientHeight - signatureHeight 
-            )
+            document.documentElement.clientHeight - signatureHeight 
         }px`,
         padding: "0 15px 0 15px",
         margin: "auto",

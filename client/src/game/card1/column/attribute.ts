@@ -35,7 +35,7 @@ export const Attribute = (attributeData: AttributeData, onGoalScoreClick?: ()=>v
         Elem("td", {}, [description], {
             verticalAlign: "top",
             paddingRight: "5px",
-            wordBreak: "break-all",
+            wordBreak: "break-word",
         })
     ])])], {
         paddingBottom: "5px",

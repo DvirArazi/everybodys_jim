@@ -41,7 +41,7 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
             }),
             Elem("div", {}, [
                 Elem("div", {}, [content], {
-                    flex: "1",
+                    flex: "0 1 auto",
                     overflowY: "auto",
                     overflowX: "clip",
                 })
@@ -49,20 +49,30 @@ export const Modal = (title: string, closeable: "none" | "close" | "minimize", c
                 backgroundColor: "#fefefe",
                 borderRadius: "0 0 10px 10px",
                 padding: "10px",
-                maxHeight: "calc(100% - 70px)",
+                maxHeight: "calc(100% - 60px)",
+
+                flex: "1",
                 display: "flex",
                 flexDirection: "column",
             })
         ], {
+            listStyle: "none",
             maxWidth: "500px",
-            height: "100%",
+            maxHeight: "100%",
             marginLeft: "auto",
             marginRight: "auto",
             borderRadius: "10px",
+            boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)",
+
+            flex: "0 1 auto",
+            display: "flex",
+            flexDirection: "column",
         })], {
             margin: "60px 10px 60px 10px",
             height: "calc(100% - 120px)",
 
+            display: "flex",
+            flexDirection: "column",
             // boxShadow: "0px 0px 11px 5px rgba(0,0,0,0.2)", //delete later
         })
     ], {
