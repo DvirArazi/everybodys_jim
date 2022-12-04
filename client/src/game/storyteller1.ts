@@ -16,6 +16,7 @@ import { GrantModal } from "./storyteller1/grantModal";
 import { MailButton } from "./storyteller1/mailButton";
 import { MailModal } from "./storyteller1/mailModal";
 import { map } from "fp-ts/lib/Functor";
+import { assert } from "console";
 
 export type RequestSt = {
     perId: string,
@@ -36,7 +37,7 @@ export const Storyteller1 = (st1Data: St1Data)=>{
     
     let modalDiv = Elem("div");
 
-    let wheelModal: WheelModal;
+    let wheelModal: WheelModal | undefined;
 
     const perToCard = (per: {id: string, connected: boolean, cardData: CardData, records: GoalRecord[]}):Card1St =>{
         let perId = per.id;
@@ -162,14 +163,30 @@ export const Storyteller1 = (st1Data: St1Data)=>{
     });
 
     socket.on("enableSpin", ()=>{
+        if (wheelModal == undefined) {
+            errMsg("'wheelModal' is not yet defined.");
+            return;
+        }
+
         wheelModal.stopTimer();
     });
 
     socket.on("spinWheel", (angle, success)=>{
+        if (wheelModal == undefined) {
+            errMsg("'wheelModal' is not yet defined.");
+            return;
+        }
+
         wheelModal.spin(angle, success);
     });
 
     socket.on("continueGame", ()=>{
+        if (wheelModal == undefined) {
+            errMsg("'wheelModal' is not yet defined.");
+            return;
+        }
+        // assert(wheelModal != undefined, "bla");
+
         modalDiv.removeChild(wheelModal.elem);
     });
 

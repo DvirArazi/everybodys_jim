@@ -3,44 +3,9 @@ import { io } from ".";
 import { TIME_TO_VOTE } from "./shared/globals";
 import { compare, errMsg, randRange } from "./shared/utils";
 import { newPersonality0, newStoryteller0, newStoryteller1, reconnectPersonality, reconnectStoryteller} from "./construct";
-import { connectToDatabase, roomsCollection } from "./models/database.service";
-import { getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, retrieveRooms, rooms, updateCard } from "./rooms";
-import { AbilityData, GoalData} from "./shared/types";
-import { onExit } from "./onExit";
-import fetch from "node-fetch";
+import { getRoomByPersonality, getRoomByRoomcode, getRoomByStoryteller, rooms, updateCard } from "./rooms";
 
 export let handler = async () => {
-    connectToDatabase()
-    .then( async() => {
-        console.log(chalk.greenBright("Retrieving rooms from the database."));
-        await retrieveRooms();
-    })
-    .catch((error: Error) => {
-        console.error("Database connection failed", error);
-        process.exit();
-    });
-
-    // setInterval(async ()=>{
-    //     await fetch("https://everybodysjimapp.herokuapp.com/");
-    // }, 50*60*1000);
-
-    onExit((done: ()=>void)=>{
-            console.log(chalk.greenBright("Saving rooms to the database."));
-            rooms.forEach(room=>{
-                room.storyteller.connected = false;
-                room.personalities.forEach(per=>{
-                    per.connected = false;
-                });
-            })
-
-            roomsCollection.deleteMany({}).then(()=>{
-                roomsCollection.insertMany(rooms).then((result)=>{
-                    if (!result) { errMsg("Could not insert rooms to database."); }
-                    done();
-                });
-            });
-    });
-
     io.on("connection", (socket) => {
 
         socket.on("init", (role, entries)=>{
