@@ -93,15 +93,23 @@ At this point, the storyteller would see a red exclamation mark on their *mail* 
 After which the player who sent the request would get a red exclamation mark alerting a new record, and the response added to their record history.
 
 <table>
+<tr>
   <th><p>Request window</p></th>
   <th><p>Mail button</p></th>
   <th><p>Pending requests</p></th>
-  <th><p>Total score button</p></th>
-  <th><p>Records history</p></th>
+</tr>
 <tr>
   <th><img src="https://user-images.githubusercontent.com/108592948/208270870-70ddfe9f-d4b2-4e53-b3e1-91656ccf09aa.png" alt="create a room" width="200"/></th>
   <th><img src="https://user-images.githubusercontent.com/108592948/208270932-c2646f62-3b86-4ebc-bcd4-a589a39ec94d.png" alt="create a room" width="200"/></th>
   <th><img src="https://user-images.githubusercontent.com/108592948/208271009-2924d544-2c10-491c-bb70-3caee87633c1.png" alt="create a room" width="200"/></th>
+</tr>
+</table>
+<table>
+<tr>
+  <th><p>Total score button</p></th>
+  <th><p>Records history</p></th>
+</tr>
+<tr>
   <th><img src="https://user-images.githubusercontent.com/108592948/208270772-f7ecd81f-11da-4313-af87-26d7954569a1.png" alt="create a room" width="200"/></th>
   <th><img src="https://user-images.githubusercontent.com/108592948/208270793-a2f73254-206e-4074-9b4b-517727ac66d8.png" alt="create a room" width="200"/></th>
 </tr>
