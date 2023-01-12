@@ -42,14 +42,12 @@ After starting the game, the page would look like that:
 
 <table>
 <tr>
-  <th>
-    <p>for the storyteller</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208266029-6b4df3a5-4984-428a-99dc-89d9bf5524b6.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>for the personalities</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208266523-7ed46825-9a4e-4be5-ae38-32d26b2cf2c2.png" alt="create a room" width="200"/>
-  </th>
+  <th><p>for the storyteller</p></th>
+  <th><p>for the personalities</p></th>
+</tr>
+<tr>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208266029-6b4df3a5-4984-428a-99dc-89d9bf5524b6.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208266523-7ed46825-9a4e-4be5-ae38-32d26b2cf2c2.png" alt="create a room" width="200"/></th>
 </tr>
 </table>
 
@@ -65,18 +63,14 @@ After the wheel has stopped, if the marker landed on a red surface, it means the
 
 <table>
 <tr>
-  <th>
-    <p>for the storyteller</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208268019-ccdf8976-a36f-4afb-a9ac-291d7b5bd8c4.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>for the dominant personality</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208267985-eba6b372-d9f6-44bf-b304-386f77a4d476.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>for all other peronalities</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208267969-4409db61-e7f4-47d4-aa7b-a2a8ffcbfbc8.png" alt="create a room" width="200"/>
-  </th>
+  <th><p>for the storyteller</p></th>
+  <th><p>for the dominant personality</p></th>
+  <th><p>for all other peronalities</p></th>
+<tr>
+<tr>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208268019-ccdf8976-a36f-4afb-a9ac-291d7b5bd8c4.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208267985-eba6b372-d9f6-44bf-b304-386f77a4d476.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208267969-4409db61-e7f4-47d4-aa7b-a2a8ffcbfbc8.png" alt="create a room" width="200"/></th>
 </tr>
 </table>
 
@@ -84,19 +78,13 @@ After the wheel has stopped, if the marker landed on a red surface, it means the
 Once a player's goal has been achieved (regardless of whether it was that player's turn or not), the storyteller can grant him the points deserved by pressing the *score* button next to said goal in the player's card, adding an optional explanation and pressing "send". At this point, the player would see an updated total score and a red exclamation mark on his *total score* button. The player can press the *total score* button to see the history of every time a score was added or denied to them.
 
 <table>
+<th><p>Score button</p></th>
+<th><p>Total score button</p></th>
+<th><p>Records history</p></th>
 <tr>
-  <th>
-    <p>Score button</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208269763-a42e73d1-bceb-4fc1-8563-acfe455f2295.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Total score button</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208269920-037b16c1-6c21-47c6-8e32-6a44fd83ef86.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Records history</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208269852-16c014d9-7ea0-4aa7-8204-04f5ab792d6b.png" alt="create a room" width="200"/>
-  </th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208269763-a42e73d1-bceb-4fc1-8563-acfe455f2295.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208269920-037b16c1-6c21-47c6-8e32-6a44fd83ef86.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208269852-16c014d9-7ea0-4aa7-8204-04f5ab792d6b.png" alt="create a room" width="200"/></th>
 </tr>
 </table>
 
@@ -105,27 +93,17 @@ At this point, the storyteller would see a red exclamation mark on their *mail* 
 After which the player who sent the request would get a red exclamation mark alerting a new record, and the response added to their record history.
 
 <table>
+  <th><p>Request window</p></th>
+  <th><p>Mail button</p></th>
+  <th><p>Pending requests</p></th>
+  <th><p>Total score button</p></th>
+  <th><p>Records history</p></th>
 <tr>
-  <th>
-    <p>Request window</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208270870-70ddfe9f-d4b2-4e53-b3e1-91656ccf09aa.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Mail button</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208270932-c2646f62-3b86-4ebc-bcd4-a589a39ec94d.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Pending requests</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208271009-2924d544-2c10-491c-bb70-3caee87633c1.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Total score button</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208270772-f7ecd81f-11da-4313-af87-26d7954569a1.png" alt="create a room" width="200"/>
-  </th>
-  <th>
-    <p>Records history</p>
-    <img src="https://user-images.githubusercontent.com/108592948/208270793-a2f73254-206e-4074-9b4b-517727ac66d8.png" alt="create a room" width="200"/>
-  </th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208270870-70ddfe9f-d4b2-4e53-b3e1-91656ccf09aa.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208270932-c2646f62-3b86-4ebc-bcd4-a589a39ec94d.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208271009-2924d544-2c10-491c-bb70-3caee87633c1.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208270772-f7ecd81f-11da-4313-af87-26d7954569a1.png" alt="create a room" width="200"/></th>
+  <th><img src="https://user-images.githubusercontent.com/108592948/208270793-a2f73254-206e-4074-9b4b-517727ac66d8.png" alt="create a room" width="200"/></th>
 </tr>
 </table>
 
