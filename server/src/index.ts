@@ -6,6 +6,7 @@ import { join } from 'path'
 import { handler as handle } from './handler';
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './shared/types';
 import { rooms } from './rooms';
+import helmet from 'helmet';
 
 dotenv.config();
 
@@ -15,7 +16,8 @@ const port = process.env.PORT || "1234";
 const assetsDir = join(__dirname, "../../client/assets");
 const srcDir = join(__dirname, "../../client/src");
 
-// app.use(pretty({ query: 'pretty' }));
+app.use(helmet());
+
 app.set('json spaces', 2)
 app.use(express.static(assetsDir));
 app.use(express.static(join(__dirname, "../../dist/client")));

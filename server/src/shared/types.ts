@@ -172,10 +172,10 @@ export type Ps1Data = {
 };
 
 export type ClientData = 
-    {   type: "Message",
+    { type: "Message",
         message: string,
     } |
-    { type: "St0Data", 
+    { type: "St0Data",
         st0Data: St0Data,
     } |
     { type: "Ps0Data",
