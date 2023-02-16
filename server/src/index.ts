@@ -16,7 +16,19 @@ const port = process.env.PORT || "1234";
 const assetsDir = join(__dirname, "../../client/assets");
 const srcDir = join(__dirname, "../../client/src");
 
-app.use(helmet());
+app.use(helmet({
+    hsts: {
+        maxAge: Number.MAX_SAFE_INTEGER,
+        includeSubDomains: true,
+        preload: true,
+      },
+}));
+app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect('https://' + req.hostname + req.url);
+    }
+    return next();
+});
 
 app.set('json spaces', 2)
 app.use(express.static(assetsDir));
